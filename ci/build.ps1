@@ -6,6 +6,7 @@ cmake --build build --config Release --parallel
 if($LASTEXITCODE) { throw 'Native build failed' }
 ctest --test-dir build -C Release --output-on-failure
 if($LASTEXITCODE) { throw 'Cloud native checks failed' }
+./tests/Test-ServerVerification.ps1
 New-Item -ItemType Directory dist -Force | Out-Null
 $version=(Get-Content ./version.txt -Raw).Trim()
 Copy-Item build/Release/dbghelp.dll "dist/server-compat-$version.dll"

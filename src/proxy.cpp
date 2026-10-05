@@ -26,7 +26,7 @@ DWORD WINAPI initialize(void*) {
     HMODULE pinned;
     GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_PIN | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
                        reinterpret_cast<LPCWSTR>(self), &pinned);
-    log_line("XHL dedicated-server adapter 0.1.0 experimental starting.");
+    log_line("XHL dedicated-server compatibility adapter starting.");
     const auto xp_path = directory + L"\\GlobalXPShare.original.dll";
     if (std::filesystem::exists(xp_path)) {
         if (!xhl::verify_file(xp_path, xhl::xp_hash)) {

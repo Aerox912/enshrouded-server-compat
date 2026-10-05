@@ -17,7 +17,7 @@ if(Test-Path -LiteralPath $OutputDirectory) { throw 'Choose a new output directo
 if($StagingGameDirectory) {
  if(Get-Process enshrouded_server -ErrorAction SilentlyContinue) { throw 'Close the dedicated server before preparing resources.' }
  Verify-File (Join-Path $StagingGameDirectory 'enshrouded_server.exe') $catalog.game.serverSha256
- if(Test-Path -LiteralPath (Join-Path $StagingGameDirectory 'enshrouded.kfc.bak')) { throw 'Use clean staging game data, not already-patched resources.' }
+ if(Test-Path -LiteralPath (Join-Path $StagingGameDirectory 'enshrouded_server.kfc.bak')) { throw 'Use clean staging game data, not already-patched resources.' }
  if(Test-Path -LiteralPath (Join-Path $StagingGameDirectory 'mods')) { throw 'Use staging without existing mods to prevent doubled multipliers.' }
 }
 $arguments=@('server',$profile.id,[IO.Path]::GetFullPath($Originals),[IO.Path]::GetFullPath($OutputDirectory))

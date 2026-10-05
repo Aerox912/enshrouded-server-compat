@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
-project(xhl_server_adapter VERSION 0.2.0 LANGUAGES C CXX ASM_MASM)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" ADAPTER_VERSION LIMIT_COUNT 1)
+project(xhl_server_adapter VERSION ${ADAPTER_VERSION} LANGUAGES C CXX ASM_MASM)
 if(NOT WIN32 OR NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
   message(FATAL_ERROR "Windows x64 is required")
 endif()
