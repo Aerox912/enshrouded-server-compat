@@ -1,10 +1,10 @@
 {
   "patches": {
-    "tag": "v1.0.2",
-    "url": "https://github.com/Aerox912/enshrouded-mod-patches/releases/download/v1.0.2/enshrouded-mod-patches-1.0.2.zip",
-    "sha256": "1ba19aa64a4f9b5e1a18d3719ed47bfaeea410e879e0d61b686cfd8f92c98d4f",
-    "size": 8219655,
-    "commit": "b160d63c581f5a697adaa94715c8fa645a30eabb"
+    "tag": "v1.0.3",
+    "url": "https://github.com/Aerox912/enshrouded-mod-patches/releases/download/v1.0.3/enshrouded-mod-patches-1.0.3.zip",
+    "sha256": "b242ee64cd8e3ba9f9200fef08542b9ed88bb3c11a6598cdb8a526b382258e8e",
+    "size": 8219778,
+    "commit": "16d16dfd649f5920c5e26f5a3c9d380b3277dfda"
   },
   "emm": {
     "size": 21424552,
