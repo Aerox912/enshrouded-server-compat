@@ -7,6 +7,7 @@ if($LASTEXITCODE) { throw 'Native build failed' }
 ctest --test-dir build -C Release --output-on-failure
 if($LASTEXITCODE) { throw 'Cloud native checks failed' }
 New-Item -ItemType Directory dist -Force | Out-Null
-Copy-Item build/Release/dbghelp.dll dist/server-compat-0.2.0.dll
+$version=(Get-Content ./version.txt -Raw).Trim()
+Copy-Item build/Release/dbghelp.dll "dist/server-compat-$version.dll"
 # Package assembly consumes only the verified maintained patch release.
 ./ci/package.ps1

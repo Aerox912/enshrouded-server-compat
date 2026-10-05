@@ -1,0 +1,51 @@
+name: Refresh shared patch catalog
+on:
+  repository_dispatch:
+    types: [component-released]
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: refresh-server-locks
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.event_name == 'workflow_dispatch' || github.event.client_payload.component == 'patches'
+    runs-on: windows-2022
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: app
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: Aerox912
+          repositories: enshrouded-server-compat
+          permission-contents: write
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app.outputs.token }}
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh server dependency lock and tag release candidate
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.event.client_payload.tag }}
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          python ./ci/refresh-locks.py --component patches --tag $env:RELEASE_TAG
+          if($LASTEXITCODE){throw 'Dependency validation failed'}
+          if(!(git status --porcelain)){exit 0}
+          git config user.name 'Enshrouded release automation'
+          git config user.email 'release-automation@users.noreply.github.com'
+          git add dependencies.lock.json version.txt
+          git commit -m "Update shared patch catalog to $env:RELEASE_TAG"
+          if($LASTEXITCODE){throw 'Lock commit failed'}
+          $version=(Get-Content version.txt -Raw).Trim()
+          git tag "v$version"
+          git push --atomic origin main "refs/tags/v$version"
+          if($LASTEXITCODE){throw 'Atomic source/tag push failed'}

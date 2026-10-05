@@ -1,5 +1,6 @@
 $ErrorActionPreference='Stop'
 $repo=Split-Path -Parent $PSScriptRoot
+$version=(Get-Content (Join-Path $repo 'version.txt') -Raw).Trim()
 $pin=Get-Content (Join-Path $repo 'dependencies.lock.json') -Raw | ConvertFrom-Json
 $cache=Join-Path $repo 'build/dependencies'; New-Item -ItemType Directory $cache -Force | Out-Null
 $archive=Join-Path $cache 'patches.zip'
@@ -22,12 +23,12 @@ foreach($profile in @('normal','cheeze')) {
  foreach($file in @('LICENSE','CREDITS.md','INSTALL.md','tools/Prepare-Server.ps1')) { Copy-Item -LiteralPath (Join-Path $repo $file) -Destination $stage }
  Copy-Item -LiteralPath (Join-Path $repo 'vendor/minhook-1.3.4/LICENSE.txt') -Destination (Join-Path $stage 'licenses/MinHook.txt')
  $dependency=@{patchTool=@{sha256=(Get-FileHash $tool.FullName).Hash.ToLowerInvariant()};emm=$pin.emm}
- if($profile -eq 'cheeze') { Copy-Item -LiteralPath (Join-Path $repo 'dist/server-compat-0.2.0.dll') -Destination (Join-Path $stage 'adapter.dll');$dependency.adapter=@{sha256=(Get-FileHash (Join-Path $stage 'adapter.dll')).Hash.ToLowerInvariant()} }
+ if($profile -eq 'cheeze') { Copy-Item -LiteralPath (Join-Path $repo "dist/server-compat-$version.dll") -Destination (Join-Path $stage 'adapter.dll');$dependency.adapter=@{sha256=(Get-FileHash (Join-Path $stage 'adapter.dll')).Hash.ToLowerInvariant()} }
  $dependency | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $stage 'dependencies.lock.json') -Encoding utf8
  $commit=if($env:GITHUB_SHA){$env:GITHUB_SHA}else{git rev-parse HEAD}
- @{schema=1;version='0.2.0';profile=$profile;commit=$commit;dependencies=$pin;game='Dedicated server build 1024233';liveTest='Separate acceptance required'} | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $stage 'build-info.json') -Encoding utf8
+ @{schema=1;version=$version;profile=$profile;commit=$commit;dependencies=$pin;game='Dedicated server build 1024233';liveTest='Separate acceptance required'} | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $stage 'build-info.json') -Encoding utf8
  $files=Get-ChildItem $stage -Recurse -File
  if($files.Name -contains 'enshrouded_server.exe' -or $files.Extension -contains '.kfc' -or $files.Name -contains 'GlobalXPShare.original.dll') { throw 'Restricted server content in package' }
- Compress-Archive -Path "$stage/*" -DestinationPath (Join-Path $repo "dist/enshrouded-server-$profile-0.2.0.zip") -Force
+ Compress-Archive -Path "$stage/*" -DestinationPath (Join-Path $repo "dist/enshrouded-server-$profile-$version.zip") -Force
 }
 Get-ChildItem (Join-Path $repo 'dist') -File | Where-Object Extension -NE '.sha256' | ForEach-Object { "$((Get-FileHash $_.FullName).Hash.ToLowerInvariant())  $($_.Name)" | Set-Content ($_.FullName+'.sha256') -Encoding ascii }
