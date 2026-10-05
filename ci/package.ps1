@@ -16,7 +16,9 @@ foreach($profile in @('normal','cheeze')) {
  Copy-Item -LiteralPath (Join-Path $source 'catalog.json') -Destination $stage
  Copy-Item -LiteralPath (Join-Path $source "profiles/$profile.json") -Destination (Join-Path $stage 'profile.json')
  Copy-Item -LiteralPath (Join-Path $source 'defaults') -Destination $stage -Recurse -Force
- Copy-Item -LiteralPath (Join-Path $source 'licenses') -Destination $stage -Recurse -Force
+ New-Item -ItemType Directory (Join-Path $stage 'licenses') -Force | Out-Null
+ Copy-Item -LiteralPath (Join-Path $source 'PYTHON-LICENSE.txt') -Destination (Join-Path $stage 'licenses')
+ Copy-Item -LiteralPath (Join-Path $source 'PYINSTALLER-LICENSES') -Destination (Join-Path $stage 'licenses') -Recurse -Force
  foreach($file in @('LICENSE','CREDITS.md','INSTALL.md','tools/Prepare-Server.ps1')) { Copy-Item -LiteralPath (Join-Path $repo $file) -Destination $stage }
  Copy-Item -LiteralPath (Join-Path $repo 'vendor/minhook-1.3.4/LICENSE.txt') -Destination (Join-Path $stage 'licenses/MinHook.txt')
  $dependency=@{patchTool=@{sha256=(Get-FileHash $tool.FullName).Hash.ToLowerInvariant()};emm=$pin.emm}
