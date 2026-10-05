@@ -1,0 +1,12 @@
+{
+  "patches": {
+    "sha256": "8187c0c4d364194307e69579bd8fd9c4e3fd050c582315ee48b00659586ffeb4",
+    "url": "https://github.com/Aerox912/enshrouded-mod-patches/releases/download/v1.0.0/enshrouded-mod-patches-1.0.0.zip",
+    "commit": "6ffc64f28cfc4c2b8b2e8f184569cf66bc352792"
+  },
+  "emm": {
+    "size": 21424552,
+    "sha256": "168a6ffe2688a2c5408847654409e024512c9926dfb91653d1fdfe3832154280",
+    "url": "https://github.com/Brabb3l/kfc-parser/releases/download/v0.1.2/emm.exe"
+  }
+}
