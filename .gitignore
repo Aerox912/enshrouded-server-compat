@@ -2,3 +2,6 @@ build/
 dist/
 *.user
 .vs/
+local-review/
+flight-allowlist.cfg
+creative-allowlist.txt

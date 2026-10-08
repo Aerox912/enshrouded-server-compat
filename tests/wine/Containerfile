@@ -1,0 +1,6 @@
+# Isolated native-test runtime, using the existing official Debian-based image.
+# This is not a server deployment image and publishes no ports.
+FROM docker.io/library/node@sha256:ac39e4b5fcb2b1b34b20364fd58b2e898f3bb80731ee6f62a7536f9df3d6aadc
+RUN apt-get update && apt-get install -y --no-install-recommends wine64=10.0~repack-6 xvfb xauth && rm -rf /var/lib/apt/lists/*
+ENV WINEARCH=win64 WINEPREFIX=/tmp/flight-wine WINEDEBUG=-all
+WORKDIR /tmp

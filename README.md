@@ -10,4 +10,6 @@ Only dedicated Windows x64 game build 1024233 is supported, SHA-256 `001c1b40ed0
 
 GitHub CI compiles all native targets and runs the cloud rejection/checksum checks without game files. Existing adapter_tests and extras_tests remain separate integration programs requiring the supported game executable and original plugins. A green cloud build does not establish multiplayer acceptance.
 
+Always Flying server support is still experimental. The optional `BUILD_FLIGHT_EXPERIMENT` target tests a per-character glide hook offline; it is not part of the loader or server packages. See [current findings and remaining work](research/flight-server-20261007.md).
+
 Global XP Share remains original. Normal uses its dbghelp.dll; Cheeze uses this adapter's dbghelp.dll and loads the original as GlobalXPShare.original.dll. Preserve the per-executable Wine override `dbghelp=native,builtin`. Confirm HOOK INSTALLED in XP Share's own log, then test XP distribution between two players who have each earned XP after joining.

@@ -1,6 +1,12 @@
 #include "adapter.hpp"
 #include <dbghelp.h>
 #include <filesystem>
+#ifdef FLIGHT_DEVELOPMENT_RUNTIME
+#include "flight_native.hpp"
+#endif
+#ifdef CREATIVE_DEVELOPMENT_RUNTIME
+#include "creative/native_runtime.h"
+#endif
 
 namespace {
 HMODULE self;
@@ -41,6 +47,16 @@ DWORD WINAPI initialize(void*) {
     }
     xhl::start(GetModuleHandleW(nullptr), directory + L"\\mods\\XHL-Vein-Mining\\XHL-Vein-Mining.dll", log_line);
     xhl::start_extras(GetModuleHandleW(nullptr), directory, log_line);
+#ifdef FLIGHT_DEVELOPMENT_RUNTIME
+#ifdef CREATIVE_DEVELOPMENT_RUNTIME
+    const auto extension=creative::native::start(GetModuleHandleW(nullptr),directory,log_line);
+    if(!extension.poll)log_line("CREATIVE DEVELOPMENT RUNTIME NOT APPLIED.");
+    if (!xhl::flight::start_runtime(GetModuleHandleW(nullptr), directory, log_line,extension))
+#else
+    if (!xhl::flight::start_runtime(GetModuleHandleW(nullptr), directory, log_line))
+#endif
+        log_line("FLIGHT DEVELOPMENT RUNTIME NOT APPLIED.");
+#endif
     return 0;
 }
 }
