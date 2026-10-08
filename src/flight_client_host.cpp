@@ -57,7 +57,11 @@ Host current_host() {
 bool allowed_host(std::uint64_t steam){return steam && current_host().steam==steam;}
 std::uint64_t random_number(){std::uint64_t n=0;return BCryptGenRandom(nullptr,reinterpret_cast<PUCHAR>(&n),sizeof(n),BCRYPT_USE_SYSTEM_PREFERRED_RNG)>=0?n:0;}
 bool prepare() {
+    static std::mutex installation_guard;
+    static HMODULE installed_game=nullptr;
+    std::lock_guard installation_lock(installation_guard);
     const auto game=GetModuleHandleW(nullptr);const auto image=reinterpret_cast<std::uintptr_t>(game);
+    if(installed_game==game)return true; // Pinned hooks survive mod-object reloads.
     if(!xhl::verify_file(xhl::module_path(game),"af2f5a1227911d8aa06b3908d6bd0211838211cae14ea91099cb57d0df990781"))return false;
     struct Site{std::uintptr_t rva;std::array<unsigned char,16> bytes;void* hook;void** original;};
     const Site sites[]={
@@ -81,7 +85,7 @@ bool prepare() {
     for(const auto& s:sites)ok=MH_QueueEnableHook(reinterpret_cast<void*>(image+s.rva))==MH_OK && ok;
     ok=ok && MH_ApplyQueued()==MH_OK && patch.install();
     if(!ok)for(const auto& s:sites)MH_DisableHook(reinterpret_cast<void*>(image+s.rva));
-    patch.enable(false);return ok;
+    patch.enable(false);if(ok)installed_game=game;return ok;
 }
 
 void set_local_flight(bool enabled){patch.enable(enabled);}

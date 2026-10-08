@@ -17,10 +17,13 @@ bool AuthProofs::finish(const Pending& ticket, const Peer& after, bool success) 
     proof.peer = after; proof.serial = ++serial_; return true;
 }
 void AuthProofs::remove(std::uintptr_t backend, std::uint16_t handle) noexcept {
+    if (!backend || backend != backend_ || !handle || (handle & 63) >= proofs_.size()) return;
+    auto& p = proofs_[handle & 63];
+    p.peer = {}; p.serial = 0; ++p.epoch;
+}
+void AuthProofs::clear_backend(std::uintptr_t backend) noexcept {
     if (!backend || backend != backend_) return;
-    for (auto& p : proofs_) if (!handle || ((handle & 63) == (&p - proofs_.data()))) {
-        p.peer = {}; p.serial = 0; ++p.epoch;
-    }
+    proofs_ = {}; ++generation_;
 }
 std::uint64_t AuthProofs::serial(const Peer& p) const noexcept {
     if (!p.handle || (p.handle & 63) >= 16 || p.backend != backend_ ||

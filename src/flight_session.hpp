@@ -40,7 +40,7 @@ struct Identity {
     std::uintptr_t backend = 0, session = 0, world = 0;
     std::uint32_t player = 0, machine = 0;
     std::uint16_t peer = 0;
-    std::uint64_t steam = 0, authentication = 0;
+    std::uint64_t steam = 0, authentication = 0, lifecycle = 0;
     bool operator==(const Identity&) const = default;
     bool valid(std::size_t slot) const noexcept;
 };
@@ -54,6 +54,7 @@ class Sessions {
         bool enabled = false;
     };
     std::array<Player, 16> players_{};
+    std::uint64_t next_lifecycle_ = 0;
     Allowlist allowlist_{};
     std::uint64_t config_checked_ = 0;
     bool approved(const Player&, std::uint64_t now) const noexcept;
@@ -62,6 +63,7 @@ public:
     void observe(const std::array<Identity, 16>&, std::uint64_t now) noexcept;
     void clear() noexcept;
     void remove_peer(std::uintptr_t backend, std::uint16_t peer) noexcept;
+    void clear_backend(std::uintptr_t backend) noexcept;
     void remove_owner(std::uintptr_t world, std::uint32_t owner) noexcept;
     bool is_approved(std::uint64_t authenticated_sender, std::uint64_t now) const noexcept;
     // Authentication only. Feature allowlists and privilege leases are separate.

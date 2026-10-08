@@ -84,10 +84,13 @@ void Sessions::configure(const Allowlist& list, std::uint64_t now) noexcept {
 }
 void Sessions::observe(const std::array<Identity, 16>& identities, std::uint64_t now) noexcept {
     for (std::size_t slot = 0; slot < players_.size(); ++slot) {
-        const auto& id = identities[slot];
+        auto id = identities[slot];
         auto& p = players_[slot];
         if (!id.valid(slot)) { p = {}; continue; }
-        if (!(p.identity == id)) { p = {}; p.identity = id; }
+        // The native mapping does not supply a lifecycle. Issue a new one after
+        // every removal/reset, even when all native handles are reused immediately.
+        id.lifecycle = p.identity.lifecycle;
+        if (!(p.identity == id)) { p = {}; id.lifecycle = ++next_lifecycle_; p.identity = id; }
         p.observed = now;
     }
     // Reject all sides of an ambiguous mapping, including an existing lease.
@@ -99,7 +102,12 @@ void Sessions::observe(const std::array<Identity, 16>& identities, std::uint64_t
 }
 void Sessions::clear() noexcept { players_ = {}; }
 void Sessions::remove_peer(std::uintptr_t backend, std::uint16_t peer) noexcept {
-    for (auto& p : players_) if (p.identity.backend == backend && (!peer || p.identity.peer == peer)) p = {};
+    if(!backend || !peer)return;
+    for (auto& p : players_) if (p.identity.backend == backend && p.identity.peer == peer) p = {};
+}
+void Sessions::clear_backend(std::uintptr_t backend) noexcept {
+    if(!backend)return;
+    for (auto& p : players_) if (p.identity.backend == backend) p = {};
 }
 void Sessions::remove_owner(std::uintptr_t world, std::uint32_t owner) noexcept {
     if (owner >= 1 && owner <= players_.size() && players_[owner - 1].identity.world == world) players_[owner - 1] = {};

@@ -94,7 +94,7 @@ std::uintptr_t remove_hook(void* context,std::uint16_t handle) {
 }
 std::uintptr_t reset_hook(void* context) {
     const auto backend=reinterpret_cast<std::uintptr_t>(context)-0xd88;
-    {std::lock_guard lock(guard);proofs.remove(backend);sessions.remove_peer(backend,0);}
+    {std::lock_guard lock(guard);proofs.clear_backend(backend);sessions.clear_backend(backend);}
     return original_peer_reset(context);
 }
 std::uintptr_t player_reset_hook(void* state,void* player) {

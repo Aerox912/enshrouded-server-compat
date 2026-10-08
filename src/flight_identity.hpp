@@ -21,7 +21,8 @@ public:
     struct Pending { Peer peer{}; std::uint64_t generation = 0, epoch = 0; };
     Pending begin(const Peer&) noexcept;
     bool finish(const Pending&, const Peer&, bool callback_success) noexcept;
-    void remove(std::uintptr_t backend, std::uint16_t handle = 0) noexcept;
+    void remove(std::uintptr_t backend, std::uint16_t handle) noexcept;
+    void clear_backend(std::uintptr_t backend) noexcept;
     std::uint64_t serial(const Peer&) const noexcept;
 };
 

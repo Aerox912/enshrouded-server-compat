@@ -1,5 +1,6 @@
 #pragma once
 #include "flight_session.hpp"
+#include "callback_gate.hpp"
 #include <windows.h>
 #include <isteamnetworkingmessages.h>
 
@@ -13,23 +14,33 @@ class SteamTransport {
     using Register = void (*)(CCallbackBase*,int);
     using Unregister = void (*)(CCallbackBase*);
     Unregister unregister_ = nullptr;
-    bool (*allowed_)(std::uint64_t) = nullptr;
     class Request final : public CCallbackBase {
-        SteamTransport* owner_;
+        struct State {ISteamNetworkingMessages* api=nullptr;bool (*allowed)(std::uint64_t)=nullptr;};
+        CallbackGate<State> gate_;
     public:
-        explicit Request(SteamTransport* owner) : owner_(owner) {}
+        void configure(ISteamNetworkingMessages* api,bool (*allowed)(std::uint64_t)) {gate_.configure({api,allowed});}
+        void disable() {gate_.disable();}
         void server_flag(bool server) { m_nCallbackFlags = server ? k_ECallbackFlagsGameServer : 0; }
         void Run(void* p) override {
             const auto* request = static_cast<const SteamNetworkingMessagesSessionRequest_t*>(p);
             const auto id = request->m_identityRemote.GetSteamID64();
-            if (owner_->api_ && owner_->allowed_ && id && owner_->allowed_(id))
-                owner_->api_->AcceptSessionWithUser(request->m_identityRemote);
+            gate_.invoke([&](const State& state) {
+                if (state.api && state.allowed && id && state.allowed(id))
+                    state.api->AcceptSessionWithUser(request->m_identityRemote);
+            });
         }
         void Run(void* p,bool failure,SteamAPICall_t) override { if(!failure) Run(p); }
         int GetCallbackSizeBytes() override { return sizeof(SteamNetworkingMessagesSessionRequest_t); }
-    } callback_{this};
+    };
+    // Retained deliberately for the pinned DLL lifetime. Unregistering does not
+    // prove a callback selected on another thread has finished. No owner pointer
+    // survives here, and shutdown drains the gate and clears all callable state.
+    Request* callback_=nullptr;
 public:
     explicit SteamTransport(int selected_channel = 18357) : channel(selected_channel) {}
+    SteamTransport(const SteamTransport&)=delete;
+    SteamTransport& operator=(const SteamTransport&)=delete;
+    ~SteamTransport(){shutdown();}
     bool initialize(bool server, bool (*allowed)(std::uint64_t)) {
         if (api_) return true;
         const auto module = GetModuleHandleW(L"steam_api64.dll");
@@ -41,8 +52,9 @@ public:
         unregister_ = reinterpret_cast<Unregister>(GetProcAddress(module,"SteamAPI_UnregisterCallback"));
         if (!get || !reg || !unregister_) return false;
         api_ = get(); if(!api_)return false;
-        allowed_ = allowed; callback_.server_flag(server);
-        reg(&callback_,SteamNetworkingMessagesSessionRequest_t::k_iCallback);return true;
+        if(!callback_)callback_=new Request;
+        callback_->configure(api_,allowed);callback_->server_flag(server);
+        reg(callback_,SteamNetworkingMessagesSessionRequest_t::k_iCallback);return true;
     }
     bool send(std::uint64_t peer,const Message& message) {
         const auto bytes=encode(message);
@@ -74,8 +86,9 @@ public:
         }
     }
     void shutdown() {
-        if(api_ && unregister_)unregister_(&callback_);
-        api_=nullptr;allowed_=nullptr;
+        if(callback_)callback_->disable();
+        if(api_ && unregister_)unregister_(callback_);
+        api_=nullptr;
     }
 };
 }

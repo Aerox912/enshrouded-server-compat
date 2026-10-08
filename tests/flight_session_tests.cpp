@@ -34,8 +34,12 @@ int main() {
              std::string(8193,' '), std::string("schema=1\0",9)})
             check(!parse_allowlist(bad).valid,"invalid config denies");
         auto a=owners(); Sessions server; server.configure(config(),100); server.observe(a,100);
-        check(server.identity_for(alice,100)==a[0],"shared authenticated sender mapping");
-        check(server.identity_for(3,1,100)==a[0],"shared authenticated owner mapping");
+        auto mapped=a[0];mapped.lifecycle=server.identity_for(alice,100)->lifecycle;
+        check(mapped.lifecycle && server.identity_for(alice,100)==mapped,"shared authenticated sender mapping with lifecycle");
+        check(server.identity_for(3,1,100)==mapped,"shared authenticated owner mapping");
+        server.observe(a,101);
+        check(server.identity_for(alice,101)==mapped,"ordinary observation preserves lifecycle");
+        server.observe(a,100);
         check(!server.identity_for(9,1,100) && !server.identity_for(3,0,100),"shared mapping rejects other world or invalid owner");
         check(!server.identity_for(alice,1100) && !server.identity_for(3,1,99),"shared mapping requires fresh monotonic evidence");
         server.configure({},100);
@@ -51,6 +55,11 @@ int main() {
         check(!server.receive(alice+2,ar,100,0),"unmapped sender denied");
         auto br=handshake(server,bc,bob,20,100);
         auto ba=server.receive(bob,br,100,0); check(ba && bc.receive(*ba,100),"simultaneous second player");
+        server.remove_peer(1,0);
+        check(server.can_fly(3,1,100) && server.can_fly(3,2,100),"missing peer from failed authentication does not revoke either player");
+        auto isolated=server;isolated.remove_peer(1,64);
+        check(!isolated.can_fly(3,1,100) && isolated.can_fly(3,2,100),"known failed authentication revokes only that player");
+        isolated.clear_backend(1);check(!isolated.can_fly(3,2,100),"explicit backend reset revokes remaining players");
         auto off=ac.request(false,200); check(off && !ac.can_fly(200),"local off immediate");
         auto oa=server.receive(alice,*off,200,0); check(oa && !oa->enabled,"server off");
         check(!server.can_fly(3,1,200) && server.can_fly(3,2,200),"different settings isolated");
@@ -83,7 +92,14 @@ int main() {
         server.remove_peer(1,64);check(!server.can_fly(3,1,5402),"disconnect denies immediately");
         check(!server.identity_for(alice,5402) && !server.identity_for(3,1,5402),"shared identity removed immediately on disconnect");
         server.observe(a,5403);ar=handshake(server,ac,alice,80,5403);server.receive(alice,ar,5403,0);
+        const auto before_reset=server.identity_for(alice,5403);
+        const auto other_before=server.identity_for(bob,5403);
         server.remove_owner(3,1);check(!server.can_fly(3,1,5403),"character reset clears privilege");
+        server.observe(a,5403);
+        const auto after_reset=server.identity_for(alice,5403);
+        check(before_reset && after_reset && before_reset->lifecycle!=after_reset->lifecycle,"immediate same-handle respawn invalidates queued identity");
+        check(other_before==server.identity_for(bob,5403),"another player's lifecycle survives reset");
+        check(!server.receive(alice,ar,5403,0) && !server.can_fly(3,1,5403),"old activation cannot survive immediate respawn");
         server.observe(a,5404);a[1].steam=alice;server.observe(a,5404);
         check(!server.receive(alice,ac.hello(),5404,99),"ambiguous identity denied");
         check(!server.identity_for(alice,5404),"shared identity rejects ambiguous peers");
