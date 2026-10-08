@@ -40,7 +40,6 @@ public:
     explicit SteamTransport(int selected_channel = 18357) : channel(selected_channel) {}
     SteamTransport(const SteamTransport&)=delete;
     SteamTransport& operator=(const SteamTransport&)=delete;
-    ~SteamTransport(){shutdown();}
     bool initialize(bool server, bool (*allowed)(std::uint64_t)) {
         if (api_) return true;
         const auto module = GetModuleHandleW(L"steam_api64.dll");
@@ -52,7 +51,9 @@ public:
         unregister_ = reinterpret_cast<Unregister>(GetProcAddress(module,"SteamAPI_UnregisterCallback"));
         if (!get || !reg || !unregister_) return false;
         api_ = get(); if(!api_)return false;
-        if(!callback_)callback_=new Request;
+        // Never re-enable a retired registration: a delayed old dispatch must
+        // remain inert even after a new activation has started.
+        callback_=new Request;
         callback_->configure(api_,allowed);callback_->server_flag(server);
         reg(callback_,SteamNetworkingMessagesSessionRequest_t::k_iCallback);return true;
     }
@@ -88,7 +89,7 @@ public:
     void shutdown() {
         if(callback_)callback_->disable();
         if(api_ && unregister_)unregister_(callback_);
-        api_=nullptr;
+        api_=nullptr;callback_=nullptr;
     }
 };
 }

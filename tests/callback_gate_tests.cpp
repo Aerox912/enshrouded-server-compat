@@ -23,5 +23,11 @@ int main() {
     gate.configure(&next);gate.invoke([](int* state){if(state)++*state;});gate.disable();
     gate.invoke([](int* state){if(state)++*state;});
     if(next!=1 || accepted!=1){std::cerr<<"callback reactivation failed\n";return 1;}
-    std::cout<<"4 callback drain, late-dispatch and reactivation checks passed\n";
+    xhl::flight::CallbackGate<int*> replacement;
+    replacement.configure(&next);
+    gate.invoke([](int* state){if(state)++*state;}); // Retired registration enters late.
+    replacement.invoke([](int* state){if(state)++*state;});
+    replacement.disable();
+    if(next!=2 || accepted!=1){std::cerr<<"retired registration crossed activation\n";return 1;}
+    std::cout<<"5 callback drain, late-dispatch and registration-isolation checks passed\n";
 }
