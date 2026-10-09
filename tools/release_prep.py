@@ -56,6 +56,78 @@ def require_sha256(value: Any, label: str) -> str:
     return value.lower()
 
 
+GEM_FORGE_CLIENT_PATHS = {
+    "client/game/mods/creative-gem-forges/mod.json",
+    "client/game/mods/creative-gem-forges/src/mod.lua",
+    "client/game/mods/creative-gem-forges/src/forge_data.lua",
+}
+GEM_FORGE_SERVER_PATHS = {name.replace("client/game/", "server/game/", 1) for name in GEM_FORGE_CLIENT_PATHS}
+GEM_FORGE_CANDIDATE_PATHS = GEM_FORGE_CLIENT_PATHS | GEM_FORGE_SERVER_PATHS
+
+
+def validate_gem_forge_candidate(
+    manifest: dict[str, Any],
+    archive_files: dict[str, bytes],
+    declared_files: dict[str, dict[str, Any]],
+) -> bool:
+    """Validate the optional exact shared EML module shipped to both game roots."""
+    module_paths = {
+        name for name in archive_files
+        if name.startswith(("client/game/mods/creative-gem-forges/", "server/game/mods/creative-gem-forges/"))
+    }
+    if not module_paths:
+        if manifest.get("sharedModules") is not None:
+            raise PrepError("Shared module metadata is present without Gem Forge files")
+        return False
+    if module_paths != GEM_FORGE_CANDIDATE_PATHS:
+        missing = sorted(GEM_FORGE_CANDIDATE_PATHS - module_paths)
+        extra = sorted(module_paths - GEM_FORGE_CANDIDATE_PATHS)
+        raise PrepError(f"Gem Forge candidate inventory mismatch; missing={missing}, extra={extra}")
+
+    shared_modules = manifest.get("sharedModules")
+    if not isinstance(shared_modules, dict) or set(shared_modules) != {"creativeGemForges"}:
+        raise PrepError("Gem Forge files require the pinned sharedModules manifest")
+    module = shared_modules["creativeGemForges"]
+    if not isinstance(module, dict) or type(module.get("schema")) is not int or module["schema"] != 1 or module.get("moduleId") != "creative-gem-forges":
+        raise PrepError("Gem Forge shared module metadata is invalid")
+    if not isinstance(module.get("moduleVersion"), str) or not module["moduleVersion"].strip():
+        raise PrepError("Gem Forge module version is missing")
+    require_sha256(module.get("sourceItemsJsonSha256"), "Gem Forge source items hash")
+    require_sha256(module.get("forgeMetadataSha256"), "Gem Forge source metadata hash")
+    targets = module.get("intendedTargets")
+    if not isinstance(targets, dict) or targets.get("clientEditions") != ["Admin", "Regular"] or targets.get("serverProfiles") != ["normal", "cheeze"]:
+        raise PrepError("Gem Forge shared module targets are invalid")
+
+    nested = module.get("files")
+    if not isinstance(nested, list):
+        raise PrepError("Gem Forge shared module manifest has no files array")
+    nested_by_path: dict[str, dict[str, Any]] = {}
+    for entry in nested:
+        if not isinstance(entry, dict) or not isinstance(entry.get("path"), str) or entry["path"] in nested_by_path:
+            raise PrepError("Gem Forge shared module manifest contains a malformed or duplicate file")
+        nested_by_path[entry["path"]] = entry
+    if set(nested_by_path) != GEM_FORGE_CANDIDATE_PATHS:
+        raise PrepError("Gem Forge shared module manifest does not list the exact six files")
+
+    for name in sorted(GEM_FORGE_CANDIDATE_PATHS):
+        record = declared_files.get(name)
+        nested_record = nested_by_path[name]
+        if not isinstance(record, dict) or record.get("adminOnly") is not False or record.get("audience") != "shared":
+            raise PrepError(f"Gem Forge file must be declared shared and available to both editions: {name}")
+        if nested_record != record:
+            raise PrepError(f"Gem Forge component manifest differs from candidate manifest: {name}")
+
+    for client_name in sorted(GEM_FORGE_CLIENT_PATHS):
+        server_name = client_name.replace("client/game/", "server/game/", 1)
+        client_record = declared_files[client_name]
+        server_record = declared_files[server_name]
+        if (client_record.get("size"), client_record.get("sha256")) != (server_record.get("size"), server_record.get("sha256")):
+            raise PrepError(f"Gem Forge client/server file hashes differ: {client_name}")
+        if archive_files[client_name] != archive_files[server_name]:
+            raise PrepError(f"Gem Forge client/server file bytes differ: {client_name}")
+    return True
+
+
 def safe_archive_path(name: str) -> str:
     if not isinstance(name, str) or not name or "\\" in name or name.startswith("/"):
         raise PrepError(f"Unsafe archive path: {name!r}")
@@ -147,6 +219,7 @@ def verify_candidate(
         expected = require_sha256(entry.get("sha256"), f"Candidate member hash for {name}")
         if sha256_bytes(data) != expected:
             raise PrepError(f"Candidate member SHA-256 mismatch: {name}")
+    validate_gem_forge_candidate(manifest, files, declared)
 
     dependencies = manifest.get("dependencies")
     if not isinstance(dependencies, dict):
@@ -435,27 +508,37 @@ def make_local_install_plan(
         if not path.is_file() or sha256_file(path) != dependencies[field].lower():
             raise PrepError(f"Supported game executable mismatch: {path}")
 
-    replacements = (
-        ("client/game/mods/creative_mode/creative_mode.dll", "mods/creative_mode/creative_mode.dll"),
-        ("client/game/mods/creative_mode/mod.json", "mods/creative_mode/mod.json"),
-        ("client/game/vmkeys.dll", "vmkeys.dll"),
-        ("server/creative/dbghelp.dll", "dbghelp.dll"),
-    )
+    replacements: list[tuple[str, str, bool]] = [
+        ("client/game/mods/creative_mode/creative_mode.dll", "mods/creative_mode/creative_mode.dll", False),
+        ("client/game/mods/creative_mode/mod.json", "mods/creative_mode/mod.json", False),
+        ("client/game/vmkeys.dll", "vmkeys.dll", False),
+        ("server/creative/dbghelp.dll", "dbghelp.dll", False),
+    ]
+    if any(name in candidate_files for name in GEM_FORGE_CANDIDATE_PATHS):
+        replacements.extend(
+            (name, name.split("/game/", 1)[1], True)
+            for name in sorted(GEM_FORGE_CANDIDATE_PATHS)
+        )
     planned_files = []
-    for archive_path, relative_target in replacements:
+    for archive_path, relative_target, optional_target in replacements:
         data = candidate_files.get(archive_path)
         if data is None:
             raise PrepError(f"Candidate lacks required test replacement: {archive_path}")
         root = server_root if archive_path.startswith("server/") else client_root
         target = root / PurePosixPath(relative_target)
-        if not target.is_file():
+        before_exists = target.exists()
+        if target.is_symlink() or (before_exists and not target.is_file()):
+            raise PrepError(f"Replacement target is not a regular file: {target}")
+        if not optional_target and not before_exists:
             raise PrepError(f"Replacement target is missing: {target}")
         planned_files.append({
             "archivePath": archive_path,
             "target": str(target),
-            "beforeSha256": sha256_file(target),
+            "beforeExists": before_exists,
+            "beforeSha256": sha256_file(target) if before_exists else None,
             "candidateSha256": sha256_bytes(data),
             "candidateSize": len(data),
+            "rollbackAction": "restore-original" if before_exists else "remove-candidate-file",
         })
 
     flight_client = client_root / "mods" / "flight_mod" / "flight_mod.dll"
@@ -500,8 +583,8 @@ def make_local_install_plan(
             "Obtain parent authorization before applying any replacement.",
             "Close the game and test server, then confirm no test-server listener remains.",
             "Reverify both executable hashes and every beforeSha256 immediately before backup.",
-            "Create a new rollback root; copy the replacement targets, server settings, allowlists, and entire test-world; verify the backups before replacement.",
-            "Install only the four listed candidate files; keep standalone Flight disabled.",
+            "Create a new rollback root; back up every existing replacement target, server settings, allowlists, and the entire test-world; record absent replacement targets so rollback removes only files created by this candidate; verify backups before replacement.",
+            "Install only the candidate files listed in replacementFiles; keep standalone Flight disabled.",
             "Capture startup and gameplay evidence; restore from the verified backup after acceptance or failure.",
             "Keep the separate server on port 15637 untouched and do not expose this test to public networks.",
         ],

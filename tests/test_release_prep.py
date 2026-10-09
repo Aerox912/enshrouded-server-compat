@@ -24,7 +24,7 @@ def temporary_directory() -> tempfile.TemporaryDirectory[str]:
     return tempfile.TemporaryDirectory(dir=Path(__file__).parent)
 
 
-def candidate_fixture(root: Path) -> tuple[Path, str, str, str, dict[str, bytes]]:
+def candidate_fixture(root: Path, include_gem_forge: bool = False) -> tuple[Path, str, str, str, dict[str, bytes]]:
     source = "1234567890abcdef1234567890abcdef12345678"
     version = "0.3.0-rc.test"
     files = {
@@ -35,8 +35,26 @@ def candidate_fixture(root: Path) -> tuple[Path, str, str, str, dict[str, bytes]
         "server/creative/dbghelp.dll": b"new creative proxy",
         "server/flight/dbghelp.dll": b"separate flight proxy",
     }
+    if include_gem_forge:
+        module_files = {
+            "mod.json": b'{"id":"creative-gem-forges","capabilities":["patch"]}\n',
+            "src/mod.lua": b'local DATA = require("forge_data")\n',
+            "src/forge_data.lua": b'entries = { pinned = true }\n',
+        }
+        for root_name in ("client/game/mods/creative-gem-forges/", "server/game/mods/creative-gem-forges/"):
+            files.update({root_name + name: data for name, data in module_files.items()})
     client_exe = b"supported client exe"
     server_exe = b"supported server exe"
+    file_records = [
+        {
+            "path": name,
+            "size": len(data),
+            "sha256": digest(data),
+            **({"audience": "shared", "adminOnly": False}
+               if "/mods/creative-gem-forges/" in name else {}),
+        }
+        for name, data in sorted(files.items())
+    ]
     manifest = {
         "schema": 1,
         "version": version,
@@ -51,11 +69,23 @@ def candidate_fixture(root: Path) -> tuple[Path, str, str, str, dict[str, bytes]
                 "serverSha256": digest(server_exe),
             },
         },
-        "files": [
-            {"path": name, "size": len(data), "sha256": digest(data)}
-            for name, data in sorted(files.items())
-        ],
+        "files": file_records,
     }
+    if include_gem_forge:
+        manifest["sharedModules"] = {
+            "creativeGemForges": {
+                "schema": 1,
+                "moduleId": "creative-gem-forges",
+                "moduleVersion": "1.0.0",
+                "sourceItemsJsonSha256": "a" * 64,
+                "forgeMetadataSha256": "b" * 64,
+                "intendedTargets": {
+                    "clientEditions": ["Admin", "Regular"],
+                    "serverProfiles": ["normal", "cheeze"],
+                },
+                "files": [record for record in file_records if "/mods/creative-gem-forges/" in record["path"]],
+            }
+        }
     archive_path = root / "candidate.zip"
     write_zip(archive_path, {**files, "manifest.json": json.dumps(manifest).encode("utf-8")})
     return archive_path, digest(archive_path.read_bytes()), source, version, files
@@ -204,6 +234,68 @@ class ReleasePrepTests(unittest.TestCase):
             for path, original_hash in before.items():
                 self.assertEqual(digest(Path(path).read_bytes()), original_hash)
             self.assertEqual(files["client/game/vmkeys.dll"], b"new vmkeys")
+
+    def test_local_install_plan_tracks_new_shared_files_for_precise_rollback(self) -> None:
+        with temporary_directory() as temporary:
+            root = Path(temporary)
+            candidate, candidate_hash, source, version, _ = candidate_fixture(root, include_gem_forge=True)
+            client = root / "client"
+            server = root / "server"
+            client.mkdir()
+            server.mkdir()
+            (client / "enshrouded.exe").write_bytes(b"supported client exe")
+            (server / "enshrouded_server.exe").write_bytes(b"supported server exe")
+            (client / "mods/creative_mode").mkdir(parents=True)
+            (client / "mods/creative_mode/creative_mode.dll").write_bytes(b"old client DLL")
+            (client / "mods/creative_mode/mod.json").write_bytes(b"old client metadata")
+            (client / "vmkeys.dll").write_bytes(b"old keys")
+            (server / "dbghelp.dll").write_bytes(b"old server DLL")
+            (server / "enshrouded_server.json").write_text("{}", encoding="utf-8")
+            (server / "creative-allowlist.txt").write_text("private-user-id", encoding="utf-8")
+            (server / "test-world").mkdir()
+            (root / "rollback").mkdir()
+            (root / "plans").mkdir()
+            output = root / "plans/local-plan.json"
+            (client / "mods/creative-gem-forges/src").mkdir(parents=True)
+            (client / "mods/creative-gem-forges/src/mod.lua").write_bytes(b"old mod source")
+
+            plan = release_prep.make_local_install_plan(
+                candidate=candidate,
+                candidate_sha256=candidate_hash,
+                source_commit=source,
+                artifact_version=version,
+                client_root=client,
+                server_root=server,
+                backup_root=root / "rollback/new-backup",
+                output=output,
+            )
+
+            forge = [item for item in plan["replacementFiles"] if "/mods/creative-gem-forges/" in item["archivePath"]]
+            self.assertEqual(len(plan["replacementFiles"]), 10)
+            self.assertEqual(len(forge), 6)
+            client_source = next(item for item in forge if item["archivePath"] == "client/game/mods/creative-gem-forges/src/mod.lua")
+            server_source = next(item for item in forge if item["archivePath"] == "server/game/mods/creative-gem-forges/src/mod.lua")
+            self.assertEqual(client_source["rollbackAction"], "restore-original")
+            self.assertTrue(client_source["beforeExists"])
+            self.assertEqual(server_source["rollbackAction"], "remove-candidate-file")
+            self.assertFalse(server_source["beforeExists"])
+            self.assertFalse((root / "rollback/new-backup").exists())
+            self.assertEqual(len(json.loads(output.read_text(encoding="utf-8"))["replacementFiles"]), 10)
+
+    def test_candidate_shared_module_rejects_wrong_edition_flag(self) -> None:
+        with temporary_directory() as temporary:
+            root = Path(temporary)
+            candidate, _, source, version, _ = candidate_fixture(root, include_gem_forge=True)
+            with zipfile.ZipFile(candidate) as archive:
+                contents = {name: archive.read(name) for name in archive.namelist()}
+            manifest = json.loads(contents["manifest.json"])
+            forge_record = next(record for record in manifest["files"] if record["path"].endswith("creative-gem-forges/src/mod.lua"))
+            forge_record["adminOnly"] = True
+            contents["manifest.json"] = json.dumps(manifest).encode("utf-8")
+            bad_candidate = root / "wrong-kind.zip"
+            write_zip(bad_candidate, contents)
+            with self.assertRaisesRegex(release_prep.PrepError, "declared shared"):
+                release_prep.verify_candidate(bad_candidate, digest(bad_candidate.read_bytes()), source, version)
 
     def test_runner_pin_and_command_are_verified_against_source(self) -> None:
         with temporary_directory() as temporary:
