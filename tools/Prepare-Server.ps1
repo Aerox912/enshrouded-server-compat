@@ -24,6 +24,17 @@ $arguments=@('server',$profile.id,[IO.Path]::GetFullPath($Originals),[IO.Path]::
 if($profile.id -eq 'cheeze') { $arguments+=@('--adapter',(Join-Path $PSScriptRoot 'adapter.dll')) }
 & (Join-Path $PSScriptRoot 'PatchTool.exe') @arguments
 if($LASTEXITCODE) { throw 'Original import failed. No live installation was changed.' }
+$packageRoot=$PSScriptRoot
+if(!(Test-Path -LiteralPath (Join-Path $packageRoot 'profile.json') -PathType Leaf)) { $packageRoot=Split-Path -Parent $PSScriptRoot }
+if($lock.PSObject.Properties['gemForge']) {
+ $sharedGemForgeHelper=Join-Path $PSScriptRoot 'SharedGemForge.psm1'
+ if(!(Test-Path -LiteralPath $sharedGemForgeHelper -PathType Leaf)) { $sharedGemForgeHelper=Join-Path (Split-Path -Parent $PSScriptRoot) 'ci/SharedGemForge.psm1' }
+ if(!(Test-Path -LiteralPath $sharedGemForgeHelper -PathType Leaf)) { throw 'Pinned Gem Forge package has no verifier module.' }
+ Import-Module -Name $sharedGemForgeHelper -Force
+ Add-VerifiedSharedGemForgeToPreparedOutput -PackageRoot $packageRoot -OutputDirectory $OutputDirectory -GemForgeMetadata $lock.gemForge | Out-Null
+} elseif(Test-Path -LiteralPath (Join-Path $packageRoot 'mods/creative-gem-forges')) {
+ throw 'Stale Gem Forge module files are present without a pinned dependencies.lock.json entry.'
+}
 if($ExistingServerConfig) {
  $config=Get-Content -LiteralPath $ExistingServerConfig -Raw | ConvertFrom-Json
  foreach($p in $profile.serverSettings.PSObject.Properties) {

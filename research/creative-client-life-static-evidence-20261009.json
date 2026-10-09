@@ -1,0 +1,664 @@
+{
+  "status": "pinned client life reader static layout matches",
+  "static_only": true,
+  "build": {
+    "path": "D:\\Games\\SteamLibrary\\steamapps\\common\\Enshrouded\\enshrouded.exe",
+    "sha256": "AF2F5A1227911D8AA06B3908D6BD0211838211CAE14EA91099CB57D0DF990781",
+    "timestamp": "0x6a4236c8",
+    "image_base": "0x140000000",
+    "image_size": "0x2da7000"
+  },
+  "anchors": [
+    {
+      "name": "inline-game-object",
+      "rva": "0x771c86",
+      "function": [
+        "0x771c80",
+        "0x771d7e"
+      ],
+      "bytes": "488D0D3360790141B8C8030000E8C808B300488D0D21607901E8AC490B00",
+      "instruction_lengths": [
+        7,
+        6,
+        5,
+        7,
+        5
+      ]
+    },
+    {
+      "name": "inline-game-getter",
+      "rva": "0x778c50",
+      "function": null,
+      "bytes": "488D0569F07801C3",
+      "instruction_lengths": [
+        7,
+        1
+      ]
+    },
+    {
+      "name": "game-client-read",
+      "rva": "0x78cd27",
+      "function": [
+        "0x78cd00",
+        "0x78cd75"
+      ],
+      "bytes": "488B8B500200004885C97437",
+      "instruction_lengths": [
+        7,
+        3,
+        2
+      ]
+    },
+    {
+      "name": "game-client-publish",
+      "rva": "0x788660",
+      "function": [
+        "0x788660",
+        "0x788686"
+      ],
+      "bytes": "488BC8E8A8D3FDFF4C8BF0488D55804C89B750020000",
+      "instruction_lengths": [
+        3,
+        5,
+        3,
+        4,
+        7
+      ]
+    },
+    {
+      "name": "client-session-publish",
+      "rva": "0x774c22",
+      "function": [
+        "0x774c1d",
+        "0x774c3a"
+      ],
+      "bytes": "4889878828050048897828",
+      "instruction_lengths": [
+        7,
+        4
+      ]
+    },
+    {
+      "name": "active-session-scene",
+      "rva": "0x78a89e",
+      "function": [
+        "0x78a610",
+        "0x78aaa8"
+      ],
+      "bytes": "488B87882805004885C074378078200074314C8B80800100004D85C07425",
+      "instruction_lengths": [
+        7,
+        3,
+        2,
+        4,
+        2,
+        7,
+        3,
+        2
+      ]
+    },
+    {
+      "name": "scene-simulation",
+      "rva": "0x771240",
+      "function": null,
+      "bytes": "488B81882805004885C07457488B80800100004885C0744B4883B8C0393400007441",
+      "instruction_lengths": [
+        7,
+        3,
+        2,
+        7,
+        3,
+        2,
+        8,
+        2
+      ]
+    },
+    {
+      "name": "scene-world-constructor-input",
+      "rva": "0x77c553",
+      "function": [
+        "0x77bfa0",
+        "0x77c867"
+      ],
+      "bytes": "488B87C00100000F1087F0273300488985C8000000",
+      "instruction_lengths": [
+        7,
+        7,
+        7
+      ]
+    },
+    {
+      "name": "scene-simulation-publish",
+      "rva": "0x77c6e9",
+      "function": [
+        "0x77bfa0",
+        "0x77c867"
+      ],
+      "bytes": "488D4D40E83E87BAFF488B8F803A3400488987C0393400",
+      "instruction_lengths": [
+        4,
+        5,
+        7,
+        7
+      ]
+    },
+    {
+      "name": "simulation-constructor-arguments",
+      "rva": "0x324e4c",
+      "function": [
+        "0x324e30",
+        "0x326f6a"
+      ],
+      "bytes": "4C8BE133D2488B09E867DCFFFF4C8BE8",
+      "instruction_lengths": [
+        3,
+        2,
+        3,
+        5,
+        3
+      ]
+    },
+    {
+      "name": "simulation-world-copy",
+      "rva": "0x324e77",
+      "function": [
+        "0x324e30",
+        "0x326f6a"
+      ],
+      "bytes": "498B842488000000488BCB49894508",
+      "instruction_lengths": [
+        8,
+        3,
+        4
+      ]
+    },
+    {
+      "name": "world-own-component-registry",
+      "rva": "0x8988b2",
+      "function": [
+        "0x898840",
+        "0x89a648"
+      ],
+      "bytes": "498D962809000049894E08",
+      "instruction_lengths": [
+        7,
+        4
+      ]
+    },
+    {
+      "name": "world-own-registry-publish",
+      "rva": "0x898956",
+      "function": [
+        "0x898840",
+        "0x89a648"
+      ],
+      "bytes": "4989961842CC00",
+      "instruction_lengths": [
+        7
+      ]
+    },
+    {
+      "name": "component-array-count-stride",
+      "rva": "0x8b7d28",
+      "function": [
+        "0x8b78c0",
+        "0x8b8096"
+      ],
+      "bytes": "488BB7380900004C8BB728090000488B9F300900004885F6742A4883C358488B134885D27411498B064C8D4540498BCEC6454000FF50104881C3000100004883EE0175DA",
+      "instruction_lengths": [
+        7,
+        7,
+        7,
+        3,
+        2,
+        4,
+        3,
+        3,
+        2,
+        3,
+        4,
+        3,
+        4,
+        3,
+        7,
+        4,
+        2
+      ]
+    },
+    {
+      "name": "component-index-and-reflection",
+      "rva": "0x8f472e",
+      "function": [
+        "0x8f4640",
+        "0x8f484e"
+      ],
+      "bytes": "0FB71048C1E208480393300900004883BA80000000000F84990000004C8B42280FB68B2042CC004983C020",
+      "instruction_lengths": [
+        3,
+        4,
+        7,
+        8,
+        6,
+        4,
+        7,
+        4
+      ]
+    },
+    {
+      "name": "root-component-resolver",
+      "rva": "0x8c761f",
+      "function": [
+        "0x8c7610",
+        "0x8c7669"
+      ],
+      "bytes": "488DBA1842CC004489442440488BF1488D542440488B0F418BD94881C188000000E8CBE7FFFF4C8BC0448BCB488BD7",
+      "instruction_lengths": [
+        7,
+        5,
+        3,
+        5,
+        3,
+        3,
+        7,
+        5,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "name": "entity-map-hash",
+      "rva": "0x8c93ea",
+      "function": [
+        "0x8c93e0",
+        "0x8c947a"
+      ],
+      "bytes": "837954004C8BC94C8B591074758B1A8BC3498B7908C1E81033C369D03B9F5D048BC2C1E81033C269C03B9F5D048BC848C1E8104833C1498D4BFF4823C1",
+      "instruction_lengths": [
+        4,
+        3,
+        4,
+        2,
+        2,
+        2,
+        4,
+        3,
+        2,
+        6,
+        2,
+        3,
+        2,
+        6,
+        2,
+        4,
+        3,
+        4,
+        3
+      ]
+    },
+    {
+      "name": "entity-map-buckets",
+      "rva": "0x8c9427",
+      "function": [
+        "0x8c93e0",
+        "0x8c947a"
+      ],
+      "bytes": "488BD00FB6C848C1EA064C8B04D749D3E841F6C001742E4D8B512841391C827427488D480133C0493BCB480F42C1488BD00FB6C848C1EA064C8B04D749D3E841F6C00175D6498BC3488B5C2408488B7C2410C3",
+      "instruction_lengths": [
+        3,
+        3,
+        4,
+        4,
+        3,
+        4,
+        2,
+        4,
+        4,
+        2,
+        4,
+        2,
+        3,
+        4,
+        3,
+        3,
+        4,
+        4,
+        3,
+        4,
+        2,
+        3,
+        5,
+        5,
+        1
+      ]
+    },
+    {
+      "name": "component-entity-record",
+      "rva": "0x8c7354",
+      "function": [
+        "0x8c7340",
+        "0x8c7429"
+      ],
+      "bytes": "488DBA48010000488BD9488BCF488D542448498BF0E872200000483B47100F8394000000488B57404C8D04C24D85C00F84830000004D8B004D85C0747B4885F67476",
+      "instruction_lengths": [
+        7,
+        3,
+        3,
+        5,
+        3,
+        5,
+        4,
+        6,
+        4,
+        4,
+        3,
+        6,
+        3,
+        3,
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "name": "component-presence-index",
+      "rva": "0x8c7396",
+      "function": [
+        "0x8c7340",
+        "0x8c7429"
+      ],
+      "bytes": "440FB70E4D8B5018418BC148C1E806410FB6C9498B14C248D3EAF6C201751C",
+      "instruction_lengths": [
+        4,
+        4,
+        3,
+        4,
+        4,
+        4,
+        3,
+        3,
+        2
+      ]
+    },
+    {
+      "name": "component-storage-address",
+      "rva": "0x8c73d1",
+      "function": [
+        "0x8c7340",
+        "0x8c7429"
+      ],
+      "bytes": "430FB7944A840A0000418B4030430FB78C4A84000000480FAFC24803C8488BC34903482048890B48895308",
+      "instruction_lengths": [
+        9,
+        4,
+        9,
+        4,
+        3,
+        3,
+        4,
+        3,
+        4
+      ]
+    },
+    {
+      "name": "actor-predicted-state",
+      "rva": "0x1dfa50",
+      "function": null,
+      "bytes": "4C8BC10FB6CABA0100000048D3E241F680B101000001498B80F80B00007414498B88D80B0000490B80D00B000048F7D14823C1488BCA4823C8483BCA0F94C0C3",
+      "instruction_lengths": [
+        3,
+        3,
+        5,
+        3,
+        8,
+        7,
+        2,
+        7,
+        7,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1
+      ]
+    }
+  ],
+  "local_entity": {
+    "anchors": [
+      {
+        "name": "local-player-hide-entity-and-predicate",
+        "rva": "0x30b760",
+        "function": [
+          "0x30b754",
+          "0x30b7d6"
+        ],
+        "bytes": "488B5C2440488D542478488BCFE81E7D5C00488BD38B08E8D4B50200",
+        "instruction_lengths": [
+          5,
+          5,
+          3,
+          5,
+          3,
+          2,
+          5
+        ]
+      },
+      {
+        "name": "local-player-entity-predicate",
+        "rva": "0x336d50",
+        "function": null,
+        "bytes": "394A040F94C0C3",
+        "instruction_lengths": [
+          3,
+          3,
+          1
+        ]
+      },
+      {
+        "name": "local-player-data-global-registration",
+        "rva": "0x3260f9",
+        "function": [
+          "0x324e30",
+          "0x326f6a"
+        ],
+        "bytes": "488D0568DC0D01C685B0000000014C8D8DB000000048894424304D8D85C005000048C74424380F000000488D5424304889742420488BCBE8DBF05C00",
+        "instruction_lengths": [
+          7,
+          7,
+          7,
+          5,
+          7,
+          9,
+          5,
+          5,
+          3,
+          5
+        ]
+      },
+      {
+        "name": "global-registry-fnv-loop",
+        "rva": "0x8f5240",
+        "function": [
+          "0x8f5210",
+          "0x8f52bd"
+        ],
+        "bytes": "410FB6040B48FFC133C369D893010001493BCA72EB",
+        "instruction_lengths": [
+          5,
+          3,
+          2,
+          6,
+          3,
+          2
+        ]
+      },
+      {
+        "name": "global-registry-bucket-and-key",
+        "rva": "0x8f5264",
+        "function": [
+          "0x8f5210",
+          "0x8f52bd"
+        ],
+        "bytes": "4C8B9EB00F6D004D8D42FF8BC34C23C0498BC0410FB6C848C1E806498B14C348D3EAF6C20174324C8B8ED00F6D0043391C817452",
+        "instruction_lengths": [
+          7,
+          4,
+          2,
+          3,
+          3,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          7,
+          4,
+          2
+        ]
+      },
+      {
+        "name": "global-record-stride",
+        "rva": "0x8f532a",
+        "function": [
+          "0x8f530b",
+          "0x8f558e"
+        ],
+        "bytes": "488B45084C8D3C4049C1E7064C037D00",
+        "instruction_lengths": [
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      {
+        "name": "global-record-hash-and-data",
+        "rva": "0x8f5434",
+        "function": [
+          "0x8f530b",
+          "0x8f558e"
+        ],
+        "bytes": "488B8424800000004C8B4424704885C04D8987A80000004C0F45C041899FA0000000488B4424784D8987B0000000",
+        "instruction_lengths": [
+          8,
+          5,
+          3,
+          7,
+          4,
+          7,
+          5,
+          7
+        ]
+      }
+    ],
+    "call_edges": [
+      {
+        "name": "local-row-entity-helper",
+        "rva": "0x30b76d",
+        "target": "0x8d3490",
+        "caller_function": [
+          "0x30b754",
+          "0x30b7d6"
+        ],
+        "bytes": "E81E7D5C00"
+      },
+      {
+        "name": "local-row-ownership-predicate",
+        "rva": "0x30b777",
+        "target": "0x336d50",
+        "caller_function": [
+          "0x30b754",
+          "0x30b7d6"
+        ],
+        "bytes": "E8D4B50200"
+      },
+      {
+        "name": "local-data-register-global",
+        "rva": "0x326130",
+        "target": "0x8f5210",
+        "caller_function": [
+          "0x324e30",
+          "0x326f6a"
+        ],
+        "bytes": "E8DBF05C00"
+      }
+    ],
+    "globals_offset": 7147392,
+    "record_stride": 192,
+    "exact_name": "LocalPlayerData",
+    "name_hash": "0x9117771d",
+    "actor_id_offset": 4,
+    "reader_bound": {
+      "max_records": 512,
+      "max_capacity": 4096,
+      "max_probes": 64
+    },
+    "current_query_world_binding_proven": false,
+    "read_only_decoder_installed": false,
+    "meaning": "native local-player predicate compares current entity with current LocalPlayerData+4; this is not server approval"
+  },
+  "state_flag_enum": {
+    "descriptor_rva": "0x1b2d230",
+    "qualified_name": "keen::actor::StateFlag",
+    "qualified_name_pointer_rva": "0x1b2d250",
+    "qualified_name_rva": "0x1ca2cf0",
+    "field_count_word_rva": "0x1b2d278",
+    "field_count_word": "0xc0000003e",
+    "field_count": 62,
+    "enum_table_pointer_rva": "0x1b2d290",
+    "enum_table_rva": "0x1b23720",
+    "entry_stride": "0x28",
+    "entries": {
+      "Dead": {
+        "index": 7,
+        "record_rva": "0x1b23838",
+        "name_rva": "0x1ca0ac0",
+        "value_rva": "0x1b23848",
+        "value": 7
+      },
+      "Spawning": {
+        "index": 12,
+        "record_rva": "0x1b23900",
+        "name_rva": "0x1ca0cf0",
+        "value_rva": "0x1b23910",
+        "value": 12
+      }
+    }
+  },
+  "reader": {
+    "game_inline_rva": "0x1f07cc0",
+    "client_slot": "0x250",
+    "session_slot": "0x52888",
+    "active_byte": "0x20",
+    "scene_slot": "0x180",
+    "world_slot": "0x1c0",
+    "simulation_slot": "0x3439c0",
+    "simulation_world_slot": 8,
+    "actor_type_rva": "0x17bc900",
+    "component_records": "0x930",
+    "component_count": "0x938",
+    "component_stride": "0x100",
+    "reflection_slot": "0x28",
+    "entity_map": "0xcc4360",
+    "authoritative_state": "0xbf8",
+    "prediction_flag": "0x1b1",
+    "added_state": "0xbd0",
+    "removed_state": "0xbd8",
+    "dead_bit": 7,
+    "spawning_bit": 12,
+    "max_components": 1280,
+    "max_entity_capacity": 1048576,
+    "max_probes": 64,
+    "max_reads": 4096
+  },
+  "runtime_installed": false,
+  "live_gameplay_verified": false,
+  "limitations": [
+    "Repeated copies detect observed inconsistency, not undetectable ABA.",
+    "Caller binds copied local identity to current host/capability approval.",
+    "Conservative life gate denies authoritative OR native effective Dead/Spawning."
+  ]
+}

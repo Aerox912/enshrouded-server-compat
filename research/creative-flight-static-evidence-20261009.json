@@ -1,0 +1,958 @@
+{
+  "status": "static offsets and bytes match pinned inputs",
+  "static_only": true,
+  "server": {
+    "path": "E:\\Scratch\\enshrouded-flight-creative-20261008\\enshrouded_server.exe",
+    "sha256": "001C1B40ED091D8C1AEE583ADDE3800D7C858AE2C7F4DFF54FCA2938B2BE1637",
+    "timestamp": "0x69fdecc9",
+    "image_base": "0x140000000",
+    "image_size": "0x1da7000"
+  },
+  "creative_original_module": {
+    "path": "E:\\Scratch\\creative-original-1.1-20261008\\creative\\creative.dll",
+    "sha256": "636BB4DF119EEB999D0348FF31E26038716FB01515DBFBC81A9323ECAF2F9698",
+    "timestamp": "0x6ac7a6b7",
+    "image_base": "0x180000000",
+    "image_size": "0x44f000"
+  },
+  "server_sites": [
+    {
+      "name": "locomotion-state-entry",
+      "rva": "0x1767c0",
+      "function": [
+        "0x1767c0",
+        "0x176858"
+      ],
+      "bytes": "48895C240848896C2410488974241848897C2420",
+      "instruction_lengths": [
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "name": "air-jump-static-candidate",
+      "rva": "0x174e21",
+      "function": [
+        "0x174dc0",
+        "0x174eba"
+      ],
+      "bytes": "80BACD00000001",
+      "instruction_lengths": [
+        7
+      ]
+    },
+    {
+      "name": "dive-mover-a-entry",
+      "rva": "0x17e480",
+      "function": [
+        "0x17e480",
+        "0x17e717"
+      ],
+      "bytes": "488BC4488958104889781855488D68A1",
+      "instruction_lengths": [
+        3,
+        4,
+        4,
+        1,
+        4
+      ]
+    },
+    {
+      "name": "dive-mover-b-entry",
+      "rva": "0x180820",
+      "function": [
+        "0x180820",
+        "0x180ab7"
+      ],
+      "bytes": "488BC4488958104889781855488D68A1",
+      "instruction_lengths": [
+        3,
+        4,
+        4,
+        1,
+        4
+      ]
+    },
+    {
+      "name": "gravity-static-candidate",
+      "rva": "0x7e8ae",
+      "function": [
+        "0x7e817",
+        "0x7e989"
+      ],
+      "bytes": "488B442458",
+      "instruction_lengths": [
+        5
+      ]
+    },
+    {
+      "name": "fall-damage-static-candidate",
+      "rva": "0x6b711",
+      "function": [
+        "0x6b67e",
+        "0x6b98d"
+      ],
+      "bytes": "400FB6FE",
+      "instruction_lengths": [
+        4
+      ]
+    },
+    {
+      "name": "mover-dispatch-static-candidate",
+      "rva": "0x187595",
+      "function": [
+        "0x187177",
+        "0x187751"
+      ],
+      "bytes": "488B45380FB6483D83F90A7777418B8C8E5C7718004903CEFFE1",
+      "instruction_lengths": [
+        4,
+        4,
+        3,
+        2,
+        8,
+        3,
+        2
+      ]
+    }
+  ],
+  "direct_call_edges": [
+    {
+      "name": "dispatch-to-mover-b",
+      "rva": "0x187602",
+      "target": "0x180820",
+      "caller_function": [
+        "0x187177",
+        "0x187751"
+      ],
+      "bytes": "E81992FFFF"
+    },
+    {
+      "name": "dispatch-to-mover-a",
+      "rva": "0x187614",
+      "target": "0x17e480",
+      "caller_function": [
+        "0x187177",
+        "0x187751"
+      ],
+      "bytes": "E8676EFFFF"
+    },
+    {
+      "name": "state-decision-caller",
+      "rva": "0x189db3",
+      "target": "0x1767c0",
+      "caller_function": [
+        "0x189c30",
+        "0x18a24e"
+      ],
+      "bytes": "E808CAFEFF"
+    }
+  ],
+  "actor_state_bits_observed": [
+    {
+      "rva": "0x176841",
+      "state_bit": 39
+    },
+    {
+      "rva": "0x176856",
+      "state_bit": 44
+    },
+    {
+      "rva": "0x176869",
+      "state_bit": 36
+    },
+    {
+      "rva": "0x17688a",
+      "state_bit": 43
+    },
+    {
+      "rva": "0x176898",
+      "state_bit": 36
+    },
+    {
+      "rva": "0x1768b9",
+      "state_bit": 37
+    },
+    {
+      "rva": "0x1768cb",
+      "state_bit": 0
+    }
+  ],
+  "actor_state_names": [
+    {
+      "name": "Grounded",
+      "state_bit": 0,
+      "reflection_rva": "0x10dda10"
+    },
+    {
+      "name": "Attached",
+      "state_bit": 36,
+      "reflection_rva": "0x10ddfb0"
+    },
+    {
+      "name": "HangGliding",
+      "state_bit": 37,
+      "reflection_rva": "0x10ddfd8"
+    },
+    {
+      "name": "Flying",
+      "state_bit": 39,
+      "reflection_rva": "0x10de028"
+    },
+    {
+      "name": "FloatingOnWater",
+      "state_bit": 43,
+      "reflection_rva": "0x10de0c8"
+    },
+    {
+      "name": "UnderWater",
+      "state_bit": 44,
+      "reflection_rva": "0x10de0f0"
+    }
+  ],
+  "configured_player_input": {
+    "player_descriptor": "0xdec3e0",
+    "digital_mask_offset": 800,
+    "input_mode_offset": 1305,
+    "actor_input_world_move_offset": 408,
+    "inventory_query_slots": {
+      "player_input": 16
+    },
+    "actor_descriptor_row": 176,
+    "actor_input_row_proven": false,
+    "observer_reads_actor_input": false,
+    "actions": {
+      "Jump": 30,
+      "Sprint": 50,
+      "Sneak": 52
+    },
+    "semantic_class": "configured gameplay input, separate from actor state bits",
+    "held_toggle_semantics_observed": false
+  },
+  "observer_native_bindings": {
+    "anchors": [
+      {
+        "name": "inventory-player-input-row-load",
+        "rva": "0x15b18d",
+        "function": [
+          "0x15b145",
+          "0x15c4f5"
+        ],
+        "bytes": "4C8B6DD0",
+        "instruction_lengths": [
+          4
+        ]
+      },
+      {
+        "name": "inventory-player-input-native-field",
+        "rva": "0x15b1d7",
+        "function": [
+          "0x15b145",
+          "0x15c4f5"
+        ],
+        "bytes": "488B45F88B8934030000",
+        "instruction_lengths": [
+          4,
+          6
+        ]
+      },
+      {
+        "name": "inventory-row-passed-to-actor-helper",
+        "rva": "0x15b8bb",
+        "function": [
+          "0x15b145",
+          "0x15c4f5"
+        ],
+        "bytes": "488D55C0498BCEE8C990FFFF",
+        "instruction_lengths": [
+          4,
+          3,
+          5
+        ]
+      },
+      {
+        "name": "inventory-actor-helper-preserves-row",
+        "rva": "0x1549ac",
+        "function": [
+          "0x154990",
+          "0x154aa5"
+        ],
+        "bytes": "488B72104C8BE1488B4A404C8BF2",
+        "instruction_lengths": [
+          4,
+          3,
+          4,
+          3
+        ]
+      },
+      {
+        "name": "inventory-linked-actor-resolve-and-state",
+        "rva": "0x154b2d",
+        "function": [
+          "0x154b2d",
+          "0x15541f"
+        ],
+        "bytes": "458B4710498BCC498B96B0000000E86085EDFF4885C00F84A0080000B207488BC8E88D56EDFF",
+        "instruction_lengths": [
+          4,
+          3,
+          7,
+          5,
+          3,
+          6,
+          2,
+          3,
+          5
+        ]
+      }
+    ],
+    "call_edges": [
+      {
+        "name": "inventory-row-actor-helper",
+        "rva": "0x15b8c2",
+        "target": "0x154990",
+        "caller_function": [
+          "0x15b145",
+          "0x15c4f5"
+        ],
+        "bytes": "E8C990FFFF"
+      },
+      {
+        "name": "inventory-linked-actor-resolver",
+        "rva": "0x154b3b",
+        "target": "0x2d0a0",
+        "caller_function": [
+          "0x154b2d",
+          "0x15541f"
+        ],
+        "bytes": "E86085EDFF"
+      },
+      {
+        "name": "inventory-linked-actor-state-test",
+        "rva": "0x154b4e",
+        "target": "0x2a1e0",
+        "caller_function": [
+          "0x154b2d",
+          "0x15541f"
+        ],
+        "bytes": "E88D56EDFF"
+      }
+    ],
+    "player_input_row": 16,
+    "actor_descriptor_row": 176,
+    "actor_input_row_proven": false,
+    "observer_reads_actor_input": false,
+    "proof_basis": "native row loads, component resolver and Actor state helper; no registration order arithmetic"
+  },
+  "control_frame": {
+    "anchors": [
+      {
+        "name": "player-input-row20",
+        "rva": "0xa0964",
+        "function": [
+          "0xa0873",
+          "0xa2a1b"
+        ],
+        "bytes": "488B75D0",
+        "instruction_lengths": [
+          4
+        ]
+      },
+      {
+        "name": "actor-input-row58",
+        "rva": "0xa0988",
+        "function": [
+          "0xa0873",
+          "0xa2a1b"
+        ],
+        "bytes": "4C8B7508",
+        "instruction_lengths": [
+          4
+        ]
+      },
+      {
+        "name": "actor-row48",
+        "rva": "0xa0994",
+        "function": [
+          "0xa0873",
+          "0xa2a1b"
+        ],
+        "bytes": "488B4DF8",
+        "instruction_lengths": [
+          4
+        ]
+      },
+      {
+        "name": "native-world-move-x",
+        "rva": "0xa0ccb",
+        "function": [
+          "0xa0873",
+          "0xa2a1b"
+        ],
+        "bytes": "F3410F118698010000",
+        "instruction_lengths": [
+          9
+        ]
+      },
+      {
+        "name": "native-world-move-y",
+        "rva": "0xa0cd8",
+        "function": [
+          "0xa0873",
+          "0xa2a1b"
+        ],
+        "bytes": "F3410F118E9C010000",
+        "instruction_lengths": [
+          9
+        ]
+      },
+      {
+        "name": "native-world-move-z",
+        "rva": "0xa0ce1",
+        "function": [
+          "0xa0873",
+          "0xa2a1b"
+        ],
+        "bytes": "F3410F1196A0010000",
+        "instruction_lengths": [
+          9
+        ]
+      }
+    ],
+    "query_size": 176,
+    "row_origin": "native RBP-0x50",
+    "player_input_row": 32,
+    "actor_row": 72,
+    "actor_input_row": 88,
+    "actor_input_world_move_offset": 408,
+    "registration_order_used": false,
+    "input_capture_requires_completed_native_control": true,
+    "movement_hook_installed": false
+  },
+  "configured_input_consumer": {
+    "query_rva": "0x1a81d0",
+    "consume_rva": "0x1a8160",
+    "query": "mask+8 contains action and consumed mask+0 does not contain action",
+    "consume": "sets action bit in consumed mask+0",
+    "held_toggle_meaning_proven": false
+  },
+  "state_caller_setup": {
+    "rva": "0x189d79",
+    "target": "0x1767c0",
+    "function": [
+      "0x189c30",
+      "0x18a24e"
+    ],
+    "bytes": "488B4424784C8B4D80488B542450488B4DA8410FB6783D4889442438488B4424684889442430488B4424604889442428488B4424584889442420E808CAFEFF",
+    "instruction_lengths": [
+      5,
+      4,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ]
+  },
+  "state_query_trace": {
+    "query_entry": {
+      "name": "locomotion-state-query-loop",
+      "rva": "0x189bf0",
+      "function": [
+        "0x189bf0",
+        "0x189c30"
+      ],
+      "bytes": "405556488DAC2458FFFFFF4881ECA801000041B870000000488D542440488BF1E8DB2B450041B870000000488D542440488BCEE838DD440084C00F841E060000",
+      "instruction_lengths": [
+        2,
+        1,
+        8,
+        7,
+        6,
+        5,
+        3,
+        5,
+        6,
+        5,
+        3,
+        5,
+        2,
+        6
+      ]
+    },
+    "iterator_edges": [
+      {
+        "name": "locomotion-state-query-begin",
+        "rva": "0x189c10",
+        "target": "0x5dc7f0",
+        "caller_function": [
+          "0x189bf0",
+          "0x189c30"
+        ],
+        "bytes": "E8DB2B4500"
+      },
+      {
+        "name": "locomotion-state-query-step",
+        "rva": "0x189c23",
+        "target": "0x5d7960",
+        "caller_function": [
+          "0x189bf0",
+          "0x189c30"
+        ],
+        "bytes": "E838DD4400"
+      }
+    ],
+    "context": "RCX is preserved in RSI and passed to query begin and step",
+    "row_buffer": "RSP+0x40",
+    "row_size": "0x70",
+    "native_state_call": {
+      "rva": "0x189d79",
+      "target": "0x1767c0",
+      "function": [
+        "0x189c30",
+        "0x18a24e"
+      ],
+      "bytes": "488B4424784C8B4D80488B542450488B4DA8410FB6783D4889442438488B4424684889442430488B4424604889442428488B4424584889442420E808CAFEFF",
+      "instruction_lengths": [
+        5,
+        4,
+        5,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    "state_input_pointer": "RDX <- [RSP+0x50], row offset +0x10",
+    "query_continuation": [
+      "0x189c30",
+      "0x18a24e"
+    ]
+  },
+  "registered_systems": [
+    {
+      "name": "locomotion_state",
+      "name_length": 16,
+      "callback": "0x189bf0",
+      "query_groups": [
+        [
+          "Locomotion"
+        ],
+        [
+          "Actor",
+          "Movement",
+          "WorldCollider"
+        ],
+        [
+          "Climb",
+          "HookShot",
+          "InertialFrame",
+          "SlopeConfig"
+        ],
+        [
+          "ActorInput",
+          "DynamicLocomotion"
+        ]
+      ],
+      "runtime_row_order_proven": false
+    }
+  ],
+  "creative_callbacks": [
+    {
+      "name": "state-callback",
+      "rva": "0xd8e80",
+      "function": [
+        "0xd8e80",
+        "0xd8ff2"
+      ]
+    },
+    {
+      "name": "fall-callback",
+      "rva": "0xd9070",
+      "function": [
+        "0xd9070",
+        "0xd9102"
+      ]
+    },
+    {
+      "name": "gravity-callback",
+      "rva": "0xd92b0",
+      "function": [
+        "0xd92b0",
+        "0xd9328"
+      ]
+    },
+    {
+      "name": "mover-callback",
+      "rva": "0xd9370",
+      "function": [
+        "0xd9370",
+        "0xd95ad"
+      ]
+    },
+    {
+      "name": "local-input-callback",
+      "rva": "0xd9720",
+      "function": [
+        "0xd9720",
+        "0xd977b"
+      ]
+    }
+  ],
+  "actor_state_helper": {
+    "rva": "0x2a1e0",
+    "argument": "DL is zero-extended as an Actor state-bit index",
+    "input_fields": [
+      "+0x1B1 bit 0",
+      "+0xBF8",
+      "+0xBD0",
+      "+0xBD8"
+    ],
+    "meaning": "bit test with conditional combination and consumed-mask filtering"
+  },
+  "proven_static_trace": [
+    "locomotion_state is registered with Actor, Movement, and input-related query groups",
+    "state caller loads its Actor argument from row+0x10; registration order is not row proof",
+    "the registered state query uses the same generic begin/step functions as the F6 actor query"
+  ],
+  "unproven": [
+    "live controller/remap behavior of G-local configured hold/toggle inputs and paired prediction",
+    "complete callable ABI and data ownership for gravity/fall/mover hooks",
+    "live per-player flight and controller behavior"
+  ],
+  "hook_implementation_authorized_by_this_report": false,
+  "paired_client": {
+    "build": {
+      "path": "D:\\Games\\SteamLibrary\\steamapps\\common\\Enshrouded\\enshrouded.exe",
+      "sha256": "AF2F5A1227911D8AA06B3908D6BD0211838211CAE14EA91099CB57D0DF990781",
+      "timestamp": "0x6a4236c8",
+      "image_base": "0x140000000",
+      "image_size": "0x2da7000"
+    },
+    "registrations": {
+      "state": 3835648,
+      "execution": 3824688,
+      "player_control_locomotion": 2651040
+    },
+    "state_query_edges": [
+      {
+        "rva": "0x3a8720",
+        "target": "0x8da7c0"
+      },
+      {
+        "rva": "0x3a8733",
+        "target": "0x8d5ca0"
+      },
+      {
+        "rva": "0x3a88c3",
+        "target": "0x3955a0"
+      }
+    ],
+    "state_actor_row_offset": 16,
+    "configured_actions": {
+      "Jump": 30,
+      "Sprint": 50,
+      "Sneak": 52
+    },
+    "digital_mask_offset": 800,
+    "input_mode_offset": 1305,
+    "input_consumer": {
+      "query_rva": "0x3cc720",
+      "consume_rva": "0x3cc6b0",
+      "query": "mask+8 contains action and consumed mask+0 does not contain action",
+      "consume": "sets action bit in consumed mask+0",
+      "held_toggle_meaning_proven": false
+    },
+    "configured_toggle": {
+      "anchors": [
+        {
+          "name": "configured-toggle-mask-copy",
+          "rva": "0x28f2d4",
+          "function": [
+            "0x28f277",
+            "0x28f374"
+          ],
+          "bytes": "488B8A1005000048894C2438",
+          "instruction_lengths": [
+            7,
+            5
+          ]
+        },
+        {
+          "name": "native-digital-toggle-update",
+          "rva": "0xca4060",
+          "function": null,
+          "bytes": "80790300741E807902007525803900740E807901007508807904000F94C0C30FB64104C38039007408807902000F94C0C332C0C3",
+          "instruction_lengths": [
+            4,
+            2,
+            4,
+            2,
+            3,
+            2,
+            4,
+            2,
+            4,
+            3,
+            1,
+            4,
+            1,
+            3,
+            2,
+            4,
+            3,
+            1,
+            2,
+            1
+          ]
+        }
+      ],
+      "toggle_config_offset": 1296,
+      "toggle": "unless consumed, invert previous active only on raw rising edge; otherwise preserve previous active",
+      "hold": "raw down and not consumed",
+      "sprint_sneak_have_additional_native_branches": true,
+      "g_climb_sink_boost_runtime_mapping_accepted": false
+    },
+    "control_frame": {
+      "anchors": [
+        {
+          "name": "player-input-row20",
+          "rva": "0x2874d4",
+          "function": [
+            "0x2873e3",
+            "0x28958b"
+          ],
+          "bytes": "488B75D0",
+          "instruction_lengths": [
+            4
+          ]
+        },
+        {
+          "name": "actor-input-row58",
+          "rva": "0x2874f8",
+          "function": [
+            "0x2873e3",
+            "0x28958b"
+          ],
+          "bytes": "4C8B7508",
+          "instruction_lengths": [
+            4
+          ]
+        },
+        {
+          "name": "actor-row48",
+          "rva": "0x287504",
+          "function": [
+            "0x2873e3",
+            "0x28958b"
+          ],
+          "bytes": "488B4DF8",
+          "instruction_lengths": [
+            4
+          ]
+        }
+      ],
+      "query_size": 176,
+      "row_origin": "native RBP-0x50",
+      "player_input_row": 32,
+      "actor_row": 72,
+      "actor_input_row": 88,
+      "actor_input_world_move_offset": 408,
+      "registration_order_used": false,
+      "input_capture_requires_completed_native_control": true,
+      "movement_hook_installed": false
+    },
+    "local_ownership": {
+      "anchors": [
+        {
+          "name": "local-player-hide-entity-and-predicate",
+          "rva": "0x30b760",
+          "function": [
+            "0x30b754",
+            "0x30b7d6"
+          ],
+          "bytes": "488B5C2440488D542478488BCFE81E7D5C00488BD38B08E8D4B50200",
+          "instruction_lengths": [
+            5,
+            5,
+            3,
+            5,
+            3,
+            2,
+            5
+          ]
+        },
+        {
+          "name": "local-player-entity-predicate",
+          "rva": "0x336d50",
+          "function": null,
+          "bytes": "394A040F94C0C3",
+          "instruction_lengths": [
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "name": "local-player-data-global-registration",
+          "rva": "0x3260f9",
+          "function": [
+            "0x324e30",
+            "0x326f6a"
+          ],
+          "bytes": "488D0568DC0D01C685B0000000014C8D8DB000000048894424304D8D85C005000048C74424380F000000488D5424304889742420488BCBE8DBF05C00",
+          "instruction_lengths": [
+            7,
+            7,
+            7,
+            5,
+            7,
+            9,
+            5,
+            5,
+            3,
+            5
+          ]
+        },
+        {
+          "name": "global-registry-fnv-loop",
+          "rva": "0x8f5240",
+          "function": [
+            "0x8f5210",
+            "0x8f52bd"
+          ],
+          "bytes": "410FB6040B48FFC133C369D893010001493BCA72EB",
+          "instruction_lengths": [
+            5,
+            3,
+            2,
+            6,
+            3,
+            2
+          ]
+        },
+        {
+          "name": "global-registry-bucket-and-key",
+          "rva": "0x8f5264",
+          "function": [
+            "0x8f5210",
+            "0x8f52bd"
+          ],
+          "bytes": "4C8B9EB00F6D004D8D42FF8BC34C23C0498BC0410FB6C848C1E806498B14C348D3EAF6C20174324C8B8ED00F6D0043391C817452",
+          "instruction_lengths": [
+            7,
+            4,
+            2,
+            3,
+            3,
+            4,
+            4,
+            4,
+            3,
+            3,
+            2,
+            7,
+            4,
+            2
+          ]
+        },
+        {
+          "name": "global-record-stride",
+          "rva": "0x8f532a",
+          "function": [
+            "0x8f530b",
+            "0x8f558e"
+          ],
+          "bytes": "488B45084C8D3C4049C1E7064C037D00",
+          "instruction_lengths": [
+            4,
+            4,
+            4,
+            4
+          ]
+        },
+        {
+          "name": "global-record-hash-and-data",
+          "rva": "0x8f5434",
+          "function": [
+            "0x8f530b",
+            "0x8f558e"
+          ],
+          "bytes": "488B8424800000004C8B4424704885C04D8987A80000004C0F45C041899FA0000000488B4424784D8987B0000000",
+          "instruction_lengths": [
+            8,
+            5,
+            3,
+            7,
+            4,
+            7,
+            5,
+            7
+          ]
+        }
+      ],
+      "call_edges": [
+        {
+          "name": "local-row-entity-helper",
+          "rva": "0x30b76d",
+          "target": "0x8d3490",
+          "caller_function": [
+            "0x30b754",
+            "0x30b7d6"
+          ],
+          "bytes": "E81E7D5C00"
+        },
+        {
+          "name": "local-row-ownership-predicate",
+          "rva": "0x30b777",
+          "target": "0x336d50",
+          "caller_function": [
+            "0x30b754",
+            "0x30b7d6"
+          ],
+          "bytes": "E8D4B50200"
+        },
+        {
+          "name": "local-data-register-global",
+          "rva": "0x326130",
+          "target": "0x8f5210",
+          "caller_function": [
+            "0x324e30",
+            "0x326f6a"
+          ],
+          "bytes": "E8DBF05C00"
+        }
+      ],
+      "globals_offset": 7147392,
+      "record_stride": 192,
+      "exact_name": "LocalPlayerData",
+      "name_hash": "0x9117771d",
+      "actor_id_offset": 4,
+      "reader_bound": {
+        "max_records": 512,
+        "max_capacity": 4096,
+        "max_probes": 64
+      },
+      "current_query_world_binding_proven": false,
+      "read_only_decoder_installed": false,
+      "meaning": "native local-player predicate compares current entity with current LocalPlayerData+4; this is not server approval"
+    },
+    "local_input_lead": 2651453,
+    "local_player_ownership_proven": false,
+    "prediction_runtime_acceptance": false
+  }
+}
