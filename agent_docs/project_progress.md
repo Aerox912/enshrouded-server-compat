@@ -1,8 +1,8 @@
 # Enshrouded mods
 
-Complete the requested native Creative features, repair Always Flying and corpse loot, publish matching Admin and Regular managers, and update Enshrouded, IKEA and Soulrend when empty. Keep GitHub, Notion and Linear aligned with verified evidence. Full Creative parity remains the acceptance scope.
+Prepare the current matched build for the mod manager and update Enshrouded and IKEA when empty. The user's latest instruction excludes Soulrend and places further native-menu refinement after this rollout. Full Creative parity remains follow-up work; it is not established by this narrower deployment. Keep GitHub, Notion and Linear aligned with verified evidence.
 
-Public manager 4.4.6 and the three hosted server baselines are unchanged. `package_ready=false`. The active thread goal replaced the deleted automation. Private approved Steam IDs belong only in server configuration.
+Public manager 4.4.6 and the three hosted server baselines are unchanged. `package_ready=false`. The thread goal replaced the deleted automation. Private approved Steam IDs belong only in server configuration. The narrower rollout still needs a matched package, scope-specific runtime and review evidence, rollback backups, fresh empty-server checks and installed-hash/startup verification.
 
 ## Menu and local test
 

@@ -5,11 +5,11 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "Full Creative parity is incomplete. Source, package and focused build checks are accepted in separate checkpoints; G flight, final gear upgrades, accepted drag/delete, persistent HUD, free actions and time control still need complete native integration and gameplay acceptance.",
+    "Full Creative parity remains incomplete and is follow-up scope. The user now requests current matched changes deployed to Enshrouded and IKEA before native-menu refinement; narrower release compatibility and runtime evidence still require evaluation.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
     "Manager23ed410 passed exact-head cloud run37956399896 for both editions and setup checks; publish was skipped. VERIFY53 independently accepted actual cloud payload inventories and RC6 lock provenance. Full feature successor, gameplay and final review remain required before public release.",
-    "UI40 crashed on its first F7 render. The local dump and independent native ABI review confirmed null required byte-pointer inputs. CRASH41 repairs that call; full client build,4 focused CTests and8 package cases passed, and UI41 installed with15 preservation guards matching. Fresh F7/approval gameplay acceptance is pending. Focused endpoint omits XP Share; crafting, bone pickup and actual Wine multiplayer acceptance remain unverified.",
+    "UI41 opens and receives approval per user gameplay report. Settings alignment and Journey activation remain unaccepted. Focused endpoint omits XP Share; hosted composition, crafting, bone pickup and Wine multiplayer acceptance remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -136,7 +136,7 @@
     "gear_result": "VERIFY46B accepted terminal uncertain-commit handling; VERIFY54/54B accepted authenticated read-only gear options, Journey final-level validation and the current-frame capacity producer. VERIFY56B accepted client reply correlation and bounded priority-cancel retry with 108 focused cache checks. Gameplay acceptance remains open.",
     "g_installer": "VERIFY55/57 accepted G-INTEGRATE13 and G-SERVER15 source/build evidence. G-CLIENT20 lifecycle wiring is frozen pending current shared-source rebuild and independent review. Native prediction execution uses its own map; owned generic Actor movement binding is unresolved, so exact storage matching keeps movement closed. No live phase-order or gameplay acceptance.",
     "time": "VERIFY51 accepted bounded time integration and independently built server DLL; 16 selected tests pass. No live callback-order sample. Observation requires private opt-in; writes remain disabled until accepted current-scope sample and later explicit enable.",
-    "local_repair": "Protocol2 UI41 source ac83603ecdfc92e038f60e2da58848c32229466a pins server5f173c49875cc65c8d7903062dfc6ed904896758. Reader and native-input repair independently accepted; full DLL installed SHA256 F4C78B7B62E0BF82F3A4E3974501DEFB88A0334629490B40839D114AF6BC3519. Awaiting fresh user F7/approval result; package_ready remains false."
+    "local_repair": "Protocol2 UI41 source ac83603ecdfc92e038f60e2da58848c32229466a pins server5f173c49875cc65c8d7903062dfc6ed904896758. Reader/native-input repair independently accepted; installed SHA256 F4C78B7B62E0BF82F3A4E3974501DEFB88A0334629490B40839D114AF6BC3519. User confirms opening and approval; menu/Journey issues remain. package_ready=false pending narrower rollout audit."
   },
   "manager_rc6_local_preview": {
     "version": "4.4.7-preview",
@@ -193,7 +193,22 @@
     "package_tests_passed": 8,
     "preservation_hashes_matched": 15,
     "gameplay_verified": false,
-    "live_result": "Awaiting user F7 and approval check",
-    "hosted_deployed": false
+    "live_result": "User confirms F7 opens and receives approval. Settings alignment and native fidelity need refinement; user reports Journey does not activate.",
+    "hosted_deployed": false,
+    "cloud_run": "https://github.com/Aerox912/enshrouded-creative-mode/actions/runs/37977798568",
+    "cloud_candidate_sha256": "5d1ae95e85f99a4e37e1cbf883c32b19a5cdf486b293e4a765cc603766c02a98",
+    "cloud_verification": "Exact head ac83603;16 payload members and30 test executables match;30 CTests pass; packageReady=false"
+  },
+  "rollout_scope": {
+    "targets": [
+      "1650d1ae",
+      "c70c80c3"
+    ],
+    "excluded": [
+      "ea6b2409"
+    ],
+    "priority": "Deploy current matched build through the manager before further native-menu refinement",
+    "authorization": "Latest direct user request",
+    "readiness": "Pending current-package and hosted-baseline audits; no remote mutations yet"
   }
 }

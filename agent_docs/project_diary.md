@@ -1,5 +1,7 @@
 # Lasting decisions
 
+- Latest rollout order: current matched build to Enshrouded and IKEA first, native-menu refinement afterward. Soulrend is excluded until the user authorizes it again. F7 opening and server approval are user-confirmed for UI41; Settings alignment and Journey activation are not accepted. Cosmetic parity is deferred, while compatibility, authority, rollback and empty-server checks remain required for the deployed scope.
+
 - An enabled Always Flying preference should survive death/respawn only within the same authenticated connection. Actual flight suspends for dead/spawning actors; fresh approval and live evidence are required to resume. Disconnect and revocation clear preference. This is the user's explicit default, not acceptance of accidental rc.2 persistence.
 - Creative requests are actor-lifetime operations. Pending grants and old approval must not survive respawn even when the flight preference does.
 - Offline harness success, native build success, Windows gameplay, and hosted Wine multiplayer acceptance are separate evidence categories.

@@ -4,7 +4,7 @@ Deployment: enshrouded-respawn-loot-20261009. User selected Heavy. Main owns arc
 
 ## Goal and constraints
 
-Complete full native Creative parity, repair Always Flying and corpse loot, publish matching Admin/Regular managers, and deploy to all three hosted servers when empty. Full acceptance scope: Creative `research/native-parity-acceptance.md`. The active goal replaced the deleted automation; do not recreate it or shrink the feature scope.
+Latest user priority: put the current matched changes into the mod manager and deploy to Enshrouded and IKEA first, then refine the native menu against the reference. Soulrend is explicitly excluded for now. Full Creative parity remains follow-up work, not a claim about this narrower rollout. Full acceptance scope: Creative `research/native-parity-acceptance.md`. The goal replaced the deleted automation; do not recreate it.
 
 Public managers remain 4.4.6; package_ready=false. Hosted Enshrouded (1650d1ae), IKEA (c70c80c3), Soulrend (ea6b2409) are unchanged. Preserve worlds, current mods, Workshop 20x, loaders, Wine overrides and settings. Do not poll occupancy before readiness. Then require fresh authenticated occupancy, an immediate pre-stop recheck, complete verified rollback backups, exact installed hashes and fresh healthy startup/authorization evidence.
 
@@ -23,6 +23,8 @@ Pinned EXEs: client af2f5a1227911d8aa06b3908d6bd0211838211cae14ea91099cb57d0df99
 RC6 GitHub run 37942933979 passed 26 native and three controls tests. E:\Build\enshrouded-native-cloud-rc6-20261009 contains outer candidate SHA7428695e19bf29110defb3df109ab85e84b0a085a10e5cc57b4235beacb34aba, tests SHAefcd10fb0dcc1f6fb8fae67b6e8eb2656bc06bc2b3f3d459e51f3e2c76a4df09, inner ZIP SHA9a5abdecc51f3a1ac5b1b5342a70af39d10be78eeed546470c5949f9ddc836f0. VERIFY43 accepted 16 payload members, 29 test executables, shared forge files, empty allowlists and external EML contract. These artifacts are not the unfinished rc.7 tree.
 
 ## Latest live result and immediate repair
+
+Latest UI41 user evidence: F7 opens and receives approval. The user rejects Settings alignment/native fidelity and reports Journey does not activate. UI41 exact-head cloud run37977798568 succeeded, verified16 payload members and30 offline executables, Creative protocol2/Flight1; packageReady remains false. Live43 found no client process at19:11:31Z, so no fresh whole-reader sample was captured. Defer MENU42 production until after the requested two-server rollout. ROLLOUT44 manager/package and server-baseline audits are active; JOURNEY44 diagnoses the reported mode failure. No deployment or public manager publication has occurred.
 
 Current local client is UI41, installed and hash-verified as F4C78B7B62E0BF82F3A4E3974501DEFB88A0334629490B40839D114AF6BC3519. All 15 current guard hashes match. Source checkpoint ac83603ecdfc92e038f60e2da58848c32229466a is pushed on the isolated Creative branch and pins server5f173c49875cc65c8d7903062dfc6ed904896758. VERIFY63 independently accepted the corrected native input call and fresh full-client build provenance; four focused CTests and eight package cases passed. Evidence: E:\Build\LOCAL-BUILD41-CLIENT-20261009\build-evidence.json and E:\Build\enshrouded-ui41-install-baseline-20261009T185516Z\install-result.json. The user has been asked to rejoin and test F7/approval; live acceptance remains pending. Do not restart or replace the client once rejoined. UI40 details below are the preceding failed checkpoint, not the installed version.
 
