@@ -8,8 +8,8 @@
     "Full Creative parity is incomplete. The paired local Release checkpoint passes all 26 CTest targets; G flight, actual gear upgrades, accepted drag/delete, persistent HUD, remaining free actions and time control still need native integration and gameplay acceptance.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Manager 074f8582d3fb3cbb3510266f9a8ba1b149902d26 passed both cloud edition jobs in run 37924463567, with publication skipped. It still consumes RC5 inputs without the shared Gem Forge payload. A complete new artifact, gameplay acceptance and final review remain open.",
-    "The matching protocol-v2 client is installed and its isolated Windows endpoint is healthy with Creative/crafting/F6 initialization, Steam, HostOnline and loopback A2S evidence. This focused endpoint omits XP Share. Crafting, bone pickup and actual Wine multiplayer gameplay acceptance remain unverified.",
+    "Manager 074f858 passed both cloud editions with publication skipped and still uses RC5. VERIFY50 accepted new local RC6 previews including shared Gem Forge payload, exact inputs and edition selection. Private input-asset publication and cloud preview remain pending; package readiness and final gameplay/review gates remain closed.",
+    "The installed protocol-v2 local test received native Steam authentication and owner mapping, but Creative approval did not arrive. The user requested fullscreen and layout repairs. At 15:12 UTC the elevated host check found both game and local server stopped, with no established exit cause. The next isolated RC6 repair is being prepared. This focused endpoint omits XP Share; crafting, bone pickup and actual Wine multiplayer acceptance remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -86,7 +86,7 @@
   "local_crafting_test": {
     "human_approved": true,
     "scope": "Wire and enable crafting hooks in isolated local test server",
-    "integration": "Build8 and 26 CTests passed; VERIFY29/30 accepted matching data and provider. The client is installed and hash-verified. The isolated Windows endpoint started at 2026-10-09 14:07 UTC; Steam, HostOnline, loopback A2S and adapter-log Creative/crafting/F6 initialization passed. Endpoint remains healthy at 14:26 UTC. First-join crafting gameplay remains pending.",
+    "integration": "Build8 and 26 CTests passed; matching protocol-v2 client installed and hash-verified. Endpoint reached Host Online at 14:07 UTC. The later authenticated join did not receive Creative approval. Elevated host check at 15:12 UTC found game/server stopped; exit cause unknown. Isolated fullscreen/reference UI and bounded approval diagnostics are being prepared. Crafting gameplay remains unverified.",
     "gameplay_verified": false,
     "hosted_deployed": false,
     "memory_blocker_resolved": true,
@@ -107,7 +107,7 @@
     "gameplay_verified": false,
     "install_evidence": "E:\\Scratch\\enshrouded-native-win-protocol2-20261009\\client-test-bundle\\evidence\\client-install-result.json",
     "install_evidence_sha256": "d207119834af97a1d098deea0fd14c2c4541c0d9e2b4038405f4ffae86494a19",
-    "endpoint_running": true,
+    "endpoint_running": false,
     "runtime_health_evidence": "E:\\Scratch\\enshrouded-native-win-protocol2-20261009\\logs-protocol2\\runtime-health-report.json"
   },
   "rc6_ci_checkpoint": {
@@ -124,8 +124,31 @@
     "test_artifact_sha256": "efcd10fb0dcc1f6fb8fae67b6e8eb2656bc06bc2b3f3d459e51f3e2c76a4df09",
     "inner_candidate_sha256": "9a5abdecc51f3a1ac5b1b5342a70af39d10be78eeed546470c5949f9ddc836f0",
     "local_archives_downloaded": true,
-    "independent_archive_review": "pending",
+    "independent_archive_review": "VERIFY43 accepted: 16 payload files, 29 test executables, shared forge files, empty example allowlists and external EML dependency match manifests",
     "installed": false,
     "gameplay_verified": false
+  },
+  "next_candidate": {
+    "version": "0.3.0-rc.7",
+    "creative_protocol": 3,
+    "flight_protocol": 1,
+    "status": "Feature work in progress; no complete paired archive",
+    "gear_result": "VERIFY46B accepted terminal uncertain-commit handling and same-sequence deduplication",
+    "g_installer": "VERIFY49 rejected partial-write plus failed-rollback path; repair and recheck required",
+    "time": "VERIFY51 accepted bounded time integration and independently built server DLL; 16 selected tests pass. No live callback-order sample. Observation requires private opt-in; writes remain disabled until accepted current-scope sample and later explicit enable.",
+    "local_repair": "Separate protocol2 fullscreen/reference UI plus accepted bounded approval diagnostics; not installed"
+  },
+  "manager_rc6_local_preview": {
+    "version": "4.4.7-preview",
+    "independently_verified": true,
+    "published": false,
+    "release_ready": false,
+    "regular_sha256": "eadd63bbcde1d013739e89e6d1cc76ee725e30ca1c274b1e88af80dfc9bfc91a",
+    "admin_sha256": "310402af220d10dc3cb6959cb86a239526ce9a9bbe07e6cb58faec351030d361",
+    "inputs_sha256": "36d0ed99408efe7d933903ee41c155d16ebfd8d42d49af1e72f38f08d8e576ad",
+    "inputs_bytes": 563194,
+    "evidence": "E:\\Build\\enshrouded-manager-rc6-preview-20261009",
+    "acceptance": "VERIFY50 local archive and packaged selection review; saved 637 Regular/640 Admin and 7 EML checks per edition",
+    "private_asset_pending": true
   }
 }

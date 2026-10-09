@@ -295,3 +295,27 @@ checks and await independent review. VERIFY-18 accepted optional shared forge
 packaging and rollback-plan validators; manager 074f858 and server e0337f3
 contain those helpers. Final combined artifacts, gameplay acceptance and the
 integrated GPT-6 Pro review remain required before publication or deployment.
+
+The later RC6 GitHub candidate passed exact-head build and archive inspection,
+including shared Gem Forge files and empty reusable allowlists. VERIFY50 also
+accepted local RC6 manager previews, their locked inputs and edition selection;
+public manager 4.4.6 and the three hosted baselines remain unchanged.
+
+Current feature work is designated rc.7 with Creative protocol 3 for an explicit
+terminal uncertain-commit result. VERIFY46B accepted that result contract and
+same-sequence deduplication. It does not establish live gear mutation. VERIFY51
+accepted the server time integration and independently passed 16 selected tests.
+No live callback-order sample exists, and native time writes remain gated.
+
+VERIFY49 found a blocking G-flight installer recovery defect: an injected partial
+instruction write followed by rollback failure could resume threads with mixed
+bytes. G-INSTALL12 is repairing ownership and recovery before independent recheck.
+Production Windows 26300 support remains unavailable.
+
+The user requested a fullscreen native-style catalogue, centered gear modal and
+server-confirmed Creative/Journey selector, including controller and 3:2 support.
+That UI is being prepared in an isolated protocol-2 pair with accepted bounded
+approval/life diagnostics. The installed checkpoint previously failed to obtain
+Creative approval; its cause remains unknown. No new repair DLL is installed.
+The complete paired artifact, gameplay matrix and final GPT-6 Pro review remain
+required before any public release or hosted deployment.
