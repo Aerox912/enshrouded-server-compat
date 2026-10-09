@@ -1,0 +1,13 @@
+# LOCAL-LIFE40: typed ClientActor life source
+
+The reader now resolves the owned life component by exact pinned reflection metadata for keen::ecs::ClientActor, not the sibling generic keen::ecs::Actor. In the pinned client, ClientActor is descriptor RVA 0x17BD910, size 0xC38. Its descriptor parent link at +0x38 points to keen::ecs::BaseActor at 0x17BC850, size 0xC20. The generic Actor descriptor at 0x17BC900 is size 0xE10 and remains ineligible even if its entity row is present.
+
+The independent consumer evidence is the update_ui_player_state descriptor at 0x1D501E8: its first component is ClientActor, its callback pointer is 0x2AFEF0, and the pinned callback uses a 0x28-byte component-row stride. The callback loads the first component from [rsp+0x28] and passes it directly to helper 0x1DFA50 with masks 0x25 and 0x21. This state helper reads BaseActor fields inherited by ClientActor. The static verifier pins the descriptor names, sizes, inheritance pointer, consumer registration, callback bytes, and unwind ranges.
+
+The owned reader still derives entity identity from LocalPlayerData+4, looks up the exact unique ClientActor descriptor ordinal in the current world's registry, checks that ordinal's entity-layout presence bit, and resolves the component using storage + group*record+0x30 + offset. A zero multiplier is valid by native arithmetic contract, but the independent presence check remains mandatory. No generic Actor alias, child entity, guessed type hash, or hard-coded ordinal is used.
+
+The public LocalLifeIdentity.actor_storage member retains its name and equality behavior for compatibility; its numeric value now identifies the verified ClientActor storage. The reader retains ownership, upper bounds, overflow checks, repeated identity/state/metadata checks, and the 4,096 safe-read limit.
+
+Verification passed in parity and fullscreen trees: the isolated MSVC x64 C++20 /W4 /WX focused harness passed CTest 1/1 with 128 checks; the Python synthetic verifier suite passed 8 tests; the real pinned-client verifier passed with 25 instruction anchors and typed metadata checks. The ordinal-54 normal fixture measured 234 copy attempts, below its focused test bound of 256.
+
+The connected-client type-map evidence in E:\Build\enshrouded-local-life31-components-20261009T1746Z\redacted-type-map-evidence.json contains three stable samples: generic Actor ordinal 3 is absent from the local entity, while ClientActor ordinal 54 is present at group 3128 and offset 7488. The newly typed life reader has not yet been sampled live, so these samples do not establish life-state resolution or approval behavior. No loaded game DLL build or live approval result is claimed.

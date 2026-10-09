@@ -50,7 +50,7 @@ inline const char* local_life_read_stage_name(LocalLifeReadStage stage) noexcept
     return "unknown";
 }
 namespace client_life_detail {
-inline constexpr std::uintptr_t game_rva=0x1f07cc0, actor_type_rva=0x17bc900;
+inline constexpr std::uintptr_t game_rva=0x1f07cc0, client_actor_type_rva=0x17bd910;
 struct WorldChain {
     std::uintptr_t client=0,session=0,scene=0,simulation=0,world=0,simulation_world=0;
     std::uint8_t active=0;
@@ -79,7 +79,7 @@ bool components(Read& read,std::uintptr_t world,Components& value) {
         local_field(read,world,0x938,value.count) && value.count && value.count<=1280;
 }
 template<class Read>
-std::optional<std::uint16_t> actor_index(Read& read,const Components& value,std::uintptr_t type) {
+std::optional<std::uint16_t> client_actor_type_index(Read& read,const Components& value,std::uintptr_t type) {
     std::optional<std::uint16_t> found;
     for(std::uint64_t index=0;index<value.count;++index) {
         std::uintptr_t metadata=0;
@@ -110,23 +110,23 @@ inline std::uint32_t entity_hash(std::uint32_t value) noexcept {
     value=((value>>16)^value)*0x45d9f3bu;
     return (value>>16)^value;
 }
-struct ActorBits {
+struct ClientActorBits {
     std::uint64_t current=0,added=0,removed=0;std::uint8_t prediction=0;
-    bool operator==(const ActorBits&) const = default;
+    bool operator==(const ClientActorBits&) const = default;
     std::uint64_t effective() const noexcept { return prediction&1 ? (current|added)&~removed : current; }
 };
 template<class Read>
-bool actor_bits(Read& read,std::uintptr_t actor,ActorBits& value) {
+bool client_actor_bits(Read& read,std::uintptr_t actor,ClientActorBits& value) {
     return local_field(read,actor,0x1b1,value.prediction) && local_field(read,actor,0xbd0,value.added) &&
         local_field(read,actor,0xbd8,value.removed) && local_field(read,actor,0xbf8,value.current);
 }
-struct ActorLocation {
-    std::uintptr_t record=0,layout=0,data=0,actor=0;std::uint32_t stride=0;
+struct ClientActorLocation {
+    std::uintptr_t record=0,layout=0,data=0,client_actor=0;std::uint32_t stride=0;
     std::uint16_t group=0,offset=0;
-    bool operator==(const ActorLocation&) const = default;
+    bool operator==(const ClientActorLocation&) const = default;
 };
 template<class Read>
-bool locate_actor(Read& read,const EntityMap& map,std::uint32_t entity,std::uint16_t index,ActorLocation& value) {
+bool locate_client_actor(Read& read,const EntityMap& map,std::uint32_t entity,std::uint16_t index,ClientActorLocation& value) {
     auto slot=std::uint64_t(entity_hash(entity))&(map.capacity-1);
     for(unsigned attempt=0;attempt<64;++attempt,slot=(slot+1)&(map.capacity-1)) {
         std::uint64_t bitmap=0;std::uint32_t key=0;
@@ -136,15 +136,15 @@ bool locate_actor(Read& read,const EntityMap& map,std::uint32_t entity,std::uint
         if(!local_field(read,map.values,slot*8,value.record) ||
            !local_field(read,value.record,0x18,value.layout) ||
            !local_field(read,value.record,0x20,value.data) || !value.data ||
-           !local_field(read,value.record,0x30,value.stride) || !value.stride || value.stride>0x100000)return false;
+           !local_field(read,value.record,0x30,value.stride) || value.stride>0x100000)return false;
         std::uint64_t present=0;
         if(!local_field(read,value.layout,(index/64)*8,present) || !(present&(1ull<<(index%64))) ||
            !local_field(read,value.layout,0xa84+std::uintptr_t(index)*2,value.group) ||
            !local_field(read,value.layout,0x84+std::uintptr_t(index)*2,value.offset))return false;
         const auto displacement=std::uint64_t(value.group)*value.stride+value.offset;
         if(displacement>UINTPTR_MAX-value.data)return false;
-        value.actor=value.data+static_cast<std::uintptr_t>(displacement);
-        return value.actor!=0;
+        value.client_actor=value.data+static_cast<std::uintptr_t>(displacement);
+        return value.client_actor!=0;
     }
     return false;
 }
@@ -169,7 +169,7 @@ std::optional<LocalLifeSnapshot> read_pinned_client_life(Read&& copy,std::uintpt
         }
         return {};
     };
-    if(!full_hash_verified || !base || base>UINTPTR_MAX-actor_type_rva)
+    if(!full_hash_verified || !base || base>UINTPTR_MAX-client_actor_type_rva)
         return failed(LocalLifeReadStage::full_hash_guard);
     auto read=[&](std::uintptr_t at,void* output,std::size_t size) {
         if(++attempts>4096) { attempt_limit_hit=true;return false; }
@@ -180,35 +180,35 @@ std::optional<LocalLifeSnapshot> read_pinned_client_life(Read&& copy,std::uintpt
     auto entity=read_pinned_client_local_actor(read,before.world);
     if(!entity)return failed(LocalLifeReadStage::owned_actor);
     if(!components(read,before.world,types))return failed(LocalLifeReadStage::component_registry);
-    const auto type=base+actor_type_rva;
-    auto index=actor_index(read,types,type);
+    const auto type=base+client_actor_type_rva;
+    auto index=client_actor_type_index(read,types,type);
     if(!index)return failed(LocalLifeReadStage::component_type_lookup);
-    ActorLocation location,again;
+    ClientActorLocation location,again;
     if(!entity_map(read,before.world,map))return failed(LocalLifeReadStage::entity_map);
-    if(!locate_actor(read,map,*entity,*index,location))return failed(LocalLifeReadStage::actor_location);
-    ActorBits state,state_after;
-    if(!actor_bits(read,location.actor,state))return failed(LocalLifeReadStage::life_state_read);
-    if(!actor_bits(read,location.actor,state_after) || state!=state_after)
+    if(!locate_client_actor(read,map,*entity,*index,location))return failed(LocalLifeReadStage::actor_location);
+    ClientActorBits state,state_after;
+    if(!client_actor_bits(read,location.client_actor,state))return failed(LocalLifeReadStage::life_state_read);
+    if(!client_actor_bits(read,location.client_actor,state_after) || state!=state_after)
         return failed(LocalLifeReadStage::consistency_reread);
     if(!entity_map(read,before.world,map_after) || map_after!=map)
         return failed(LocalLifeReadStage::consistency_reread);
-    if(!locate_actor(read,map_after,*entity,*index,again) || again!=location)
+    if(!locate_client_actor(read,map_after,*entity,*index,again) || again!=location)
         return failed(LocalLifeReadStage::consistency_reread);
     if(!components(read,before.world,types_after) || types_after!=types)
         return failed(LocalLifeReadStage::consistency_reread);
-    if(actor_index(read,types_after,type)!=index)
+    if(client_actor_type_index(read,types_after,type)!=index)
         return failed(LocalLifeReadStage::consistency_reread);
     if(read_pinned_client_local_actor(read,before.world)!=entity)
         return failed(LocalLifeReadStage::consistency_reread);
     if(!chain(read,base,after) || after!=before)
         return failed(LocalLifeReadStage::consistency_reread);
-    if(!actor_bits(read,again.actor,state_after) || state_after!=state)
+    if(!client_actor_bits(read,again.client_actor,state_after) || state_after!=state)
         return failed(LocalLifeReadStage::consistency_reread);
     if(diagnostic) {
         diagnostic->stage=LocalLifeReadStage::none;
         diagnostic->read_attempts=static_cast<std::uint16_t>(attempts);
     }
-    return LocalLifeSnapshot{{before.client,before.session,before.scene,before.simulation,before.world,location.actor,*entity},state.current,state.effective()};
+    return LocalLifeSnapshot{{before.client,before.session,before.scene,before.simulation,before.world,location.client_actor,*entity},state.current,state.effective()};
 }
 // Host connection/capability epoch are supplied by the client protocol provider,
 // never a wire ServerIdentity. An unchanged heartbeat must not rebind a retired

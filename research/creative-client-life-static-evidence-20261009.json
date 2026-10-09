@@ -1,5 +1,5 @@
 {
-  "status": "pinned client life reader static layout matches",
+  "status": "pinned client typed ClientActor life reader static layout matches",
   "static_only": true,
   "build": {
     "path": "D:\\Games\\SteamLibrary\\steamapps\\common\\Enshrouded\\enshrouded.exe",
@@ -423,6 +423,57 @@
         3,
         1
       ]
+    },
+    {
+      "name": "ui-player-state-clientactor-callback-entry",
+      "rva": "0x2afef0",
+      "function": [
+        "0x2afef0",
+        "0x2aff24"
+      ],
+      "bytes": "40574883EC5041B828000000488D542420488BF9E8B7A8620041B828000000488D542420488BCFE8845D620084C00F84ED000000",
+      "instruction_lengths": [
+        2,
+        4,
+        6,
+        5,
+        3,
+        5,
+        6,
+        5,
+        3,
+        5,
+        2,
+        6
+      ]
+    },
+    {
+      "name": "ui-player-state-clientactor-bit-25-call",
+      "rva": "0x2aff78",
+      "function": [
+        "0x2aff24",
+        "0x2b0011"
+      ],
+      "bytes": "488B4C2428B225E8CCFAF2FF",
+      "instruction_lengths": [
+        5,
+        2,
+        5
+      ]
+    },
+    {
+      "name": "ui-player-state-clientactor-bit-21-call",
+      "rva": "0x2affa4",
+      "function": [
+        "0x2aff24",
+        "0x2b0011"
+      ],
+      "bytes": "488B4C2428B221E8A0FAF2FF",
+      "instruction_lengths": [
+        5,
+        2,
+        5
+      ]
     }
   ],
   "local_entity": {
@@ -628,6 +679,55 @@
       }
     }
   },
+  "client_actor": {
+    "client_actor": {
+      "descriptor_rva": "0x17bd910",
+      "name": "ClientActor",
+      "name_rva": "0x1c9b758",
+      "qualified_name": "keen::ecs::ClientActor",
+      "qualified_name_rva": "0x1c9b8d0",
+      "size": "0xc38",
+      "packed_size": "0x8000800000c38"
+    },
+    "base_actor": {
+      "descriptor_rva": "0x17bc850",
+      "name": "BaseActor",
+      "name_rva": "0x1c96f20",
+      "qualified_name": "keen::ecs::BaseActor",
+      "qualified_name_rva": "0x1c97038",
+      "size": "0xc20",
+      "packed_size": "0x8000800000c20"
+    },
+    "client_actor_inheritance": {
+      "parent_descriptor_rva": "0x17bc850",
+      "parent_size": "0xC20",
+      "client_size": "0xC38",
+      "extension_size": "0x18",
+      "base_link_offset": "0x38"
+    },
+    "generic_actor": {
+      "descriptor_rva": "0x17bc900",
+      "name": "Actor",
+      "name_rva": "0x1c99e64",
+      "qualified_name": "keen::ecs::Actor",
+      "qualified_name_rva": "0x1c9a030",
+      "size": "0xe10",
+      "packed_size": "0x8000800000e10"
+    },
+    "state_consumer": {
+      "descriptor_rva": "0x1d501e8",
+      "name": "update_ui_player_state",
+      "first_component": "keen::ecs::ClientActor",
+      "callback_rva": "0x2afef0",
+      "component_row_size": "0x28",
+      "state_helper_rva": "0x1dfa50",
+      "state_bits": [
+        37,
+        33
+      ],
+      "callback_behavior": "loads first component from [rsp+0x28] and passes it directly to the state helper"
+    }
+  },
   "reader": {
     "game_inline_rva": "0x1f07cc0",
     "client_slot": "0x250",
@@ -637,7 +737,7 @@
     "world_slot": "0x1c0",
     "simulation_slot": "0x3439c0",
     "simulation_world_slot": 8,
-    "actor_type_rva": "0x17bc900",
+    "client_actor_type_rva": "0x17bd910",
     "component_records": "0x930",
     "component_count": "0x938",
     "component_stride": "0x100",
@@ -659,6 +759,7 @@
   "limitations": [
     "Repeated copies detect observed inconsistency, not undetectable ABA.",
     "Caller binds copied local identity to current host/capability approval.",
+    "The reader selects the exact ClientActor descriptor, not generic Actor.",
     "Conservative life gate denies authoritative OR native effective Dead/Spawning."
   ]
 }
