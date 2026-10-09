@@ -84,7 +84,7 @@ int main(){try{
     Sessions sessions;std::array<Identity,16> ids{};ids[0]=chain.identity;
     ids[0].steam=0x0110000100000001;ids[0].authentication=1;
     Allowlist list;list.valid=true;list.ids[0]=ids[0].steam;list.count=1;
-    sessions.configure(list,100);sessions.observe(ids,100);
+    sessions.configure(list,100);sessions.observe(ids,100);sessions.observe_actor(*sessions.begin_actor_observation(ids[0].world,1,100),1,100);
     auto response=sessions.receive(ids[0].steam,{Kind::hello,false,Status::ok,10,0,0,client_revision},100,20);
     check(response.has_value(),"query test client authenticated");
     sessions.receive(ids[0].steam,{Kind::set,true,Status::ok,10,20,1,client_revision},100,0);

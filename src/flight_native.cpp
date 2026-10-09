@@ -34,6 +34,8 @@ using Remove = std::uintptr_t (*)(void*,std::uint16_t);
 Two original_event, original_player_reset;
 One original_receive, original_peer_reset, original_teardown;
 Remove original_remove;
+using ActorSystem = void (*)(void*);
+ActorSystem original_actor;
 using Lock = void (*)(void*);
 Lock native_lock, native_unlock;
 bool copy_memory(std::uintptr_t address,void* out,std::size_t size) noexcept {
@@ -98,6 +100,8 @@ std::uintptr_t reset_hook(void* context) {
     return original_peer_reset(context);
 }
 std::uintptr_t player_reset_hook(void* state,void* player) {
+    // 0x68a7e0 destroys the connection's Player record on removal/handle
+    // replacement, not the actor's normal Dead/Spawning transition.
     const auto world=field<std::uintptr_t>(reinterpret_cast<std::uintptr_t>(state),0x1b0);
     const auto handle=field<std::uint32_t>(reinterpret_cast<std::uintptr_t>(player),0);
     {std::lock_guard lock(guard);if(handle)sessions.remove_owner(world,(handle&63)+1);}
@@ -106,6 +110,46 @@ std::uintptr_t player_reset_hook(void* state,void* player) {
 std::uintptr_t teardown_hook(void* state) {
     {std::lock_guard lock(guard);sessions.clear();}
     return original_teardown(state);
+}
+void actor_hook(void* context) {
+    if(running.load(std::memory_order_acquire)) {
+        // Same query as actor_to_network: row +8 is Actor, currentState is +0xbf8.
+        // The native iterator changes context+8; restore it before the original.
+        struct Cursor {
+            void* at;std::uint32_t saved;
+            explicit Cursor(void* p):at(static_cast<char*>(p)+8){std::memcpy(&saved,at,4);}
+            ~Cursor(){std::memcpy(at,&saved,4);}
+        } cursor(context);
+        std::uintptr_t world=0;
+        if(read_query_world(copy_memory,reinterpret_cast<std::uintptr_t>(context),world)) {
+            std::array<std::uintptr_t,4> row{};
+            const auto begin=reinterpret_cast<void (*)(void*,void*,std::uint32_t)>(image+0x5dc7f0);
+            const auto step=reinterpret_cast<bool (*)(void*,void*,std::uint32_t)>(image+0x5d7960);
+            const auto entity=reinterpret_cast<void* (*)(void*,void*)>(image+0x5d5130);
+            begin(context,row.data(),0x20);
+            unsigned visits=0;
+            while(++visits<=16384) {
+                bool changed=false;
+                {
+                    // Serialize row resolution, identity capture, native sampling
+                    // and publication against our reset/owner/actor observations.
+                    // No Creative extension or original actor callback runs here.
+                    std::lock_guard lock(guard);
+                    if(!step(context,row.data(),0x20))break;
+                    std::uint32_t owner=0;entity(context,&owner);
+                    if(owner<1 || owner>16)continue;
+                    const auto sample=sessions.begin_actor_observation(world,owner,GetTickCount64());
+                    if(!sample)continue;
+                    std::uint64_t state=0;
+                    std::optional<std::uint64_t> observed;
+                    if(row[1] && row[1]<=UINTPTR_MAX-0xbf8 && copy_memory(row[1]+0xbf8,&state,sizeof(state)))observed=state;
+                    changed=sessions.observe_actor(*sample,observed,GetTickCount64());
+                }
+                if(changed && logger)logger("FLIGHT LIFECYCLE: actor state changed or unavailable; connection flight preference retained, old Creative lifecycle invalidated.");
+            }
+        }
+    }
+    original_actor(context);
 }
 void capture_owners(std::uintptr_t state) {
     static std::uintptr_t diagnostic_state=0;
@@ -189,6 +233,7 @@ bool authorize(const void* query,std::uint32_t owner) noexcept {
     read_query_world(copy_memory,reinterpret_cast<std::uintptr_t>(query),world);
     std::unique_lock lock(guard);
     authorization_probe={};authorization_probe.world=world;
+    if(!sessions.alive_for(world,owner,GetTickCount64()))return false;
     if(owner>=1 && owner<=observed_worlds.size()) {
         authorization_probe.expected=observed_worlds[owner-1];
         authorization_probe.approved_for_expected=sessions.can_fly(authorization_probe.expected,owner,GetTickCount64());
@@ -222,6 +267,15 @@ std::optional<Identity> authenticated_identity(std::uint64_t steam) {
 std::optional<Identity> authenticated_owner(std::uintptr_t world,std::uint32_t owner) {
     std::lock_guard lock(guard);return sessions.identity_for(world,owner,GetTickCount64());
 }
+bool owner_alive(std::uintptr_t world,std::uint32_t owner) {
+    std::lock_guard lock(guard);return sessions.alive_for(world,owner,GetTickCount64());
+}
+bool owner_alive(const Identity& id) {
+    std::lock_guard lock(guard);return sessions.alive_for(id,GetTickCount64());
+}
+std::optional<bool> owner_alive_state(const Identity& id) {
+    std::lock_guard lock(guard);return sessions.actor_alive_for(id,GetTickCount64());
+}
 bool start_runtime(HMODULE game,const std::wstring& directory,Logger log,Extension added) {
     static bool attempted=false;if(attempted)return false;attempted=true;
     if(!validate_server(game))return false;
@@ -230,6 +284,7 @@ bool start_runtime(HMODULE game,const std::wstring& directory,Logger log,Extensi
     config_path=directory+L"\\flight-allowlist.cfg";
     native_lock=reinterpret_cast<Lock>(image+0x4ddb70);native_unlock=reinterpret_cast<Lock>(image+0x4f31e0);
     const Site sites[]={
+        {0x69290,{0x48,0x89,0x74,0x24,0x18,0x55,0x48,0x8b,0xec,0x48,0x81,0xec,0x80,0,0,0},reinterpret_cast<void*>(actor_hook),reinterpret_cast<void**>(&original_actor)},
         {0x903880,{0x40,0x55,0x53,0x57,0x48,0x8d,0xac,0x24,0x40,0xf0,0xff,0xff,0xb8,0xc0,0x10,0x00},reinterpret_cast<void*>(event_hook),reinterpret_cast<void**>(&original_event)},
         {0x8f7a60,{0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x74,0x24,0x18,0x66,0x89,0x54,0x24,0x10,0x57},reinterpret_cast<void*>(remove_hook),reinterpret_cast<void**>(&original_remove)},
         {0x8f7800,{0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x6c,0x24,0x10,0x48,0x89,0x74,0x24,0x18,0x57},reinterpret_cast<void*>(reset_hook),reinterpret_cast<void**>(&original_peer_reset)},

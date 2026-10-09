@@ -101,6 +101,53 @@ void Sessions::observe(const std::array<Identity, 16>& identities, std::uint64_t
     for(std::size_t i=0;i<players_.size();++i)if(ambiguous[i])players_[i]={};
 }
 void Sessions::clear() noexcept { players_ = {}; }
+std::optional<ActorObservation> Sessions::begin_actor_observation(std::uintptr_t world,std::uint32_t owner,std::uint64_t now) noexcept {
+    if(!world || owner<1 || owner>players_.size())return {};
+    auto& p=players_[owner-1];
+    if(p.identity.world!=world || !p.identity.valid(owner-1) || !fresh(p.observed,now,snapshot_ms))return {};
+    if(next_actor_ticket_==UINT64_MAX) {
+        // Saturation cannot reuse an observation identity or retain live evidence.
+        if(p.actor_known)p.identity.lifecycle=++next_lifecycle_;
+        p.actor_ticket=0;p.actor_known=p.actor_alive=false;return {};
+    }
+    p.actor_ticket=++next_actor_ticket_;
+    return ActorObservation{p.identity,p.actor_ticket,now};
+}
+bool Sessions::observe_actor(const ActorObservation& sample,std::optional<std::uint64_t> state,std::uint64_t now) noexcept {
+    const auto slot=sample.identity.player&63;
+    if(slot>=players_.size() || !sample.ticket)return false;
+    auto& p=players_[slot];
+    if(p.identity!=sample.identity || p.actor_ticket!=sample.ticket ||
+        now<sample.sampled_at ||
+        (p.actor_sampled && sample.sampled_at<p.actor_seen))return false;
+    p.actor_ticket=0; // Every ticket is single-use, even if lifecycle stays the same.
+    // Ownership may expire between sampling and publication. A matching
+    // failure/dead sample must still invalidate old evidence before a refresh.
+    if(!fresh(p.observed,now,snapshot_ms) || !fresh(sample.sampled_at,now,snapshot_ms))state.reset();
+    constexpr auto suspended=(std::uint64_t{1}<<7)|(std::uint64_t{1}<<12); // Dead / Spawning
+    const bool alive=state && (*state&suspended)==0;
+    const bool changed=state ? p.actor_sampled && (!p.actor_known || p.actor_alive!=alive || !fresh(p.actor_seen,now,snapshot_ms)) : p.actor_known;
+    if(changed)p.identity.lifecycle=++next_lifecycle_;
+    p.actor_sampled=true;p.actor_known=state.has_value();p.actor_alive=alive;p.actor_seen=sample.sampled_at;
+    return changed;
+}
+bool Sessions::alive_for(std::uintptr_t world,std::uint32_t owner,std::uint64_t now) const noexcept {
+    if(!world || owner<1 || owner>players_.size())return false;
+    const auto& p=players_[owner-1];
+    return p.identity.world==world && p.actor_known && p.actor_alive &&
+        fresh(p.observed,now,snapshot_ms) && fresh(p.actor_seen,now,snapshot_ms);
+}
+bool Sessions::alive_for(const Identity& id,std::uint64_t now) const noexcept {
+    return actor_alive_for(id,now).value_or(false);
+}
+std::optional<bool> Sessions::actor_alive_for(const Identity& id,std::uint64_t now) const noexcept {
+    const auto slot=id.player&63;
+    if(slot>=players_.size())return {};
+    const auto& p=players_[slot];
+    if(p.identity!=id || !p.actor_known || !fresh(p.observed,now,snapshot_ms) ||
+        !fresh(p.actor_seen,now,snapshot_ms))return {};
+    return p.actor_alive;
+}
 void Sessions::remove_peer(std::uintptr_t backend, std::uint16_t peer) noexcept {
     if(!backend || !peer)return;
     for (auto& p : players_) if (p.identity.backend == backend && p.identity.peer == peer) p = {};
@@ -135,7 +182,7 @@ std::optional<Identity> Sessions::identity_for(std::uintptr_t world,std::uint32_
 }
 bool Sessions::flying_for(std::uint64_t sender, std::uint64_t now) const noexcept {
     if(!is_approved(sender,now))return false;
-    for(const auto& p:players_)if(p.identity.steam==sender)return p.enabled && now<p.expiry;
+    for(std::size_t i=0;i<players_.size();++i){const auto& p=players_[i];if(p.identity.steam==sender)return p.enabled && now<p.expiry && alive_for(p.identity.world,static_cast<std::uint32_t>(i+1),now);}
     return false;
 }
 std::optional<Message> Sessions::receive(std::uint64_t sender, const Message& m,
@@ -162,12 +209,12 @@ std::optional<Message> Sessions::receive(std::uint64_t sender, const Message& m,
         p.expiry = now <= UINT64_MAX - lease_ms ? now + lease_ms : now;
     }
     // Replaying a duplicate never extends a lease or reactivates expired flight.
-    return Message{Kind::ack, p.enabled && now < p.expiry, Status::ok, p.nonce, p.token, p.sequence, server_revision};
+    return Message{Kind::ack, p.enabled && now < p.expiry && alive_for(p.identity.world,(p.identity.player&63)+1,now), Status::ok, p.nonce, p.token, p.sequence, server_revision};
 }
 bool Sessions::can_fly(std::uintptr_t world, std::uint32_t owner, std::uint64_t now) const noexcept {
     if (!world || owner < 1 || owner > players_.size()) return false;
     const auto& p = players_[owner - 1];
-    return p.identity.world == world && approved(p, now) && p.enabled && now < p.expiry;
+    return alive_for(world,owner,now) && approved(p, now) && p.enabled && now < p.expiry;
 }
 void ClientSession::reset(std::uint64_t nonce) noexcept {
     nonce_ = nonce; token_ = sequence_ = expires_ = sent_at_ = 0; desired_ = approved_ = false;

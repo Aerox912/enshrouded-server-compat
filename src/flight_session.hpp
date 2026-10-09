@@ -44,6 +44,10 @@ struct Identity {
     bool operator==(const Identity&) const = default;
     bool valid(std::size_t slot) const noexcept;
 };
+struct ActorObservation {
+    Identity identity{};
+    std::uint64_t ticket = 0, sampled_at = 0;
+};
 
 // All access is serialized by the native adapter. Times are monotonic ms;
 // random challenge tokens are supplied by BCrypt, never by remote messages.
@@ -52,15 +56,30 @@ class Sessions {
         Identity identity{};
         std::uint64_t observed = 0, nonce = 0, token = 0, sequence = 0, expiry = 0;
         bool enabled = false;
+        std::uint64_t actor_seen = 0, actor_ticket = 0;
+        bool actor_sampled = false, actor_known = false, actor_alive = false;
     };
     std::array<Player, 16> players_{};
     std::uint64_t next_lifecycle_ = 0;
+    std::uint64_t next_actor_ticket_ = 0;
     Allowlist allowlist_{};
     std::uint64_t config_checked_ = 0;
     bool approved(const Player&, std::uint64_t now) const noexcept;
 public:
     void configure(const Allowlist&, std::uint64_t now) noexcept;
     void observe(const std::array<Identity, 16>&, std::uint64_t now) noexcept;
+    // Flight preference belongs to the connection; execution belongs to a live
+    // actor. Death/spawn changes the lifecycle without forgetting that preference.
+    // Acquire before reading the native actor. A newer ticket supersedes older
+    // samples, including initial observations that have not changed lifecycle.
+    std::optional<ActorObservation> begin_actor_observation(std::uintptr_t world, std::uint32_t owner, std::uint64_t now) noexcept;
+    // Empty state explicitly invalidates this owner's execution evidence. The
+    // ticket binds identity, lifecycle, order and sampling time to publication.
+    bool observe_actor(const ActorObservation&, std::optional<std::uint64_t> state, std::uint64_t now) noexcept;
+    bool alive_for(std::uintptr_t world, std::uint32_t owner, std::uint64_t now) const noexcept;
+    bool alive_for(const Identity&, std::uint64_t now) const noexcept;
+    // Empty means unknown/stale, false means a freshly observed dead/spawning actor.
+    std::optional<bool> actor_alive_for(const Identity&, std::uint64_t now) const noexcept;
     void clear() noexcept;
     void remove_peer(std::uintptr_t backend, std::uint16_t peer) noexcept;
     void clear_backend(std::uintptr_t backend) noexcept;
