@@ -253,10 +253,20 @@ and independent recheck remain necessary. Current native runtime categories
 include NPC, altar and player-level conditions; the older coverage conclusion
 does not apply. The optional forge catalogue parser repair passed VERIFY-11B.
 
-The next Windows launch was blocked before process creation by low available
-RAM. The password-protected isolated test may use ordinary Steam networking
-with the existing firewall and private allowlist; hidden lobby visibility is
-not an extra launch requirement. LOOT-8 separately reproduced the adapter-query
-fix under pinned Wine 11.0 and received an in-container A2S reply, but its Steam
-API/authentication evidence remains unresolved. That stopped disposable baseline
-is not a user join endpoint or hosted Wine acceptance.
+The low-RAM blocker is resolved. At the user's request, CLOSE-OLD-SERVERS-1
+backed up and stopped both old local test servers, recovering free memory from
+3.1 to 10.6 GB. Final on-disk snapshots are verified; targeted SIGTERM was
+required, so graceful application shutdown is not confirmed. Hosted servers
+and the shared VM are unchanged. Fresh headroom must still be checked before
+the next test. LOOT-9 confirms that the archived Wine 11 baseline connected to
+Steam and answered in-container A2S. That stopped baseline is not a current
+user join endpoint or hosted Wine acceptance.
+
+VERIFY-16I accepted the integrated server lease checks. The client flag
+restoration repair passed independent review, but the fresh local actor/life
+gate remains under integration. No live crafting claim follows from these
+tests. JOURNEY-4's bounded page reader and strict export repair pass focused
+checks and await independent review. VERIFY-18 accepted optional shared forge
+packaging and rollback-plan validators; manager 074f858 and server e0337f3
+contain those helpers. Final combined artifacts, gameplay acceptance and the
+integrated GPT-6 Pro review remain required before publication or deployment.

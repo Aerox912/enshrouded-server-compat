@@ -9,7 +9,7 @@
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
     "Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 passed both cloud edition jobs in run 37917954833; publication was skipped. Independent verification accepted all 113 Admin and 109 Regular embedded files. Gameplay and final feature acceptance remain open.",
-    "Wine 10.0 fails the exact Steam AF_UNSPEC plus INCLUDE_PREFIX adapter request. Windows RC5 previously reached Steam InGame and loopback A2S; the next run was blocked before launch by low available host memory. No endpoint is available for gameplay; graceful stop, bone pickup and Wine multiplayer remain unverified.",
+    "Wine 11's disposable baseline connected to Steam and answered in-container A2S. The two old local test servers are stopped with verified snapshots, recovering RAM from 3.1 to 10.6 GB. No matching current gameplay endpoint is installed; bone pickup and actual Wine multiplayer acceptance remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -86,8 +86,12 @@
   "local_crafting_test": {
     "human_approved": true,
     "scope": "Wire and enable crafting hooks in isolated local test server",
-    "integration": "Paired ALL_BUILD and 13/13 CTests passed; independent integrated lease review and matching client integration pending",
+    "integration": "Paired ALL_BUILD and 13/13 CTests passed; independent integrated server lease review passed. Client masked flag restoration passed review; fresh client actor/liveness gate and matching integration remain pending",
     "gameplay_verified": false,
-    "hosted_deployed": false
+    "hosted_deployed": false,
+    "memory_blocker_resolved": true,
+    "old_local_servers_stopped": true,
+    "shutdown_evidence": "E:\\Build\\enshrouded-native-cloud-rc5-20261009\\windows-endpoint\\close-old-servers-20261009T1115Z\\stop-report.json",
+    "shutdown_evidence_sha256": "41f1fd9e324097e41f0d8b9de8427f93c3fae54170850cf6f0e672449586ffb9"
   }
 }
