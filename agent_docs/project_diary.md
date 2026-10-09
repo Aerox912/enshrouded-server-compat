@@ -43,3 +43,11 @@
 - VERIFY49 found a failure combination missed by passing native fixture tests: partial instruction publication followed by failed rollback resumed threads with mixed bytes. Production acceptance requires proof of a whole original or whole installed instruction before execution resumes, including recovery ownership across failed attempts.
 - The requested gear modal displays final level, while the existing wire contract carries base level plus upgrades. Derive base only from proven item capacity and bounded final level; unknown capacity must stay unavailable. A native preset-tab builder is not evidence of a safe custom-tab renderer.
 - VERIFY50 accepted the RC6 manager preview inventories and selection behavior. This clears local packaging review only; the shared data's offline proofs and disposable EML restoration do not establish live forge behavior or hosted compatibility.
+
+## 2026-10-09: reviewed cloud previews and native UI repair
+
+Manager commit 23ed410f95dea332005963715f309f77690c35ca passed cloud run 37956399896 for both editions and setup checks; publication was skipped. VERIFY53 accepted the actual cloud inventories (112 Regular, 116 Admin), all 13 locked inputs, edition exclusions and false-readiness metadata. The private RC6 input prerelease is available. Public 4.4.6 and hosted servers remain unchanged.
+
+VERIFY49B accepted the repaired atomic G installer and retained rollback recovery. Exact Windows build 26300 support is being prepared for private testing without extending the supported range. VERIFY54/54B accepted the authenticated gear-capacity contract and current-frame producer; client cache and reply-operation correlation remain in progress. Time writes and HUD/drag observers still require live observations and final integration.
+
+The reference-style protocol-2 local build compiled both DLLs and passed 27 CTests. Independent review then found category scrolling and Journey pending-state defects, so those outputs were marked obsolete without installation. MENU19 repairs these paths and uses the native frame call corroborated against real pinned-game callers. The local approval failure remains undiagnosed. Fresh two-DLL rollback copies were verified at 16:34 UTC; no game/server was running and no files were installed. The current handoff was reconciled to remove superseded ownership and readiness statements.

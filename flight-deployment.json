@@ -5,10 +5,10 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "Full Creative parity is incomplete. The paired local Release checkpoint passes all 26 CTest targets; G flight, actual gear upgrades, accepted drag/delete, persistent HUD, remaining free actions and time control still need native integration and gameplay acceptance.",
+    "Full Creative parity is incomplete. Source, package and focused build checks are accepted in separate checkpoints; G flight, final gear upgrades, accepted drag/delete, persistent HUD, free actions and time control still need complete native integration and gameplay acceptance.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Manager 074f858 passed both cloud editions with publication skipped and still uses RC5. VERIFY50 accepted new local RC6 previews including shared Gem Forge payload, exact inputs and edition selection. Private input-asset publication and cloud preview remain pending; package readiness and final gameplay/review gates remain closed.",
+    "Manager23ed410 passed exact-head cloud run37956399896 for both editions and setup checks; publish was skipped. VERIFY53 independently accepted actual cloud payload inventories and RC6 lock provenance. Full feature successor, gameplay and final review remain required before public release.",
     "The installed protocol-v2 local test received native Steam authentication and owner mapping, but Creative approval did not arrive. The user requested fullscreen and layout repairs. At 15:12 UTC the elevated host check found both game and local server stopped, with no established exit cause. The next isolated RC6 repair is being prepared. This focused endpoint omits XP Share; crafting, bone pickup and actual Wine multiplayer acceptance remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
@@ -133,10 +133,10 @@
     "creative_protocol": 3,
     "flight_protocol": 1,
     "status": "Feature work in progress; no complete paired archive",
-    "gear_result": "VERIFY46B accepted terminal uncertain-commit handling and same-sequence deduplication",
-    "g_installer": "VERIFY49 rejected partial-write plus failed-rollback path; repair and recheck required",
+    "gear_result": "VERIFY46B accepted terminal uncertain-commit handling; VERIFY54 accepted authenticated read-only gear options and server Journey final-level validation. VERIFY54B accepted the current-frame capacity producer and separate gear/time readiness. Client cache and reply-operation correlation are being integrated.",
+    "g_installer": "VERIFY49B accepted G-INSTALL12: 1277 transaction and 4169 native checks, 35 server/23 client proof rows. Retained recovery and atomic publication repaired. Exact Windows26300 support and G runtime integration are being prepared for private testing; no game-level acceptance.",
     "time": "VERIFY51 accepted bounded time integration and independently built server DLL; 16 selected tests pass. No live callback-order sample. Observation requires private opt-in; writes remain disabled until accepted current-scope sample and later explicit enable.",
-    "local_repair": "Separate protocol2 fullscreen/reference UI plus accepted bounded approval diagnostics; not installed"
+    "local_repair": "Separate protocol2 fullscreen/reference UI and accepted bounded approval diagnostics. LOCAL-REPAIR19 compiled both DLLs and passed 27 CTests, but VERIFY48B rejected category autoscroll and pending-mode behavior; those outputs are obsolete and were not installed. MENU-REFERENCE19 repairs both and adds a native frame call corroborated by NATIVE-FRAME25. Live approval remains unverified."
   },
   "manager_rc6_local_preview": {
     "version": "4.4.7-preview",
@@ -149,6 +149,21 @@
     "inputs_bytes": 563194,
     "evidence": "E:\\Build\\enshrouded-manager-rc6-preview-20261009",
     "acceptance": "VERIFY50 local archive and packaged selection review; saved 637 Regular/640 Admin and 7 EML checks per edition",
-    "private_asset_pending": true
+    "private_asset_pending": false
+  },
+  "manager_rc6_cloud_checkpoint": {
+    "manager_commit": "23ed410f95dea332005963715f309f77690c35ca",
+    "run_id": 37956399896,
+    "run_url": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/37956399896",
+    "conclusion": "success",
+    "publish_job": "skipped",
+    "private_inputs_release": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/gameplay-native-candidate-20261009-rc6",
+    "private_inputs_asset_id": 625455982,
+    "regular_sha256": "cf72d8c83e67b42e9a784a584b36fb2e73b1c1d595a30f5f930e92a88c4ef42f",
+    "admin_sha256": "d56a50841114ce73c0adcda13ff437959a0ca1ada6524e1845b4001cb691c87e",
+    "archive_review": "VERIFY53 independently accepted 112 Regular and 116 Admin payload entries, 13 locked inputs, edition exclusions and false-readiness metadata",
+    "artifact_directory": "E:\\Build\\enshrouded-manager-cloud-23ed410-20261009",
+    "release_ready": false,
+    "installed": false
   }
 }
