@@ -9,7 +9,7 @@
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
     "Manager 074f8582d3fb3cbb3510266f9a8ba1b149902d26 passed both cloud edition jobs in run 37924463567, with publication skipped. It still consumes RC5 inputs without the shared Gem Forge payload. A complete new artifact, gameplay acceptance and final review remain open.",
-    "Wine 11's disposable baseline connected to Steam and answered in-container A2S. The two old local test servers are stopped with verified snapshots, recovering RAM from 3.1 to 10.6 GB. No matching current gameplay endpoint is installed; bone pickup and actual Wine multiplayer acceptance remain unverified.",
+    "The matching protocol-v2 client is installed and its isolated Windows endpoint is healthy with Creative/crafting/F6 initialization, Steam, HostOnline and loopback A2S evidence. This focused endpoint omits XP Share. Crafting, bone pickup and actual Wine multiplayer gameplay acceptance remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -86,7 +86,7 @@
   "local_crafting_test": {
     "human_approved": true,
     "scope": "Wire and enable crafting hooks in isolated local test server",
-    "integration": "CHECKPOINT-BUILD8 paired Release build and all 26 CTests passed. Independent VERIFY30 accepted integrated client provider, 39 life and 104 state checks. Matching selected-mod data passed independent VERIFY29; local installation and gameplay remain pending.",
+    "integration": "Build8 and 26 CTests passed; VERIFY29/30 accepted matching data and provider. The client is installed and hash-verified. The isolated Windows endpoint started at 2026-10-09 14:07 UTC; Steam, HostOnline, loopback A2S and adapter-log Creative/crafting/F6 initialization passed. Endpoint remains healthy at 14:26 UTC. First-join crafting gameplay remains pending.",
     "gameplay_verified": false,
     "hosted_deployed": false,
     "memory_blocker_resolved": true,
@@ -103,6 +103,28 @@
     "data_manifest": "E:\\Scratch\\enshrouded-forge-composition-FORGEDATA5-20261009T122756Z\\evidence\\selected-mod-composition-manifest.json",
     "data_manifest_sha256": "c4fab671aacb4c3f0ee3931aecfc5823eedeb384b0eaa02eea4ac2b9f44a7b14",
     "data_verified": true,
+    "installed": true,
+    "gameplay_verified": false,
+    "install_evidence": "E:\\Scratch\\enshrouded-native-win-protocol2-20261009\\client-test-bundle\\evidence\\client-install-result.json",
+    "install_evidence_sha256": "d207119834af97a1d098deea0fd14c2c4541c0d9e2b4038405f4ffae86494a19",
+    "endpoint_running": true,
+    "runtime_health_evidence": "E:\\Scratch\\enshrouded-native-win-protocol2-20261009\\logs-protocol2\\runtime-health-report.json"
+  },
+  "rc6_ci_checkpoint": {
+    "release_ready": false,
+    "source_commit": "85fdf3f790469268c6afee7ad95727139b5c2447",
+    "server_commit": "5cbe7fd327744ad5ac481a5de6c549432bae2378",
+    "run_id": "37942933979",
+    "run_url": "https://github.com/Aerox912/enshrouded-creative-mode/actions/runs/37942933979",
+    "conclusion": "success",
+    "native_tests_passed": 26,
+    "controls_tests_passed": 3,
+    "artifact_directory": "E:\\Build\\enshrouded-native-cloud-rc6-20261009",
+    "candidate_artifact_sha256": "7428695e19bf29110defb3df109ab85e84b0a085a10e5cc57b4235beacb34aba",
+    "test_artifact_sha256": "efcd10fb0dcc1f6fb8fae67b6e8eb2656bc06bc2b3f3d459e51f3e2c76a4df09",
+    "inner_candidate_sha256": "9a5abdecc51f3a1ac5b1b5342a70af39d10be78eeed546470c5949f9ddc836f0",
+    "local_archives_downloaded": true,
+    "independent_archive_review": "pending",
     "installed": false,
     "gameplay_verified": false
   }
