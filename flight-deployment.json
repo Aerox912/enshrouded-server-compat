@@ -8,8 +8,8 @@
     "Requested Creative parity remains incomplete. Protocol v2 and menu settings compile, but true G flight, verified Journey knowledge coverage, actual gear upgrades, drag/delete, free actions, live forges and time control still require native integration and gameplay acceptance.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "RC5 cloud/offline artifacts and private manager inputs are verified. Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 passed both cloud edition builds in run 37917954833; publication was skipped. Independent embedded-payload verification is in progress. No publication is authorized by build success alone.",
-    "Wine 10.0 fails the exact Steam AF_UNSPEC plus INCLUDE_PREFIX adapter request. A fresh Windows RC5 endpoint reached Steam InGame and loopback A2S but is stopped pending socket-role and graceful-shutdown checks. No endpoint is left available for gameplay; live bone pickup and Wine multiplayer acceptance remain open.",
+    "Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 passed both cloud edition jobs in run 37917954833; publication was skipped. Independent verification accepted all 113 Admin and 109 Regular embedded files. Gameplay and final feature acceptance remain open.",
+    "Wine 10.0 fails the exact Steam AF_UNSPEC plus INCLUDE_PREFIX adapter request. Windows RC5 previously reached Steam InGame and loopback A2S; the next run was blocked before launch by low available host memory. No endpoint is available for gameplay; graceful stop, bone pickup and Wine multiplayer remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -81,6 +81,13 @@
     "manager_inputs_private": true,
     "manager_commit": "92b63991dda788fc19e004cce4270ebecbaac9a1",
     "manager_build_run": 37917954833,
-    "manager_build_status": "Admin and Regular jobs succeeded; publication skipped; downloaded archives verified by executor, independent payload inspection pending."
+    "manager_build_status": "Admin and Regular jobs succeeded; publication skipped. VERIFY-13 independently accepted actual embedded payload paths, sizes, hashes, edition exclusions and false-readiness gate; downloaded installers were not independently run."
+  },
+  "local_crafting_test": {
+    "human_approved": true,
+    "scope": "Wire and enable crafting hooks in isolated local test server",
+    "integration": "Paired ALL_BUILD and 13/13 CTests passed; independent integrated lease review and matching client integration pending",
+    "gameplay_verified": false,
+    "hosted_deployed": false
   }
 }

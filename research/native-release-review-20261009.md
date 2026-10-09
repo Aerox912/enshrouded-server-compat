@@ -234,5 +234,29 @@ Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 is pushed. GitHub run
 Downloaded ZIP hashes are 83ca525546dea4182b59713a0432cf53c5f3a53fe9d0306b77c4231d487f6dd7
 (Admin) and dec9a3dc7b2f23e520954dc3ed06c38fc27cedb04e4d8a2e34d1c6604afa2a59
 (Regular). REL-10 verified sidecars, source/lock pins and readiness=false;
-VERIFY-13 is independently checking the embedded payloads. These cloud artifacts
+VERIFY-13 independently accepted all 113 Admin and 109 Regular embedded files,
+edition exclusions, exact hashes and the rejecting publication gate. It did not
+run the downloaded installers. These cloud artifacts
 supersede local package hashes for cloud-delivery claims, not for gameplay.
+
+The user subsequently approved wiring and enabling the crafting hooks in the
+isolated local server. The paired integration builds and passes 13 CTest
+targets. VERIFY-14 accepted the isolated server crafting adapter and 55 portable
+checks; VERIFY-16C accepted the isolated client preview adapter, 19 policy checks
+and pinned static targets. Neither independently verifies integrated leases or
+live crafting. Those checks remain assigned before the gameplay test.
+
+VERIFY-15 reproduced corrected paired Journey scalar exports and all expected
+recipe coverage. It also found malformed condition dictionaries accepted as
+complete, a stale code-hash manifest and a compound-query closure gap. Repair
+and independent recheck remain necessary. Current native runtime categories
+include NPC, altar and player-level conditions; the older coverage conclusion
+does not apply. The optional forge catalogue parser repair passed VERIFY-11B.
+
+The next Windows launch was blocked before process creation by low available
+RAM. The password-protected isolated test may use ordinary Steam networking
+with the existing firewall and private allowlist; hidden lobby visibility is
+not an extra launch requirement. LOOT-8 separately reproduced the adapter-query
+fix under pinned Wine 11.0 and received an in-container A2S reply, but its Steam
+API/authentication evidence remains unresolved. That stopped disposable baseline
+is not a user join endpoint or hosted Wine acceptance.
