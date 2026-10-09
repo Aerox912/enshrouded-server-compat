@@ -250,11 +250,11 @@
     "private_configs_evidence": "E:\\Build\\enshrouded-rollout59-private-stage-20261009\\allowlist-status.json",
     "private_configs_staged_only": true,
     "manager_camera_popup_commit": "252a1cd",
-    "manager_camera_popup_installed": false,
+    "manager_camera_popup_installed": true,
     "manager_camera_popup_ci": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/37990457146",
     "manager_camera_popup_review": "GPT-6 Pro found no source defect. Actual in-game notice remains unverified.",
-    "local_manager_handoff": "HOME77 found game running and no manager process. Active stable app remains4.4.2. Automatic updates temporarily disabled with original backup retained. Use app-only registration of a matched preview newer than4.4.6, then restore original automatic preference after verifying version selection; avoid payload Apply route.",
-    "overlay_verification": "VERIFY87 accepts immutable Enshrouded/IKEA overlay and rollback ZIP40414dab0e9fe3ee83addd0721709a3b65cf7712dbfcd88e9ae6c075b09b8a29;36entries,9overlayfiles+4restoreassets per host. Capture prior allowlist existence before write; delete on rollback only when deployment-created and currenthash matches. Soulrend freshbaseline pending.",
+    "local_manager_handoff": "RESUME98 recovered verified private release and app-only registration of Regular4.4.7, with previous4.4.2 retained, Automatic=true restored and no pending transaction. No game payload was applied. The final process sample found no manager process; supported persistent broker launch is under diagnosis. Home and visible popup remain unverified.",
+    "overlay_verification": "VERIFY87 accepted the immutable36-entry two-host archive40414dab0e9fe3ee83addd0721709a3b65cf7712dbfcd88e9ae6c075b09b8a29. VERIFY102 accepted the three-host mapping,7of7stagechecksums and Soulrend rollback metadata, reusing prior archive/resource/native acceptance. Each target has9overlaypaths and4restoreassets. Refresh baseline and private-file existence before write; rollback removals require deployment-created ledger and matching installed hash.",
     "private_input_upload": "User approved exact private input release; CI79-B published and read back gameplay-native-candidate-20261010-rc6-ui43 in private Aerox912/enshrouded-client-installer:586696bytes SHA256 b3e43dfc0e7bdaf6a19f2eadd261442036b16a06943ee9fb619bbc7bf54f92f4.",
     "occupancy_method_authorization": "Direct user answer: Approve direct zero-player checks. Replaces original requirement to rely only on authenticated panel occupancy records."
   },
@@ -280,7 +280,11 @@
     "excluded": [],
     "priority": "Deploy current matched build through the manager before further native-menu refinement",
     "authorization": "Latest direct user annotation explicitly adds Soulrend again on2026-10-10; supersedes earlier two-server restriction.",
-    "readiness": "All3 hosted baselines and completed backups captured; Soulrend has identical mod/resource/loader composition and different preserved server JSON. UI43 source/Pro/native artifacts and final manager cloud packages independently accepted. Private manager publication/app delivery and all3 overlay preparation continue. Direct zero-player checks authorized; require fresh result and immediate pre-stop recheck. No server payload/process changes."
+    "readiness": "All3 hosted baselines and completed backups captured; Soulrend has identical mod/resource/loader composition and different preserved server JSON. UI43 source/Pro/native artifacts, final private manager packages and three-host mapping independently accepted. Main assigned DEPLOY103 for scoped private rollout with fresh immediate pre-stop zero-player checks, backup/baseline verification, exact installed hashes and healthy startup. No server is yet recorded applied. Local Regular/Admin mismatch is being corrected separately without game-payload changes.",
+    "preparation_accepted": true,
+    "operator_task": "DEPLOY103-THREE-SERVERS",
+    "stage_directory": "E:\\Build\\enshrouded-rollout96-three-servers-20261010",
+    "full_parity_ready": false
   },
   "ui43_repair": {
     "creative_commit": "8fa0ebb3b177f3182a6d78da21b265094046ffc5",
@@ -309,8 +313,13 @@
     "admin_zip_sha256": "a65981150e0c0e4000f380689242ec084c949c74e9c4a349fecfc36e9def69a8",
     "artifact_directory": "E:\\Build\\enshrouded-manager-cloud-ui43-58141a4-20261010",
     "verification": "VERIFY93 independently accepted exact cloud ZIP/app/Setup hashes,112 Regular and116 Admin embedded payload entries, source/input pins, edition exclusions, three Forge files and AutoLoot. Embedded4.4.7 version exceeds4.4.6. No local runtime or popup gameplay check.",
-    "published": false,
-    "installed": false,
+    "published": true,
+    "release_url": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/private-preview-4.4.7-ui43-58141a4",
+    "private_prerelease": true,
+    "installed": true,
+    "installation_scope": "Regular4.4.7 app registration only; previous4.4.2 retained; Automatic=true restored; no game payload applied",
+    "broker_running": true,
+    "broker_status": "Regular4.4.7 persists after monitor/parent exit, but ReadReceipt rejects the installed Admin Creative selection. REPAIR105 is switching app-only to matching Admin4.4.7; Home gameplay unverified.",
     "gameplay_verified": false
   }
 }
