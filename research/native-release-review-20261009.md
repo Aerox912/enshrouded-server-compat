@@ -127,9 +127,11 @@ Other Hollow corpse containers are a separate path; live pickup and multiplayer
 acceptance remain required.
 
 The intended next test is a separate constrained Wine server with the matching
-combined Creative client. The older standalone Shroudtopia flight client has no
-dedicated-server approval protocol and cannot replace that client. Public
-publication and all three hosted deployments remain held.
+combined Creative client. The RC5 standalone Flight client is built from
+server-compat's flight_client.cpp and uses SteamTransport server approval; it
+must not be confused with the older client-local Shroudtopia implementation.
+Combined Creative already supplies F6, so these client options remain mutually
+exclusive. Public publication and all three hosted deployments remain held.
 
 Delivery inspection found a material dependency mismatch. The manager still
 consumes patches v1.0.6 (aabe8e8), whose Auto Loot output is the older critter-only
@@ -174,7 +176,25 @@ remaining three Workshop files already come from the gameplay overlay. The
 repair applies that verified overlay before original preparation. Independent
 source review and eight focused manifest tests pass, with public promotion
 still rejecting packageReady=false. Fresh full Admin/Regular assembly and
-resulting Workshop, vmkeys, import and edition checks remain pending.
+resulting Workshop, vmkeys, import and edition checks subsequently passed in
+VERIFY-7. Both editions preserve 84 unique original inputs across 85 import
+rows; the extra Rested/Hoarder variant shares its original source. The first
+full builds predate the corrected Flight descriptions and must be rebuilt.
+The private gameplay input prerelease gameplay-native-candidate-20261009-rc5
+contains the verified 436,844-byte archive with SHA-256
+a7e8293c4afe722281e31e30da6492b07916e5f21e8f265c48c8e31f361a065f.
+It is a private build input, not a published manager release.
+
+Journey verification independently passed 11 CTest targets and 66 focused
+reader/session checks, plus exact alias regeneration and static layout checks.
+Unsupported Extern query categories remain unavailable; a resource export is
+determining their relevance to the catalogue. Initial forge proofs resolve all
+six stock templates on client and server and record unchanged regional caps,
+essence IDs, actions and cost modifiers. Independent review found missing
+original probe inputs, an absent runtime Lua schema guard and an unchecked
+client preview-resolution flag. Repairs and a new replay are required. The
+existing signatures cover selected fields, not full nested template equality.
+Neither result is live acceptance.
 
 The full Creative parity target remains part of completion. The candidate's
 unsupported-feature list and NIC-496 backlog did not establish user approval to

@@ -15,3 +15,8 @@
 - Unknown Journey knowledge or level is unavailable data, not an undiscovered item or level zero. Native readers must positively establish known facts; unknown state must not revoke a valid connection or erase the remembered F6 preference.
 - Take 1 and customized quantity one are different operations. Carry an explicit selection policy; hotbar grants must use the same item, gear and Journey eligibility checks as inventory grants before their atomic grant-and-bind transaction.
 - An A2S timeout reproduced with the builtin loader and the native candidate does not identify native hooks as its cause. Investigate shared Wine, Steam, network and probe prerequisites before changing gameplay code.
+- The RC5 standalone Flight client is built from server-compat's flight_client.cpp and uses SteamTransport server approval. Do not describe it as the older client-local Shroudtopia implementation. Combined Creative already contains F6, so install one client implementation at a time.
+- Count original inputs by unique source hash. The Rested/Hoarder transformed variant adds a catalogue row without requiring an additional original download; 85 rows can correctly represent 84 unique originals.
+- Reflected Actor state bits are not configured input actions. Creative flight must use actual Jump, Sneak and Sprint input semantics and matching client/server movement, with a distinct G lease from F6.
+- Level 50 is the game level cap, not an upgrade-count limit. Gear upgrades must respect the selected item's actual available perks.
+- Offline forge resource proof establishes stock template resolution and preserved native costs/caps, not placement visuals, pickup or save compatibility. Keep those as separate gameplay checks.

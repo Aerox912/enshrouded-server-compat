@@ -8,8 +8,8 @@
     "Requested Creative parity remains incomplete: true G flight, Journey discovery/level enforcement, gear upgrades, hotbar drag and catalog deletion, free resource actions, regional gem forges and time controls. Backlog status is not user approval to omit these requirements.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Current selected-mod regeneration, corrected server package verification and exact rc.5 artifact/offline Wine checks pass. The manager overlay/import ordering repair and complete generated payload verification remain open.",
-    "The separate Wine candidate reaches Host_Online but no Windows loopback join endpoint is verified. Live bone pickup and Wine multiplayer acceptance remain open.",
+    "Current selected-mod regeneration, corrected server package verification, exact rc.5 artifact/offline Wine checks and manager payload integrity pass. Private RC5 gameplay inputs are uploaded and verified. Fresh manager builds and UI verification must include corrected server-approved Flight descriptions.",
+    "The separate Wine candidate and builtin-loader baseline reach Run but fail in-container A2S; the baseline reports adapter-query and Steam initialization errors. No usable Windows join endpoint is verified. Live bone pickup and Wine multiplayer acceptance remain open.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -74,6 +74,10 @@
     "archive_sha256": "5dd291ed15c4b435b517d44110270746b93d177b0a3e74795342da4c42fdb7d4",
     "offline_wine_log_sha256": "23d34cb6e1a379c057f3106be5f35c5b80bc8785a860e0157ba8f7b74022c6ef",
     "server_package_build_run": 37904871130,
-    "server_package_build_status": "success"
+    "server_package_build_status": "success",
+    "manager_inputs_release": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/gameplay-native-candidate-20261009-rc5",
+    "manager_inputs_sha256": "a7e8293c4afe722281e31e30da6492b07916e5f21e8f265c48c8e31f361a065f",
+    "manager_inputs_bytes": 436844,
+    "manager_inputs_private": true
   }
 }
