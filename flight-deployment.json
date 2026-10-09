@@ -5,6 +5,7 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
+    "UI42 commit515a7d89dcb1f22a9df71e7320bab0bb8bf55e7c passed exact-head CI37994193335 and124 lifecycle checks under Wine10, but final Pro review found HELLO/unreadable-sample preference loss and stale caller timestamps. UI42 is held; REPAIR75 is preparing UI43 before matching private delivery.",
     "Full Creative parity remains incomplete and is follow-up scope. The user now requests current matched changes deployed to Enshrouded and IKEA before native-menu refinement; narrower release compatibility and runtime evidence still require evaluation.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
@@ -42,12 +43,38 @@
     {
       "name": "Enshrouded",
       "id": "1650d1ae",
-      "applied": false
+      "applied": false,
+      "predeploy_backup": {
+        "name": "rollout46-predeploy-2026-10-09",
+        "completed_utc": "2026-10-09T19:42:11Z",
+        "locked": true,
+        "ignored_files": 0,
+        "restore_rehearsed": false
+      },
+      "baseline_audit": {
+        "evidence": "E:\\Build\\rollout55-audit-baseline-20261009\\rollout55-audit-baseline-20261009.md",
+        "archive_sha256": "59b288914fb5e37a615aa5c09f38c46e186650f75eeecf4abe72fe6a904db4c1",
+        "server_exe_sha256": "001c1b40ed091d8c1aee583adde3800d7c858ae2c7f4dff54fca2938b2be1637",
+        "root_dbghelp_sha256": "0b69fed17198db9e1d982abdede4cd09122d9a7137f602964337bafc25af13da"
+      }
     },
     {
       "name": "IKEA",
       "id": "c70c80c3",
-      "applied": false
+      "applied": false,
+      "predeploy_backup": {
+        "name": "rollout46-predeploy-2026-10-09",
+        "completed_utc": "2026-10-09T19:42:58Z",
+        "locked": true,
+        "ignored_files": 0,
+        "restore_rehearsed": false
+      },
+      "baseline_audit": {
+        "evidence": "E:\\Build\\rollout55-audit-baseline-20261009\\rollout55-audit-baseline-20261009.md",
+        "archive_sha256": "fe663b6f1914560d23ca04db87042816db323cf44e28be23e5e0b6ebe122e6f3",
+        "server_exe_sha256": "001c1b40ed091d8c1aee583adde3800d7c858ae2c7f4dff54fca2938b2be1637",
+        "root_dbghelp_sha256": "0b69fed17198db9e1d982abdede4cd09122d9a7137f602964337bafc25af13da"
+      }
     },
     {
       "name": "Soulrend",
@@ -199,6 +226,32 @@
     "cloud_candidate_sha256": "5d1ae95e85f99a4e37e1cbf883c32b19a5cdf486b293e4a765cc603766c02a98",
     "cloud_verification": "Exact head ac83603;16 payload members and30 test executables match;30 CTests pass; packageReady=false"
   },
+  "rollout_preflight": {
+    "occupancy": "Unknown for both targets: authenticated panel has no current player/session list and available logs cannot reconcile an active set. No stop authorized from this evidence.",
+    "occupancy_evidence": "E:\\Build\\enshrouded-rollout64-occupancy-20261009\\report.md",
+    "resources_evidence": "E:\\Build\\enshrouded-rollout59-private-stage-20261009\\resources\\manifest.json",
+    "resource_composition": "Reconstructed baseline agrees across19 mod-referenced types. RESOURCE73 confirms all4219 moved resources belong to those compared types in the final two chunks; preceding55 chunks are byte-identical. Compression/alignment explains the16KiB difference. RESOURCE74 staged the76-file proposed composition preserving Workshop20x; VERIFY76 serialized-content checks pending. Dat containers remain untouched. Historical FORGEDATA5 remains excluded.",
+    "private_configs_evidence": "E:\\Build\\enshrouded-rollout59-private-stage-20261009\\allowlist-status.json",
+    "private_configs_staged_only": true,
+    "manager_camera_popup_commit": "252a1cd",
+    "manager_camera_popup_installed": false,
+    "manager_camera_popup_ci": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/37990457146",
+    "manager_camera_popup_review": "GPT-6 Pro found no source defect. Actual in-game notice remains unverified.",
+    "local_manager_handoff": "HOME77 found game running and no manager process. Active stable app remains4.4.2. Automatic updates temporarily disabled with original backup retained. Use app-only registration of a matched preview newer than4.4.6, then restore original automatic preference after verifying version selection; avoid payload Apply route."
+  },
+  "ui42_repair": {
+    "creative_commit": "515a7d89dcb1f22a9df71e7320bab0bb8bf55e7c",
+    "server_commit": "5f173c49875cc65c8d7903062dfc6ed904896758",
+    "version": "0.3.0-rc.6-ui.42",
+    "source_verification": "VERIFY53-B accepted fixed expiry through fresh HELLO and F6 acknowledgement, retirement before local observation and reply processing, and 124 offline lifecycle checks under cached Wine10. Owner strict MSVC core checks: 655.",
+    "review_packet_sha256": "9a3550bd91e01e98f2ebf62755db978fe54dfea2193bb3bcaf8bd4cd70ea6866",
+    "review_status": "GPT-6 Pro completed at2026-10-09T21:38:26Z with two additional recovery findings, assigned REPAIR75. HOME65 popup has no source findings. The staged attachment hash matches the retained prompt prefix plus source packet.",
+    "ci_status": "Exact-head run37994193335 succeeded:27 native and3 control tests;16 manifest payload hashes verified. UI42 held, no manager input regeneration.",
+    "ci_run_url": "https://github.com/Aerox912/enshrouded-creative-mode/actions/runs/37994193335",
+    "candidate_zip_sha256": "cf81fe22403671e536262d6a1b47c771a9549dd432b873286ad546f08b2be16e",
+    "installed": false,
+    "gameplay_verified": false
+  },
   "rollout_scope": {
     "targets": [
       "1650d1ae",
@@ -209,6 +262,6 @@
     ],
     "priority": "Deploy current matched build through the manager before further native-menu refinement",
     "authorization": "Latest direct user request",
-    "readiness": "Pending current-package and hosted-baseline audits; no remote mutations yet"
+    "readiness": "UI42 exact-head CI passed but final Pro review requires REPAIR75/UI43 recovery fixes. Then verify the matched private manager delivery, complete resource composition, and proven empty occupancy. Full backups and exact hosted baselines are captured. Only temporary audit archives were created; no original server file, configuration or process changes."
   }
 }

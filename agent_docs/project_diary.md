@@ -1,6 +1,9 @@
 # Lasting decisions
 
 - Latest rollout order: current matched build to Enshrouded and IKEA first, native-menu refinement afterward. Soulrend is excluded until the user authorizes it again. F7 opening and server approval are user-confirmed for UI41; Settings alignment and Journey activation are not accepted. Cosmetic parity is deferred, while compatibility, authority, rollback and empty-server checks remain required for the deployed scope.
+- Review the actual native lifecycle integration, not just protocol helpers. UI41's first local dead read retired pending replies and reset the F6 preference before a server suspension reply could preserve it. Remembered intent and execution authority need separate retirement rules; local dead reads cannot manufacture authenticated server contact.
+- A native fresh-hello barrier must still use current core compatibility and permission classification. Returning a synthetic suspension before those checks can hide revocation even when no operation executes.
+- Panel loading can temporarily show zero uptime/resources and a disconnected console. Confirm a fresh connected state before treating that as an outage. The two backup operations retained the existing server uptimes.
 
 - An enabled Always Flying preference should survive death/respawn only within the same authenticated connection. Actual flight suspends for dead/spawning actors; fresh approval and live evidence are required to resume. Disconnect and revocation clear preference. This is the user's explicit default, not acceptance of accidental rc.2 persistence.
 - Creative requests are actor-lifetime operations. Pending grants and old approval must not survive respawn even when the flight preference does.
@@ -65,3 +68,9 @@ The native type map proved that the locally owned scene entity has ClientActor b
 Native blur transforms consist of one positive scale and two finite translations. Requiring positive translations incorrectly rejects the ordinary zero-translation case. MENU26 keeps that regression covered, limits the native DB5C backdrop to the top bar, and uses the blue/gold FancyBox contract for details and modal panels.
 
 UI40's first F7 render crashed at native input helper 94E072. Two zero-valued byte inputs in the native caller were incorrectly implemented as null pointer arguments. The callee dereferences both without checks. A correct ABI description must distinguish a zero value from the address of a live zero-initialized value; matching the function signature and rendering geometry did not catch that error. CRASH41 repairs the actual call boundary and requires independent pinned-caller review before the next live test.
+
+Historical staging composition is not the hosted baseline. The Forge stage omitted Workshop-Speed-20x even though earlier summaries claimed preservation. Capture current files and compare them with a reconstruction from clean resources before overlaying changes. EMM patch counts and six Forge proofs alone do not establish preservation of unrelated mods.
+
+Home is currently a manager-owned shortcut, not an in-game binding. First-person files can be intact while the shortcut is absent because the manager is closed. Launching an older installed manager can also trigger an automatic payload update, so inspect that lifecycle before using it alongside a development client.
+
+A retained F6 preference is not an execution lease. The fixed recovery budget must cover both fresh HELLO and the flight acknowledgement; accepting HELLO alone must not reset it. Check expiry before interpreting a new life sample or reply, otherwise a late death can recreate a bookmark or a late acknowledgement can restore expired state. Local death observations must never manufacture authenticated contact.
