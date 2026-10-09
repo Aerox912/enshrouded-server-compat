@@ -10,4 +10,5 @@
 - A successful older test-stage rebuild does not establish a matching update for the current installation. Compare the complete selected-mod file inventory first; the October 6 client stage lacked the later Workshop 20x files and other current client changes.
 - Hosted updates require fresh empty-server evidence, complete rollback backups, exact hashes and healthy startup. Preserve worlds, existing mods, Workshop 20x, loaders, Wine overrides and private configuration.
 - Source provenance in a native artifact does not prove that a separate manager or server preparation pipeline consumes that source. The rc.4 inspection found older patch archives in both delivery locks; check the generated Lua, frozen PatchTool and catalogs themselves.
+- Candidate documentation and an agent-created backlog entry do not authorize narrowing the user's requested Creative parity. Keep all requested features in the completion audit unless the user explicitly changes scope.
 - Host_Online and Podman port publications do not establish a usable Windows join endpoint. The separate Wine candidate still needs listener and UDP forwarding evidence before asking the user to join it.

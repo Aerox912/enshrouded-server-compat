@@ -146,3 +146,39 @@ probe also timed out. Existing Windows and Wine servers were left unchanged.
 
 The scheduled deployment check was deleted at the user's request because the
 active thread goal replaces it. Empty-server deployment conditions still apply.
+
+## Corrected inputs and RC5 verification
+
+The exact 7dc8953 patch archive and frozen PatchTool are published under the
+separate prerelease tag patch-candidate-20261009-7dc8953. API asset digests match
+5d56dd220681d4bb4ffb3d29ca91214f152cd932f8e92a10612daef57ba73389 and
+137396b71678a455c9b733ef38e01c77cc1c5c22e6b8504de5d05a27fcd7598a,
+respectively. Stable patch latest remains v1.0.6. Server 9315f7a pins those
+inputs; workflow 37904871130 passed and an independent download check confirmed
+the expected tool and provenance in both normal and Cheeze profile packages.
+That check does not establish combined Creative runtime behavior.
+
+Creative ddc8700 packages rc.5 against server 9315f7a. Push run 37905445031 passed.
+The downloaded candidate ZIP SHA-256 is
+5dd291ed15c4b435b517d44110270746b93d177b0a3e74795342da4c42fdb7d4.
+All ten manifest members and exact source/dependency pins match; private defaults
+remain empty. All five DLLs and thirteen test executables differ from rc.4, so
+the thirteen rc.5 executables were rerun under offline Wine. All 889 checks
+passed. Log SHA-256:
+23d34cb6e1a379c057f3106be5f35c5b80bc8785a860e0157ba8f7b74022c6ef.
+No rc.5 installation or live acceptance is claimed.
+
+The corrected patch catalog exposed a manager preparation ordering issue: 87
+original imports were requested, while the pinned originals contain 84 and the
+remaining three Workshop files already come from the gameplay overlay. The
+repair applies that verified overlay before original preparation. Independent
+source review and eight focused manifest tests pass, with public promotion
+still rejecting packageReady=false. Fresh full Admin/Regular assembly and
+resulting Workshop, vmkeys, import and edition checks remain pending.
+
+The full Creative parity target remains part of completion. The candidate's
+unsupported-feature list and NIC-496 backlog did not establish user approval to
+omit true G flight, Journey, upgrades, drag/delete, free actions, regional forges
+or time controls. Those native packages are being developed separately from the
+candidate under test. Final integrated review and gameplay acceptance remain
+required before manager publication and hosted deployment.

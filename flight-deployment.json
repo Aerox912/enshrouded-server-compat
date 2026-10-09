@@ -5,9 +5,10 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
+    "Requested Creative parity remains incomplete: true G flight, Journey discovery/level enforcement, gear upgrades, hotbar drag and catalog deletion, free resource actions, regional gem forges and time controls. Backlog status is not user approval to omit these requirements.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Current selected-mod client/server regeneration passes, but manager and server package dependency locks still consume older patch inputs; immutable candidate input integration and a native dependency rebuild are required.",
+    "Current selected-mod regeneration, corrected server package verification and exact rc.5 artifact/offline Wine checks pass. The manager overlay/import ordering repair and complete generated payload verification remain open.",
     "The separate Wine candidate reaches Host_Online but no Windows loopback join endpoint is verified. Live bone pickup and Wine multiplayer acceptance remain open.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
@@ -54,7 +55,7 @@
       "applied": false
     }
   ],
-  "candidate": {
+  "previous_candidate": {
     "version": "0.3.0-rc.4",
     "creative_commit": "ae1f5f87ac1a639a1f2a489b376289e337d9f9e9",
     "server_commit": "f68faf0a9f108317cf9b9c8b694b1a89601e509b",
@@ -62,5 +63,17 @@
     "review": "Focused GPT-6 Pro client and native findings repaired and source-closed; independent Release build and 10 CTest targets pass. Runtime acceptance remains open.",
     "build_run": 37864540683,
     "archive_sha256": "30f3082dc987f400cfbde2e4151e39416e44e8f62612b64f80929504b2aa12f3"
+  },
+  "candidate": {
+    "version": "0.3.0-rc.5",
+    "creative_commit": "ddc8700e0e7beefdfe74e0fe25db381a8c1ee9b9",
+    "server_commit": "9315f7adce860fe5cb4653229f7a4d5b434d79b8",
+    "build_status": "Exact-head push run 37905445031 succeeded; all 10 candidate manifest members verified; all 13 offline Wine executables passed 889 checks.",
+    "review": "No gameplay implementation changes since focused rc.4 source review. Requested parity, live acceptance and final integrated review remain open.",
+    "build_run": 37905445031,
+    "archive_sha256": "5dd291ed15c4b435b517d44110270746b93d177b0a3e74795342da4c42fdb7d4",
+    "offline_wine_log_sha256": "23d34cb6e1a379c057f3106be5f35c5b80bc8785a860e0157ba8f7b74022c6ef",
+    "server_package_build_run": 37904871130,
+    "server_package_build_status": "success"
   }
 }
