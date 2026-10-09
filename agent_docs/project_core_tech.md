@@ -1,0 +1,9 @@
+# Core technology
+
+The production adapter uses C++20, Windows x64, MASM, CMake and MinHook. `adapter_core` contains the shared adapter and extras logic; `dbghelp` is the proxy library packaged for the server profiles. The Normal profile uses the original Global XP Share `dbghelp.dll`; Cheeze uses the adapter proxy and loads the original as `GlobalXPShare.original.dll`. Preserve the per-executable Wine override `dbghelp=native,builtin`.
+
+`BUILD_FLIGHT_EXPERIMENT` is off by default. When enabled, it builds isolated flight identity/session logic, native hooks, client and server development libraries, and offline harnesses. Creative is another opt-in experiment that requires the flight experiment and an external Creative source tree. These targets stay outside production packages until authenticated client behavior, native gameplay and intended Wine runtime acceptance are complete.
+
+The respawn contract keeps flight preference for the same authenticated connection. Flight must be inactive during death and spawning, then be freshly authorized after a live respawn; disconnect or revocation clears it. Lifecycle serials protect against reused native handles, but they do not establish native alive-state observation or simulation-thread commit ordering. Full-inventory rejection has been observed, while partial-fit rollback remains open. Undead bone-pile loot repair is in progress and has not been tested live.
+
+CMake/CTest covers isolated native logic. `adapter_tests` and `extras_tests` remain separate integration programs requiring the supported game executable and original plugins. Offline Wine harnesses are not actual Wine multiplayer sessions. Current verified evidence is recorded in `research/native-release-review-20261009.md`; `flight-deployment.json` is the package/deployment record and may lag active candidate work.

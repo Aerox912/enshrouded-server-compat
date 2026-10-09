@@ -1,27 +1,66 @@
 {
-  "feature": "Always Flying dedicated-server support",
+  "feature": "Always Flying, Creative and corpse-loot compatibility",
   "package_ready": false,
   "package": null,
   "sha256": null,
-  "evidence": "research/flight-server-20261007.md",
+  "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "Mixed-client isolation, unapproved-player gameplay, death and respawn acceptance remain; one approved controller client now levels out/climbs, with live revocation and reconnect checks observed",
-    "Wine verification, matching client delivery to all testers and a release manifest with hosted rollback evidence remain"
+    "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
+    "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
+    "Current selected-mod client/server regeneration passes, but manager and server package dependency locks still consume older patch inputs; immutable candidate input integration and a native dependency rebuild are required.",
+    "The separate Wine candidate reaches Host_Online but no Windows loopback join endpoint is verified. Live bone pickup and Wine multiplayer acceptance remain open.",
+    "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
-    "server": "E:\\Build\\enshrouded-flight-server\\Release\\flight_server_dev.dll",
-    "server_sha256": "15d256f2eec3164136a2de4398e6b52487af90cd90f3b6a2964c39e02acbd71f",
-    "client": "E:\\Build\\enshrouded-flight-server\\Release\\flight_client_dev.dll",
-    "client_sha256": "f0f81b886f62386d555c0ec2704acbad5ac1d2205df8d731035673ee50b3cfd3",
-    "local_test_root": "E:\\Scratch\\enshrouded-flight-runtime-20261008",
-    "local_test_only": true
+    "version": "0.3.0-rc.2",
+    "archive": "E:\\Build\\enshrouded-native-cloud-rc2-20261009\\native-gameplay-candidate.zip",
+    "archive_sha256": "45effc1f64c869c8d9e16aeb9b4b71794bb43659e8b92ad533db9f31c19ef3fd",
+    "local_test_root": "E:\\Scratch\\enshrouded-flight-creative-20261008",
+    "install_evidence": "E:\\Build\\enshrouded-native-cloud-rc2-20261009\\local-test-install.json",
+    "local_test_only": true,
+    "wine_offline_checks": 602,
+    "gameplay_evidence": [
+      "User confirmed requested weapon level and quality match.",
+      "User confirmed item persists after reconnect.",
+      "User confirmed full-backpack extra weapon request added nothing; server rejection logs corroborate.",
+      "User requested enabled flight preference intentionally resume after respawn in the same authenticated connection; rc.2 accidental persistence is not acceptance of the replacement implementation."
+    ],
+    "pending_tests": [
+      "Deliberate same-session flight resume with native dead/spawn suspension",
+      "Partial-fit rollback",
+      "Mixed approved and denied clients",
+      "Actual Wine multiplayer runtime",
+      "Undead bone-pile manual looting after matching data update"
+    ]
   },
   "deploy_only_when_empty": true,
-  "retry_minutes": 15,
-  "automation_id": "deploy-always-flying-when-servers-are-empty",
+  "coordination": "Active thread goal replaces the scheduled deployment check.",
+  "automation_id": null,
+  "removed_automation_id": "deploy-always-flying-when-servers-are-empty",
   "servers": [
-    { "name": "Enshrouded", "id": "1650d1ae", "applied": false },
-    { "name": "IKEA", "id": "c70c80c3", "applied": false },
-    { "name": "Soulrend", "id": "ea6b2409", "applied": false }
-  ]
+    {
+      "name": "Enshrouded",
+      "id": "1650d1ae",
+      "applied": false
+    },
+    {
+      "name": "IKEA",
+      "id": "c70c80c3",
+      "applied": false
+    },
+    {
+      "name": "Soulrend",
+      "id": "ea6b2409",
+      "applied": false
+    }
+  ],
+  "candidate": {
+    "version": "0.3.0-rc.4",
+    "creative_commit": "ae1f5f87ac1a639a1f2a489b376289e337d9f9e9",
+    "server_commit": "f68faf0a9f108317cf9b9c8b694b1a89601e509b",
+    "build_status": "success; exact-head run 37864540683 artifact verified; all 13 offline Wine executables pass (889 checks). Successor required to integrate corrected server package patch dependency.",
+    "review": "Focused GPT-6 Pro client and native findings repaired and source-closed; independent Release build and 10 CTest targets pass. Runtime acceptance remains open.",
+    "build_run": 37864540683,
+    "archive_sha256": "30f3082dc987f400cfbde2e4151e39416e44e8f62612b64f80929504b2aa12f3"
+  }
 }
