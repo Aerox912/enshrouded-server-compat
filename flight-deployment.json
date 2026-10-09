@@ -5,11 +5,11 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "Requested Creative parity remains incomplete: true G flight, Journey discovery/level enforcement, gear upgrades, hotbar drag and catalog deletion, free resource actions, regional gem forges and time controls. Backlog status is not user approval to omit these requirements.",
+    "Requested Creative parity remains incomplete. Protocol v2 and menu settings compile, but true G flight, verified Journey knowledge coverage, actual gear upgrades, drag/delete, free actions, live forges and time control still require native integration and gameplay acceptance.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Current selected-mod regeneration, corrected server package verification, exact rc.5 artifact/offline Wine checks and manager payload integrity pass. Private RC5 gameplay inputs are uploaded and verified. Fresh manager builds and UI verification must include corrected server-approved Flight descriptions.",
-    "The separate Wine candidate and builtin-loader baseline reach Run but fail in-container A2S; the baseline reports adapter-query and Steam initialization errors. No usable Windows join endpoint is verified. Live bone pickup and Wine multiplayer acceptance remain open.",
+    "RC5 cloud/offline artifacts and private manager inputs are verified. Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 passed both cloud edition builds in run 37917954833; publication was skipped. Independent embedded-payload verification is in progress. No publication is authorized by build success alone.",
+    "Wine 10.0 fails the exact Steam AF_UNSPEC plus INCLUDE_PREFIX adapter request. A fresh Windows RC5 endpoint reached Steam InGame and loopback A2S but is stopped pending socket-role and graceful-shutdown checks. No endpoint is left available for gameplay; live bone pickup and Wine multiplayer acceptance remain open.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
   "development_artifacts": {
@@ -78,6 +78,9 @@
     "manager_inputs_release": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/gameplay-native-candidate-20261009-rc5",
     "manager_inputs_sha256": "a7e8293c4afe722281e31e30da6492b07916e5f21e8f265c48c8e31f361a065f",
     "manager_inputs_bytes": 436844,
-    "manager_inputs_private": true
+    "manager_inputs_private": true,
+    "manager_commit": "92b63991dda788fc19e004cce4270ebecbaac9a1",
+    "manager_build_run": 37917954833,
+    "manager_build_status": "Admin and Regular jobs succeeded; publication skipped; downloaded archives verified by executor, independent payload inspection pending."
   }
 }

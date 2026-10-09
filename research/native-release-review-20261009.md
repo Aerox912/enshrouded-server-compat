@@ -202,3 +202,37 @@ omit true G flight, Journey, upgrades, drag/delete, free actions, regional forge
 or time controls. Those native packages are being developed separately from the
 candidate under test. Final integrated review and gameplay acceptance remain
 required before manager publication and hosted deployment.
+
+## Subsequent verification delta
+
+VERIFY-7B accepted rebuilt Admin/Regular manager payloads, corrected companion
+descriptions, all pinned files and edition exclusions. It found a latent
+Flight-only lock with no nativeGameplay object could pass the publication gate.
+REL-9 repairs that case through shared build/release validation; VERIFY-7C
+independently accepted both validation paths. The current packageReady=false lock was
+blocked throughout. The final notice-only binaries have source-equivalent UI
+coverage (608 Admin / 605 Regular checks), not a same-binary test rerun.
+
+Protocol v2 and separate hour/rate commands passed a paired Release build and
+11 CTest targets. Native callbacks and authoritative UI state are still being
+integrated. VERIFY-10 exposed scalar KnowledgeQueryData values exported as
+arrays, invalidating the earlier query histogram. Native consumer tracing
+supports RecipeInfo+0x50; repair the export shape before concluding reader
+coverage. VERIFY-11 independently replayed paired forge proofs and confirmed
+the six corrected Workshop/Production rows. A small optional catalogue-verifier
+parser defect remains in repair; live forge behavior is unverified.
+
+LOOT-7 reproduces Wine's failure on Steam's exact adapter-query arguments,
+including the 15,000-byte-buffer alternative. The fresh Windows RC5 server
+reached Steam InGame and answered loopback A2S, then was stopped for further
+socket-role and graceful-stop verification. These runtime observations are
+not multiplayer or gameplay acceptance. Public release and hosted state remain
+unchanged.
+
+Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 is pushed. GitHub run
+37917954833 succeeded for Admin and Regular; the publication job was skipped.
+Downloaded ZIP hashes are 83ca525546dea4182b59713a0432cf53c5f3a53fe9d0306b77c4231d487f6dd7
+(Admin) and dec9a3dc7b2f23e520954dc3ed06c38fc27cedb04e4d8a2e34d1c6604afa2a59
+(Regular). REL-10 verified sidecars, source/lock pins and readiness=false;
+VERIFY-13 is independently checking the embedded payloads. These cloud artifacts
+supersede local package hashes for cloud-delivery claims, not for gameplay.

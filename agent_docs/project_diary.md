@@ -20,3 +20,7 @@
 - Reflected Actor state bits are not configured input actions. Creative flight must use actual Jump, Sneak and Sprint input semantics and matching client/server movement, with a distinct G lease from F6.
 - Level 50 is the game level cap, not an upgrade-count limit. Gear upgrades must respect the selected item's actual available perks.
 - Offline forge resource proof establishes stock template resolution and preserved native costs/caps, not placement visuals, pickup or save compatibility. Keep those as separate gameplay checks.
+- Reflection field types matter as much as offsets. The Journey exporter treated scalar KnowledgeQueryData structs as arrays and emitted misleading empty values. Do not change a native field offset to fit faulty export evidence; trace the original consumer and validate the export shape first.
+- Component registration names can be sorted independently of runtime query columns. String-length metadata is not a component type ID, and registration order alone cannot establish native pointer layout.
+- Release validation must require a native manifest for either server-authorized Flight or Creative files. A Creative-only negative fixture missed a malformed Flight-only lock; the current explicit blocked lock was unaffected.
+- Distinguish query-port binding from Steam transport sockets. A wildcard UDP socket needs role and accessibility evidence; it does not by itself prove an isolated local server is unusable.
