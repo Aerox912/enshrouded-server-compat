@@ -5,8 +5,8 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "UI42 commit515a7d89dcb1f22a9df71e7320bab0bb8bf55e7c passed exact-head CI37994193335 and124 lifecycle checks under Wine10, but final Pro review found HELLO/unreadable-sample preference loss and stale caller timestamps. UI42 is held; REPAIR75 is preparing UI43 before matching private delivery.",
-    "Full Creative parity remains incomplete and is follow-up scope. The user now requests current matched changes deployed to Enshrouded and IKEA before native-menu refinement; narrower release compatibility and runtime evidence still require evaluation.",
+    "UI43 source8fa0ebb passed VERIFY78 and GPT-6 Pro review; exact-head native CI37996919115 succeeded with16 verified payload hashes. Matching private manager delivery and final artifact acceptance are underway; live respawn remains unverified.",
+    "Full Creative parity remains incomplete and is follow-up scope. The user requests current matched changes deployed to all three servers before native-menu refinement; narrower release compatibility and runtime evidence still require evaluation.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
     "Manager23ed410 passed exact-head cloud run37956399896 for both editions and setup checks; publish was skipped. VERIFY53 independently accepted actual cloud payload inventories and RC6 lock provenance. Full feature successor, gameplay and final review remain required before public release.",
@@ -79,7 +79,23 @@
     {
       "name": "Soulrend",
       "id": "ea6b2409",
-      "applied": false
+      "applied": false,
+      "predeploy_backup": {
+        "name": "ROLLOUT88-SOULREND-20261010",
+        "completed_utc": "2026-10-09T22:29:36Z",
+        "size_display": "10.01 GiB",
+        "state": "CREATED",
+        "locked_option_checked": true,
+        "persisted_lock_state_independently_verified": false,
+        "ignored_pattern": "!**",
+        "restore_rehearsed": false
+      },
+      "baseline_audit": {
+        "evidence": "E:\\Build\\enshrouded-rollout88-soulrend-20261010\\report.md",
+        "root_archive_sha256": "ba19e35ddddbfbf6002bc1ea0595288dbc5a4f6929bb41083270fb01371dc9b6",
+        "mods_archive_sha256": "8f9cdb7a9e08362085e553f58d56919db1655bf45dc7c7ba59f8ba93ff549e93",
+        "comparison": "Loader, executable, resources, XPShare, safeprobe and all73 mod paths/hashes match Enshrouded/IKEA baseline. Server JSON differs and is preserved. Both allowlists absent in fresh listing."
+      }
     }
   ],
   "previous_candidate": {
@@ -227,17 +243,20 @@
     "cloud_verification": "Exact head ac83603;16 payload members and30 test executables match;30 CTests pass; packageReady=false"
   },
   "rollout_preflight": {
-    "occupancy": "Unknown for both targets: authenticated panel has no current player/session list and available logs cannot reconcile an active set. No stop authorized from this evidence.",
+    "occupancy": "Kinetic panel cannot establish current player/session counts for all3 servers. User explicitly approved fresh direct Steam server queries and immediate pre-stop recheck on2026-10-10; any nonzero, failed or ambiguous query leaves server running. Await fresh query evidence.",
     "occupancy_evidence": "E:\\Build\\enshrouded-rollout64-occupancy-20261009\\report.md",
     "resources_evidence": "E:\\Build\\enshrouded-rollout59-private-stage-20261009\\resources\\manifest.json",
-    "resource_composition": "Reconstructed baseline agrees across19 mod-referenced types. RESOURCE73 confirms all4219 moved resources belong to those compared types in the final two chunks; preceding55 chunks are byte-identical. Compression/alignment explains the16KiB difference. RESOURCE74 staged the76-file proposed composition preserving Workshop20x; VERIFY76 serialized-content checks pending. Dat containers remain untouched. Historical FORGEDATA5 remains excluded.",
+    "resource_composition": "RESOURCE73 confirms reconstruction equivalence for all changed typed resources and byte identity of unchanged chunks. VERIFY76 accepts76-file mod delta, six serialized Forge carrier proofs, four protected bonepile records and17 unchanged resource types. VERIFY76-B accepted final rollback/touched records: binary pair, prior AutoLoot restore and exact3 Forge removals. Dat containers untouched. AutoLoot uses separate tracked recipe/source pin7dc8953df88e44fa6fe12a41b247e0475dad64b1, not native artifact provenance.",
     "private_configs_evidence": "E:\\Build\\enshrouded-rollout59-private-stage-20261009\\allowlist-status.json",
     "private_configs_staged_only": true,
     "manager_camera_popup_commit": "252a1cd",
     "manager_camera_popup_installed": false,
     "manager_camera_popup_ci": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/37990457146",
     "manager_camera_popup_review": "GPT-6 Pro found no source defect. Actual in-game notice remains unverified.",
-    "local_manager_handoff": "HOME77 found game running and no manager process. Active stable app remains4.4.2. Automatic updates temporarily disabled with original backup retained. Use app-only registration of a matched preview newer than4.4.6, then restore original automatic preference after verifying version selection; avoid payload Apply route."
+    "local_manager_handoff": "HOME77 found game running and no manager process. Active stable app remains4.4.2. Automatic updates temporarily disabled with original backup retained. Use app-only registration of a matched preview newer than4.4.6, then restore original automatic preference after verifying version selection; avoid payload Apply route.",
+    "overlay_verification": "VERIFY87 accepts immutable Enshrouded/IKEA overlay and rollback ZIP40414dab0e9fe3ee83addd0721709a3b65cf7712dbfcd88e9ae6c075b09b8a29;36entries,9overlayfiles+4restoreassets per host. Capture prior allowlist existence before write; delete on rollback only when deployment-created and currenthash matches. Soulrend freshbaseline pending.",
+    "private_input_upload": "User approved exact private input release; CI79-B published and read back gameplay-native-candidate-20261010-rc6-ui43 in private Aerox912/enshrouded-client-installer:586696bytes SHA256 b3e43dfc0e7bdaf6a19f2eadd261442036b16a06943ee9fb619bbc7bf54f92f4.",
+    "occupancy_method_authorization": "Direct user answer: Approve direct zero-player checks. Replaces original requirement to rely only on authenticated panel occupancy records."
   },
   "ui42_repair": {
     "creative_commit": "515a7d89dcb1f22a9df71e7320bab0bb8bf55e7c",
@@ -255,13 +274,43 @@
   "rollout_scope": {
     "targets": [
       "1650d1ae",
-      "c70c80c3"
-    ],
-    "excluded": [
+      "c70c80c3",
       "ea6b2409"
     ],
+    "excluded": [],
     "priority": "Deploy current matched build through the manager before further native-menu refinement",
-    "authorization": "Latest direct user request",
-    "readiness": "UI42 exact-head CI passed but final Pro review requires REPAIR75/UI43 recovery fixes. Then verify the matched private manager delivery, complete resource composition, and proven empty occupancy. Full backups and exact hosted baselines are captured. Only temporary audit archives were created; no original server file, configuration or process changes."
+    "authorization": "Latest direct user annotation explicitly adds Soulrend again on2026-10-10; supersedes earlier two-server restriction.",
+    "readiness": "All3 hosted baselines and completed backups captured; Soulrend has identical mod/resource/loader composition and different preserved server JSON. UI43 source/Pro/native artifacts and final manager cloud packages independently accepted. Private manager publication/app delivery and all3 overlay preparation continue. Direct zero-player checks authorized; require fresh result and immediate pre-stop recheck. No server payload/process changes."
+  },
+  "ui43_repair": {
+    "creative_commit": "8fa0ebb3b177f3182a6d78da21b265094046ffc5",
+    "code_commit": "cbf55416e733f2a15b45a2e1c9480014d3cb57c0",
+    "server_commit": "5f173c49875cc65c8d7903062dfc6ed904896758",
+    "version": "0.3.0-rc.6-ui.43",
+    "source_verification": "VERIFY78 accepted source/provenance and159 lifecycle checks under cached Wine10. Owner strict MSVC:655 core and8 package checks. Independent package rerun hit sandbox temp-write restrictions.",
+    "review_status": "GPT-6 Pro closed both latest findings at2026-10-09T21:59:34Z. No remaining evidence-backed active-path defect introduced by REPAIR75.",
+    "review_packet_sha256": "803ebeff171ce4eed1c69bfa9b34f806340e8c1d313a454ce13a5d8b671e00d0",
+    "review_response_sha256": "a7179c325962b25d4306637b080272af31681a2e71660b9a06c616771c6e6d05",
+    "ci_status": "Exact-head run37996919115 succeeded; CI79-B verified16 manifest payload hashes and identical embedded/outer manifests. VERIFY84 independently accepted archive integrity, pins, alternative clients and empty defaults. No final-test-binary Wine rerun; prior159 lifecycle checks remain source-repair evidence. Matched manager preparation continues.",
+    "installed": false,
+    "gameplay_verified": false,
+    "ci_run_url": "https://github.com/Aerox912/enshrouded-creative-mode/actions/runs/37996919115",
+    "candidate_zip_sha256": "837c73cbcd4f10f2c7ce45f16b7ecb96d61a2e569cd02a8d3fb9efdf8d9daf80",
+    "candidate_manifest_sha256": "5317d1f507fc6c61912d65bb93fc5cb9e6341fc9f4968ec8ce9d6bbc60182c30"
+  },
+  "manager_ui43_cloud": {
+    "manager_commit": "58141a462e9449d75dd2eda6a8a29590507ef9ef",
+    "version": "4.4.7",
+    "run_url": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/37999868841",
+    "conclusion": "success",
+    "publish_job": "skipped",
+    "private_inputs_release": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/gameplay-native-candidate-20261010-rc6-ui43",
+    "regular_zip_sha256": "f4e5d97a2af71cc472656498cc892fab79b9d3021e0a39ecb2773edb7d357025",
+    "admin_zip_sha256": "a65981150e0c0e4000f380689242ec084c949c74e9c4a349fecfc36e9def69a8",
+    "artifact_directory": "E:\\Build\\enshrouded-manager-cloud-ui43-58141a4-20261010",
+    "verification": "VERIFY93 independently accepted exact cloud ZIP/app/Setup hashes,112 Regular and116 Admin embedded payload entries, source/input pins, edition exclusions, three Forge files and AutoLoot. Embedded4.4.7 version exceeds4.4.6. No local runtime or popup gameplay check.",
+    "published": false,
+    "installed": false,
+    "gameplay_verified": false
   }
 }

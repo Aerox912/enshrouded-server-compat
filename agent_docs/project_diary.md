@@ -74,3 +74,7 @@ Historical staging composition is not the hosted baseline. The Forge stage omitt
 Home is currently a manager-owned shortcut, not an in-game binding. First-person files can be intact while the shortcut is absent because the manager is closed. Launching an older installed manager can also trigger an automatic payload update, so inspect that lifecycle before using it alongside a development client.
 
 A retained F6 preference is not an execution lease. The fixed recovery budget must cover both fresh HELLO and the flight acknowledgement; accepting HELLO alone must not reset it. Check expiry before interpreting a new life sample or reply, otherwise a late death can recreate a bookmark or a late acknowledgement can restore expired state. Local death observations must never manufacture authenticated contact.
+
+## Backup cleanup and interrupted delivery
+
+Use the backup capture event or reliable directory creation time for age-based cleanup; copied source files can retain older timestamps inside a fresh backup. Preserve current recovery inputs and prune only verified obsolete children in mixed backup trees. After interrupted operations, recover the release, install pointer and deletion ledger before repeating a mutation. Displayed deduplicated backup sizes do not establish physically reclaimed storage.
