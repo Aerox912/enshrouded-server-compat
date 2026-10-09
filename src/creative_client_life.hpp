@@ -14,6 +14,41 @@ struct LocalLifeSnapshot {
     std::uint64_t current_state=0,effective_state=0;
     bool alive() const noexcept { return !((current_state|effective_state)&((1ull<<7)|(1ull<<12))); }
 };
+enum class LocalLifeReadStage : std::uint8_t {
+    none,
+    full_hash_guard,
+    image_base_unavailable,
+    world_chain,
+    owned_actor,
+    component_registry,
+    component_type_lookup,
+    entity_map,
+    actor_location,
+    life_state_read,
+    consistency_reread,
+    read_attempt_limit
+};
+struct LocalLifeReadDiagnostic {
+    LocalLifeReadStage stage=LocalLifeReadStage::none;
+    std::uint16_t read_attempts=0;
+};
+inline const char* local_life_read_stage_name(LocalLifeReadStage stage) noexcept {
+    switch(stage) {
+    case LocalLifeReadStage::none:return "none";
+    case LocalLifeReadStage::full_hash_guard:return "full-hash-guard";
+    case LocalLifeReadStage::image_base_unavailable:return "image-base-unavailable";
+    case LocalLifeReadStage::world_chain:return "world-chain";
+    case LocalLifeReadStage::owned_actor:return "owned-actor";
+    case LocalLifeReadStage::component_registry:return "component-registry";
+    case LocalLifeReadStage::component_type_lookup:return "component-type-lookup";
+    case LocalLifeReadStage::entity_map:return "entity-map";
+    case LocalLifeReadStage::actor_location:return "actor-location";
+    case LocalLifeReadStage::life_state_read:return "life-state-read";
+    case LocalLifeReadStage::consistency_reread:return "consistency-reread";
+    case LocalLifeReadStage::read_attempt_limit:return "read-attempt-limit";
+    }
+    return "unknown";
+}
 namespace client_life_detail {
 inline constexpr std::uintptr_t game_rva=0x1f07cc0, actor_type_rva=0x17bc900;
 struct WorldChain {
@@ -121,30 +156,58 @@ bool locate_actor(Read& read,const EntityMap& map,std::uint32_t entity,std::uint
 // in copied chain, ownership, registry, entity layout or life bits denies.
 // Repeated copies detect observed inconsistency, not undetectable engine ABA.
 template<class Read>
-std::optional<LocalLifeSnapshot> read_pinned_client_life(Read&& copy,std::uintptr_t base,bool full_hash_verified) {
+std::optional<LocalLifeSnapshot> read_pinned_client_life(Read&& copy,std::uintptr_t base,
+    bool full_hash_verified,LocalLifeReadDiagnostic* diagnostic=nullptr) {
     using namespace client_life_detail;
-    if(!full_hash_verified || !base || base>UINTPTR_MAX-actor_type_rva)return {};
+    if(diagnostic)*diagnostic={};
     unsigned attempts=0;
+    bool attempt_limit_hit=false;
+    const auto failed=[&](LocalLifeReadStage stage)->std::optional<LocalLifeSnapshot> {
+        if(diagnostic) {
+            diagnostic->stage=attempt_limit_hit?LocalLifeReadStage::read_attempt_limit:stage;
+            diagnostic->read_attempts=static_cast<std::uint16_t>(attempts);
+        }
+        return {};
+    };
+    if(!full_hash_verified || !base || base>UINTPTR_MAX-actor_type_rva)
+        return failed(LocalLifeReadStage::full_hash_guard);
     auto read=[&](std::uintptr_t at,void* output,std::size_t size) {
-        if(++attempts>4096)return false;
+        if(++attempts>4096) { attempt_limit_hit=true;return false; }
         return copy(at,output,size);
     };
     WorldChain before,after;Components types,types_after;EntityMap map,map_after;
-    if(!chain(read,base,before))return {};
+    if(!chain(read,base,before))return failed(LocalLifeReadStage::world_chain);
     auto entity=read_pinned_client_local_actor(read,before.world);
-    if(!entity || !components(read,before.world,types))return {};
+    if(!entity)return failed(LocalLifeReadStage::owned_actor);
+    if(!components(read,before.world,types))return failed(LocalLifeReadStage::component_registry);
     const auto type=base+actor_type_rva;
     auto index=actor_index(read,types,type);
+    if(!index)return failed(LocalLifeReadStage::component_type_lookup);
     ActorLocation location,again;
-    if(!index || !entity_map(read,before.world,map) || !locate_actor(read,map,*entity,*index,location))return {};
+    if(!entity_map(read,before.world,map))return failed(LocalLifeReadStage::entity_map);
+    if(!locate_actor(read,map,*entity,*index,location))return failed(LocalLifeReadStage::actor_location);
     ActorBits state,state_after;
-    if(!actor_bits(read,location.actor,state) || !actor_bits(read,location.actor,state_after) || state!=state_after ||
-       !entity_map(read,before.world,map_after) || map_after!=map ||
-       !locate_actor(read,map_after,*entity,*index,again) || again!=location ||
-       !components(read,before.world,types_after) || types_after!=types || actor_index(read,types_after,type)!=index ||
-       read_pinned_client_local_actor(read,before.world)!=entity ||
-       !chain(read,base,after) || after!=before ||
-       !actor_bits(read,again.actor,state_after) || state_after!=state)return {};
+    if(!actor_bits(read,location.actor,state))return failed(LocalLifeReadStage::life_state_read);
+    if(!actor_bits(read,location.actor,state_after) || state!=state_after)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(!entity_map(read,before.world,map_after) || map_after!=map)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(!locate_actor(read,map_after,*entity,*index,again) || again!=location)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(!components(read,before.world,types_after) || types_after!=types)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(actor_index(read,types_after,type)!=index)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(read_pinned_client_local_actor(read,before.world)!=entity)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(!chain(read,base,after) || after!=before)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(!actor_bits(read,again.actor,state_after) || state_after!=state)
+        return failed(LocalLifeReadStage::consistency_reread);
+    if(diagnostic) {
+        diagnostic->stage=LocalLifeReadStage::none;
+        diagnostic->read_attempts=static_cast<std::uint16_t>(attempts);
+    }
     return LocalLifeSnapshot{{before.client,before.session,before.scene,before.simulation,before.world,location.actor,*entity},state.current,state.effective()};
 }
 // Host connection/capability epoch are supplied by the client protocol provider,

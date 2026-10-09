@@ -1,4 +1,5 @@
 #include "creative_client_life.hpp"
+#include <cstring>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -17,7 +18,7 @@ struct Fixture {
  static constexpr std::uintptr_t actor=data+stride+offset;
  std::map<std::uintptr_t,std::vector<unsigned char>> memory;
  std::function<void(Fixture&,std::uintptr_t)> mutate;
- unsigned reads=0;bool changed=false,fail=false;
+ unsigned reads=0;std::uintptr_t fail_at=0;bool changed=false,fail=false;
  void region(std::uintptr_t at,std::size_t size){memory[at].resize(size);}
  template<class T>void put(std::uintptr_t at,T value){for(auto& [start,bytes]:memory)if(at>=start && at-start<=bytes.size() && sizeof(T)<=bytes.size()-(at-start)){std::memcpy(bytes.data()+at-start,&value,sizeof(value));return;}throw std::runtime_error("fixture write");}
  Fixture(){
@@ -35,12 +36,44 @@ struct Fixture {
   auto slot=client_life_detail::entity_hash(entity)&63;put(bitmap,1ull<<slot);put(keys+slot*4,entity);put(values+slot*8,record);
   put(record+0x18,layout);put(record+0x20,data);put(record+0x30,stride);put(layout,1ull<<index);put(layout+0xa84+index*2,group);put(layout+0x84+index*2,offset);put(actor+0xbf8,std::uint64_t(1));
  }
- bool read(std::uintptr_t at,void* out,std::size_t size){++reads;if(fail)return false;for(const auto& [start,bytes]:memory)if(at>=start && at-start<=bytes.size() && size<=bytes.size()-(at-start)){std::memcpy(out,bytes.data()+at-start,size);if(mutate && !changed)mutate(*this,at);return true;}return false;}
- auto run(bool pinned=true,std::uintptr_t image=base){return read_pinned_client_life([&](auto at,auto out,auto size){return read(at,out,size);},image,pinned);}
+ bool read(std::uintptr_t at,void* out,std::size_t size){++reads;if(fail || at==fail_at)return false;for(const auto& [start,bytes]:memory)if(at>=start && at-start<=bytes.size() && size<=bytes.size()-(at-start)){std::memcpy(out,bytes.data()+at-start,size);if(mutate && !changed)mutate(*this,at);return true;}return false;}
+ auto run(bool pinned=true,std::uintptr_t image=base,LocalLifeReadDiagnostic* diagnostic=nullptr){return read_pinned_client_life([&](auto at,auto out,auto size){return read(at,out,size);},image,pinned,diagnostic);}
 };
 }
 int main(){try {
  {Fixture f;auto s=f.run();check(s && s->alive(),"current owner alive");check(s->identity.world==f.world && s->identity.entity==f.entity && s->identity.actor_storage==f.actor,"copied native identity");check(f.reads<180,"small normal read");}
+ {
+  Fixture plain;auto expected=plain.run();const auto plain_reads=plain.reads;
+  Fixture observed;LocalLifeReadDiagnostic diagnostic;auto actual=observed.run(true,Fixture::base,&diagnostic);
+  check(expected && actual,"diagnostic does not change valid read result");
+  check(expected->identity==actual->identity && expected->current_state==actual->current_state
+      && expected->effective_state==actual->effective_state,"diagnostic preserves copied life snapshot");
+  check(plain_reads==observed.reads && diagnostic.read_attempts==observed.reads
+      && diagnostic.read_attempts<180 && diagnostic.stage==LocalLifeReadStage::none,
+      "diagnostic preserves valid read attempt count");
+ }
+ {
+  const auto expect_stage=[](Fixture& fixture,LocalLifeReadStage expected,const char* expected_name,bool pinned=true) {
+   LocalLifeReadDiagnostic diagnostic;
+   check(!fixture.run(pinned,Fixture::base,&diagnostic),"diagnostic stage still denies unavailable life");
+   check(diagnostic.stage==expected,"reader reports the expected failure stage");
+   check(diagnostic.read_attempts<=4097,"diagnostic read count remains capped");
+   const auto* name=local_life_read_stage_name(diagnostic.stage);
+   check(name && std::strlen(name)>0 && std::strlen(name)<=32
+       && std::strcmp(name,"unknown")!=0,"failure stage has a bounded name");
+   check(std::strcmp(name,expected_name)==0,"failure stage name matches its enum");
+   check(!fixture.run(pinned),"diagnostic leaves the original fail-closed result unchanged");
+  };
+  {Fixture f;expect_stage(f,LocalLifeReadStage::full_hash_guard,"full-hash-guard",false);}
+  {Fixture f;f.put(Fixture::session+0x20,std::uint8_t(0));expect_stage(f,LocalLifeReadStage::world_chain,"world-chain");}
+  {Fixture f;f.put(Fixture::world+client_globals_offset,std::uintptr_t(0));expect_stage(f,LocalLifeReadStage::owned_actor,"owned-actor");}
+  {Fixture f;f.put(Fixture::world+0xcc4218,Fixture::world+0x930);expect_stage(f,LocalLifeReadStage::component_registry,"component-registry");}
+  {Fixture f;f.put(Fixture::records+Fixture::index*0x100+0x28,std::uintptr_t(0));expect_stage(f,LocalLifeReadStage::component_type_lookup,"component-type-lookup");}
+  {Fixture f;f.put(Fixture::world+0xcc4360+0x10,std::uint64_t(0));expect_stage(f,LocalLifeReadStage::entity_map,"entity-map");}
+  {Fixture f;f.put(Fixture::bitmap,std::uint64_t(0));expect_stage(f,LocalLifeReadStage::actor_location,"actor-location");}
+  {Fixture f;f.fail_at=Fixture::actor+0x1b1;expect_stage(f,LocalLifeReadStage::life_state_read,"life-state-read");}
+  {Fixture f;f.mutate=[](Fixture& v,auto at){if(at==v.actor+0xbf8){v.changed=true;v.put(v.local_data+4,std::uint32_t(78));}};expect_stage(f,LocalLifeReadStage::consistency_reread,"consistency-reread");}
+ }
  {Fixture f;check(!f.run(false) && !f.reads,"full pinned hash required before read");check(!f.run(true,0) && !f.reads,"zero module rejected");check(!f.run(true,UINTPTR_MAX-0x100) && !f.reads,"module overflow rejected");}
  {Fixture f;f.fail=true;check(!f.run(),"read failure unavailable");}
  for(auto state:{1ull<<7,1ull<<12,(1ull<<7)|(1ull<<12)}){Fixture f;f.put(f.actor+0xbf8,state);auto s=f.run();check(s && !s->alive(),"known Dead/Spawning is copied and inactive");}
