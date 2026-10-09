@@ -18,6 +18,19 @@ inline constexpr std::uint16_t valid_effect_mask =
     static_cast<std::uint16_t>(Effect::free_crafting) |
     static_cast<std::uint16_t>(Effect::free_consumables);
 
+constexpr std::uint16_t backend_ready_effects_mask(bool free_building_ready,
+    bool free_crafting_ready, bool free_consumables_ready) noexcept {
+    return static_cast<std::uint16_t>(
+        (free_building_ready ? static_cast<std::uint16_t>(Effect::free_building) : 0u) |
+        (free_crafting_ready ? static_cast<std::uint16_t>(Effect::free_crafting) : 0u) |
+        (free_consumables_ready ? static_cast<std::uint16_t>(Effect::free_consumables) : 0u));
+}
+
+constexpr std::uint16_t lease_effects_for_backends(std::uint16_t lease_effects,
+    std::uint16_t ready_effects) noexcept {
+    return static_cast<std::uint16_t>(lease_effects & ready_effects & valid_effect_mask);
+}
+
 namespace recipe_event_layout {
 inline constexpr std::size_t stride = 0x38;
 inline constexpr std::size_t crafting_operator_id = 0x08;

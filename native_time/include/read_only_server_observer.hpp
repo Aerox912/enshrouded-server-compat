@@ -1,6 +1,7 @@
 #pragma once
 
 #include "read_only_observer.hpp"
+#include "runtime_adapter.hpp"
 
 #include <windows.h>
 
@@ -12,6 +13,14 @@ namespace xhl::native_time::observer {
 // called by static initialization or by the server runtime. Installation also
 // requires XHL_ENABLE_NATIVE_TIME_OBSERVER=1 in the dedicated server process.
 bool install_local_read_only_server_observer(HMODULE server) noexcept;
+// Installs the observer through RuntimeAdapter's single six-site hook owner.
+// This explicit development path shares the same one-shot context as the
+// standalone observer installer, so the two entry points cannot both hook
+// CACE0 or any of the other five sites. It always starts observe-only.
+bool install_local_server_time_runtime(HMODULE server,
+    const runtime::Host& host,
+    std::uint64_t sample_duration_ms = maximum_sample_ms) noexcept;
+runtime::RuntimeAdapter* local_server_time_runtime_adapter() noexcept;
 bool stop_local_read_only_server_observer() noexcept;
 bool local_read_only_server_observer_ready() noexcept;
 Statistics local_read_only_server_observer_statistics() noexcept;

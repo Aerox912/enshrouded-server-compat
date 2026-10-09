@@ -23,8 +23,10 @@ struct ServerRuntimeContext {
     SRWLOCK api_lock = SRWLOCK_INIT;
     HMODULE server = nullptr;
     ReadOnlyObserver observer{};
+    runtime::RuntimeAdapter time_runtime{};
     bool install_attempted = false;
     bool installed = false;
+    bool runtime_installed = false;
     bool stopped = false;
 };
 
@@ -238,13 +240,57 @@ bool install_local_read_only_server_observer(HMODULE server) noexcept {
     return context->installed;
 }
 
+bool install_local_server_time_runtime(HMODULE server,
+    const runtime::Host& host, std::uint64_t sample_duration_ms) noexcept {
+    auto* context = runtime_context();
+    if (!context || !environment_enabled()) return false;
+    ExclusiveLock lock(&context->api_lock);
+    if (context->install_attempted) return false;
+    context->install_attempted = true;
+
+    // The runtime adapter owns the six detours and composes the observer
+    // behind them. The standalone observer entry point shares install_attempted
+    // so it cannot create a second CACE0 (or other target) hook.
+    if (!server || GetModuleHandleW(nullptr) != server ||
+        !xhl::validate_server(server) ||
+        sample_duration_ms == 0 || sample_duration_ms > maximum_sample_ms)
+        return false;
+    const MH_STATUS init_status = MH_Initialize();
+    if (init_status != MH_OK && init_status != MH_ERROR_ALREADY_INITIALIZED)
+        return false;
+    context->server = server;
+
+    const auto image_base = reinterpret_cast<std::uintptr_t>(server);
+    const RuntimeReaders readers{context, guarded_read_memory,
+        current_thread_id, monotonic_milliseconds, validate_pinned_image};
+    const HookBackend hooks{context, create_hook, enable_hook,
+        disable_hook, remove_hook};
+    runtime::StartOptions options{};
+    options.mode = runtime::Mode::observe_only;
+    options.explicitly_enabled = true;
+    options.observation = InstallOptions{image_base, readers, hooks,
+        sample_duration_ms};
+    options.host = host;
+    context->runtime_installed = context->time_runtime.start(
+        context->observer, options);
+    context->installed = context->runtime_installed;
+    return context->runtime_installed;
+}
+
+runtime::RuntimeAdapter* local_server_time_runtime_adapter() noexcept {
+    auto* context = runtime_context();
+    return context && context->runtime_installed
+        ? &context->time_runtime : nullptr;
+}
+
 bool stop_local_read_only_server_observer() noexcept {
     auto* context = runtime_context();
     if (!context) return false;
     ExclusiveLock lock(&context->api_lock);
     if (!context->installed) return false;
     if (context->stopped) return true;
-    context->stopped = context->observer.stop();
+    context->stopped = context->runtime_installed
+        ? context->time_runtime.stop() : context->observer.stop();
     return context->stopped;
 }
 

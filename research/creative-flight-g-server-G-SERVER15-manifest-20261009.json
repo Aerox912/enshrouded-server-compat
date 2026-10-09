@@ -1,0 +1,107 @@
+{
+  "task_id": "G-SERVER15-FREEZE",
+  "date": "2026-10-09",
+  "sources": [
+    {
+      "path": "E:\\Worktrees\\enshrouded-creative-parity-20261009\\src\\native_runtime.cpp",
+      "sha256": "91949743580CAE0F07DFDBB77123BCD7A89D82A9F4D4B8A300E607A22F8D86B4",
+      "role": "Creative native runtime; caller-owned command buffer lifetime repair"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_g_authority.hpp",
+      "sha256": "2A15ED13DE86848B3D3BD7DC37D89B3F593B166CBA5DBCC72C2FFD4817439B79"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_g_authority.cpp",
+      "sha256": "1AC7FE58EB2A61E4CE9853D1133AD979C3642D5E071D84B30BE75169ED606D0A"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_g_integration.hpp",
+      "sha256": "333853106283FF3055B2056C50C98BD5E12C3853DBAE93D2B89139DBA32F363E"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_g_integration.cpp",
+      "sha256": "5E3918DD5B40D36F16A5E56ABF1549E490E9312905270CABA7E51175D4325EDE"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_server_runtime.hpp",
+      "sha256": "A650EE32B1B1F911713FA5BC29FB8F65DE3CCAA6888F7632A470814D52F59DA9"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_server_runtime.cpp",
+      "sha256": "CD0B0A8D6A585BFCDA49F106041CC7C2DD8C514B3ED4776AC577BED42AEE057D"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_transaction.hpp",
+      "sha256": "0E3A802D54F9E8CD1EADF67E7B2DE68CF16678F5B9ACE1D484FC948414DC1945"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_transaction.cpp",
+      "sha256": "DFD4470D60DBCD934CB2EF7366FAAE78158047B800B87A4200300B5127B48DB6"
+    }
+  ],
+  "accepted_snapshots": [
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\CMakeLists.txt",
+      "sha256": "A32B4EC872C4A622E67B74A8117BDEAE9A20C1295E7858EF7618C57B4F088318",
+      "note": "Accepted server snapshot; released for approval_repair client wiring. Later concurrent CMake edits are outside this server verification."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "E:\\Build\\enshrouded-g-server14-wire-20261009\\Release\\creative_server_dev.dll",
+      "sha256": "CF0EFEFB1DC3B70E2712D9938BA5ED1ED4E314AFE03360F5D55FFB992B485D84",
+      "role": "Strict MSVC Release paired Creative/server DLL after command lifetime repair"
+    },
+    {
+      "path": "E:\\Build\\enshrouded-g-server14-wire-20261009\\Release\\creative_flight_server_g.lib",
+      "sha256": "42267C9C30E2BF5025137333109431C739882C1A5FF626669A0B6002E36FCE8B"
+    }
+  ],
+  "verification": {
+    "compiler": "MSVC 17.14.51, Visual Studio 2022 x64, Release, strict project flags",
+    "build_target": "creative_server_dev",
+    "focused_five_test_run": {
+      "result": "5/5 passed before the command lifetime patch",
+      "tests": [
+        "creative_native_gear_options_cache",
+        "creative_flight_g_authority",
+        "creative_flight_g_integration",
+        "creative_flight_server_runtime",
+        "creative_flight_dispatch_bridge"
+      ]
+    },
+    "post_patch_test_run": {
+      "result": "2/2 passed",
+      "tests": [
+        "creative_flight_g_authority",
+        "creative_flight_server_runtime"
+      ]
+    },
+    "local_file_reader": "Source-reviewed and compiled; not directly exercised end-to-end through the local file in a live server.",
+    "live_server_or_game_mutation": false
+  },
+  "review": {
+    "reference": "VERIFY57",
+    "outcome": "Accepted bounded command lifetime source/build behavior.",
+    "source_pointer": "E:\\Worktrees\\enshrouded-creative-parity-20261009\\src\\native_runtime.cpp:670-694"
+  },
+  "module_document": {
+    "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\research\\creative-flight-server-runtime-abi-20261009.md",
+    "sha256": "01623377463D2AA792EE6920623849CA6EEA4FEAA7F59DD9E6D80CD241ECB020"
+  },
+  "historical_g_integrate13_preserved": [
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\research\\creative-flight-g-integration-G-INTEGRATE13-20261009.md",
+      "sha256": "D5AF81E0EBD5711A9CC3864AAB144654FE4E72F32EA634A1D91ED6DD5CD9C46C"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\research\\creative-flight-g-integration-G-INTEGRATE13-manifest-20261009.json",
+      "sha256": "955520D10AF82D58D849DFAD45BED27B03FC28F5419313D7C3A8258DD737D358"
+    }
+  ],
+  "report": {
+    "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\research\\creative-flight-g-server-G-SERVER15-20261009.md",
+    "sha256": "0AE0B2E8A4B795FCC9EC12E819812916D66E1270D1094B115167119709D53EDE"
+  }
+}

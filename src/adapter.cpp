@@ -1,5 +1,6 @@
 #include "adapter.hpp"
 #include <MinHook.h>
+#include "adapter_hook_lifecycle.hpp"
 #include <bcrypt.h>
 #include <array>
 #include <cstring>
@@ -44,6 +45,77 @@ bool valid_image(HMODULE image) {
     return nt->Signature == IMAGE_NT_SIGNATURE && nt->FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64 &&
         nt->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC &&
         nt->FileHeader.TimeDateStamp == 0x69fdecc9 && nt->OptionalHeader.SizeOfImage == 0x1da7000;
+}
+constexpr size_t adapter_hook_count = sizeof(hooks) / sizeof(hooks[0]);
+using AdapterHookSet = xhl::adapter_hooks::HookSet<adapter_hook_count>;
+
+struct AdapterHookContext {
+    unsigned char* plugin = nullptr;
+    std::array<void*, adapter_hook_count> targets{};
+    std::array<void*, adapter_hook_count> originals{};
+};
+
+AdapterHookSet adapter_hook_set;
+AdapterHookContext adapter_hook_context;
+
+int adapter_hook_index(const AdapterHookContext& context, void* target) noexcept {
+    for (size_t i = 0; i < context.targets.size(); ++i)
+        if (context.targets[i] == target) return static_cast<int>(i);
+    return -1;
+}
+
+void publish_pointer(unsigned char* plugin, DWORD slot, void* value) noexcept {
+    auto* address = reinterpret_cast<PVOID volatile*>(plugin + slot);
+    InterlockedExchangePointer(address, value);
+}
+
+void clear_pointer_if_unchanged(unsigned char* plugin, DWORD slot,
+    void* expected) noexcept {
+    auto* address = reinterpret_cast<PVOID volatile*>(plugin + slot);
+    InterlockedCompareExchangePointer(address, nullptr, expected);
+}
+
+bool create_adapter_hook(void* opaque, void* target, void* detour,
+    void** original) noexcept {
+    auto& context = *static_cast<AdapterHookContext*>(opaque);
+    const int index = adapter_hook_index(context, target);
+    if (index < 0 || !context.plugin || !original) return false;
+    // Only MH_OK grants ownership. An existing hook may belong to another module.
+    if (MH_CreateHook(target, detour, original) != MH_OK) return false;
+
+    const auto i = static_cast<size_t>(index);
+    context.originals[i] = *original;
+    if (*original) {
+        publish_pointer(context.plugin, hooks[i].owner_slot, *original);
+        publish_pointer(context.plugin, hooks[i].call_slot, *original);
+    }
+    return true;
+}
+
+bool remove_adapter_hook(void* opaque, void* target) noexcept {
+    auto& context = *static_cast<AdapterHookContext*>(opaque);
+    const int index = adapter_hook_index(context, target);
+    if (index < 0 || !context.plugin ||
+        MH_RemoveHook(target) != MH_OK) return false;
+
+    const auto i = static_cast<size_t>(index);
+    const auto original = context.originals[i];
+    if (original) {
+        clear_pointer_if_unchanged(context.plugin, hooks[i].owner_slot, original);
+        clear_pointer_if_unchanged(context.plugin, hooks[i].call_slot, original);
+    }
+    context.originals[i] = nullptr;
+    return true;
+}
+
+bool enable_adapter_hook(void*, void* target) noexcept {
+    const auto status = MH_EnableHook(target);
+    return status == MH_OK || status == MH_ERROR_ENABLED;
+}
+
+bool disable_adapter_hook(void*, void* target) noexcept {
+    const auto status = MH_DisableHook(target);
+    return status == MH_OK || status == MH_ERROR_DISABLED;
 }
 }
 
@@ -111,6 +183,7 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
     HMODULE plugin = LoadLibraryExW(plugin_path.c_str(), nullptr, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
     if (!plugin) { log("NOT APPLIED: could not load original XHL native plugin."); return false; }
     auto p = reinterpret_cast<unsigned char*>(plugin);
+
     if (!replace_pointer(p + 0x4cbe8, reinterpret_cast<void*>(no_local_keyboard))) {
         log("NOT APPLIED: could not disable client keyboard polling."); return false;
     }
@@ -124,34 +197,51 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
     *reinterpret_cast<void**>(p + 0x49598) = base + 0x881170;
     *reinterpret_cast<void**>(p + 0x49510) = base + 0x8b48f0;
     *reinterpret_cast<void**>(p + 0x49508) = base + 0x8b48b0;
-    if (MH_Initialize() != MH_OK) { log("NOT APPLIED: hook engine initialization failed."); return false; }
-    size_t prepared = 0;
-    bool queued = true;
-    for (const auto& h : hooks) {
-        void* trampoline = nullptr;
-        if (MH_CreateHook(base + h.game_rva, p + h.callback_rva, &trampoline) != MH_OK) break;
-        ++prepared;
-        *reinterpret_cast<void**>(p + h.owner_slot) = trampoline;
-        *reinterpret_cast<void**>(p + h.call_slot) = trampoline;
-        if (MH_QueueEnableHook(base + h.game_rva) != MH_OK) { queued = false; break; }
-    }
-    if (!queued || prepared != std::size(hooks)) {
-        for (size_t i = 0; i < prepared; ++i) MH_RemoveHook(base + hooks[i].game_rva);
-        log("NOT APPLIED: could not prepare all five server hooks.");
-        return false;
-    }
     HMODULE pinned;
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_PIN | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
                            reinterpret_cast<LPCWSTR>(plugin), &pinned)) {
-        for (const auto& h : hooks) MH_RemoveHook(base + h.game_rva);
-        log("NOT APPLIED: could not pin native plugin lifetime."); return false;
+        log("NOT APPLIED: could not pin native plugin lifetime.");
+        return false;
     }
-    // MinHook suspends other threads and relocates instruction pointers while
-    // applying the batch. All original-call pointers are ready before enabling.
-    if (MH_ApplyQueued() != MH_OK) {
-        // Keep trampolines allocated even on failure: a callback may be in flight.
-        MH_DisableHook(MH_ALL_HOOKS);
-        log("NOT APPLIED: hook activation failed; attempted to disable the batch.");
+    const auto initialization = MH_Initialize();
+    // MinHook is process-wide; an already initialized instance remains shared.
+    if (initialization != MH_OK && initialization != MH_ERROR_ALREADY_INITIALIZED) {
+        log("NOT APPLIED: hook engine initialization failed.");
+        return false;
+    }
+
+    adapter_hook_context.plugin = p;
+    for (size_t i = 0; i < adapter_hook_count; ++i)
+        adapter_hook_context.targets[i] = base + hooks[i].game_rva;
+    std::array<void*, adapter_hook_count> detours{};
+    for (size_t i = 0; i < adapter_hook_count; ++i)
+        detours[i] = p + hooks[i].callback_rva;
+
+    const xhl::adapter_hooks::Operations hook_operations{
+        &adapter_hook_context, create_adapter_hook, remove_adapter_hook,
+        enable_adapter_hook, disable_adapter_hook};
+    if (!adapter_hook_set.prepare(adapter_hook_context.targets, detours,
+        hook_operations)) {
+        if (adapter_hook_set.any_prepared()) {
+            log("NOT APPLIED: could not prepare all five server hooks; an owned trampoline could not be removed and remains retained with the plugin pinned.");
+        } else {
+            log("NOT APPLIED: could not prepare all five server hooks; prepared adapter hooks were removed.");
+        }
+        return false;
+    }
+
+    // MinHook's per-target operation freezes threads for this hook only and
+    // does not apply other modules' pending queue state. Original-call pointers
+    // were published as each trampoline was created, before activation starts.
+    if (!adapter_hook_set.enable_all(adapter_hook_context.targets,
+        hook_operations)) {
+        const bool disabled = adapter_hook_set.disable_enabled(
+            adapter_hook_context.targets, hook_operations);
+        if (disabled) {
+            log("NOT APPLIED: per-target hook activation failed; enabled adapter hooks were disabled and their trampolines remain retained.");
+        } else {
+            log("PARTIAL ACTIVATION: an owned hook could not be disabled after activation failed; callbacks may still run, so the pinned plugin and all trampolines remain retained.");
+        }
         return false;
     }
     log("HOOKS INSTALLED: 5 server gameplay/input hooks; client graphics and keyboard disabled.");

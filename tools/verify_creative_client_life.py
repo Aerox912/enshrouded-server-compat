@@ -1,4 +1,4 @@
-"""Verify pinned CLIENT current-world/Actor life reader layout.
+"""Verify pinned CLIENT current-world/typed ClientActor life reader layout.
 Usage: python verify_creative_client_life.py --client <enshrouded.exe> [--json <evidence.json>]
 Read-only: full hash, PE identity, unwind ranges, small instruction signatures
 and metadata. No runtime pointers, memory, hooks or binary changes.
@@ -129,6 +129,25 @@ ANCHORS = ({'name': 'inline-game-object',
   'signature': '4C8BC10FB6CABA0100000048D3E241F680B101000001498B80F80B00007414498B88D80B0000490B80D00B000048F7D14823C1488BCA4823C8483BCA0F94C0C3',
   'instruction_lengths': (3, 3, 5, 3, 8, 7, 2, 7, 7, 3, 3, 3, 3, 3, 3, 1)})
 
+
+ANCHORS += (
+ {'name': 'ui-player-state-clientactor-callback-entry',
+  'rva': 0x2afef0,
+  'function': (0x2afef0, 0x2aff24),
+  'signature': '40574883EC5041B828000000488D542420488BF9E8B7A8620041B828000000488D542420488BCFE8845D620084C00F84ED000000',
+  'instruction_lengths': (2, 4, 6, 5, 3, 5, 6, 5, 3, 5, 2, 6)},
+ {'name': 'ui-player-state-clientactor-bit-25-call',
+  'rva': 0x2aff78,
+  'function': (0x2aff24, 0x2b0011),
+  'signature': '488B4C2428B225E8CCFAF2FF',
+  'instruction_lengths': (5, 2, 5)},
+ {'name': 'ui-player-state-clientactor-bit-21-call',
+  'rva': 0x2affa4,
+  'function': (0x2aff24, 0x2b0011),
+  'signature': '488B4C2428B221E8A0FAF2FF',
+  'instruction_lengths': (5, 2, 5)},
+)
+
 def _rva_for_image_pointer(image, pointer, label):
     if pointer < image.image_base or pointer >= image.image_base + image.image_size:
         raise VerificationError(f"StateFlag {label} pointer is outside the pinned image")
@@ -178,25 +197,119 @@ def verify_state_flag_metadata(image):
         entry_stride=f"0x{STATE_FLAG_ENTRY_STRIDE:x}", entries=entries)
 
 
+
+BASE_ACTOR_DESCRIPTOR_RVA = 0x17BC850
+GENERIC_ACTOR_DESCRIPTOR_RVA = 0x17BC900
+CLIENT_ACTOR_DESCRIPTOR_RVA = 0x17BD910
+BASE_ACTOR_NAME_RVA = 0x1C96F20
+BASE_ACTOR_QUALIFIED_NAME_RVA = 0x1C97038
+GENERIC_ACTOR_NAME_RVA = 0x1C99E64
+GENERIC_ACTOR_QUALIFIED_NAME_RVA = 0x1C9A030
+CLIENT_ACTOR_NAME_RVA = 0x1C9B758
+CLIENT_ACTOR_QUALIFIED_NAME_RVA = 0x1C9B8D0
+CLIENT_ACTOR_BASE_DESCRIPTOR_OFFSET = 0x38
+UI_PLAYER_STATE_DESCRIPTOR_RVA = 0x1D501E8
+UI_PLAYER_STATE_NAME_RVA = 0x1D52250
+UI_PLAYER_STATE_CALLBACK_RVA = 0x2AFEF0
+
+
+def _verify_component_descriptor(image, descriptor, short_name, qualified_name,
+                                 short_name_rva, qualified_name_rva, expected_size):
+    short_pointer = image.qword_at(descriptor)
+    short_pointer_rva = _rva_for_image_pointer(image, short_pointer, short_name)
+    short_length = image.qword_at(descriptor + 8)
+    qualified_pointer = image.qword_at(descriptor + 0x20)
+    qualified_pointer_rva = _rva_for_image_pointer(image, qualified_pointer, qualified_name)
+    qualified_length = image.qword_at(descriptor + 0x28)
+    packed_size = image.qword_at(descriptor + 0x40)
+    size = packed_size & 0xFFFFFFFF
+    if (short_pointer_rva != short_name_rva or
+        image.c_string_at(short_pointer_rva) != short_name or
+        short_length != len(short_name) or
+        qualified_pointer_rva != qualified_name_rva or
+        image.c_string_at(qualified_pointer_rva) != qualified_name or
+        qualified_length != len(qualified_name) or
+        size != expected_size):
+        raise VerificationError(f"{qualified_name} reflection descriptor drift")
+    return dict(descriptor_rva=f"0x{descriptor:x}", name=short_name,
+        name_rva=f"0x{short_pointer_rva:x}", qualified_name=qualified_name,
+        qualified_name_rva=f"0x{qualified_pointer_rva:x}",
+        size=f"0x{size:x}", packed_size=f"0x{packed_size:x}")
+
+
+def verify_client_actor_metadata(image):
+    base_actor = _verify_component_descriptor(image, BASE_ACTOR_DESCRIPTOR_RVA,
+        "BaseActor", "keen::ecs::BaseActor", BASE_ACTOR_NAME_RVA,
+        BASE_ACTOR_QUALIFIED_NAME_RVA, 0xC20)
+    generic_actor = _verify_component_descriptor(image, GENERIC_ACTOR_DESCRIPTOR_RVA,
+        "Actor", "keen::ecs::Actor", GENERIC_ACTOR_NAME_RVA,
+        GENERIC_ACTOR_QUALIFIED_NAME_RVA, 0xE10)
+    client_actor = _verify_component_descriptor(image, CLIENT_ACTOR_DESCRIPTOR_RVA,
+        "ClientActor", "keen::ecs::ClientActor", CLIENT_ACTOR_NAME_RVA,
+        CLIENT_ACTOR_QUALIFIED_NAME_RVA, 0xC38)
+
+    parent_pointer = image.qword_at(CLIENT_ACTOR_DESCRIPTOR_RVA +
+        CLIENT_ACTOR_BASE_DESCRIPTOR_OFFSET)
+    expected_parent = image.image_base + BASE_ACTOR_DESCRIPTOR_RVA
+    if parent_pointer != expected_parent:
+        raise VerificationError("ClientActor BaseActor descriptor link drift")
+    base_size = int(base_actor["size"], 16)
+    client_size = int(client_actor["size"], 16)
+    if client_size <= base_size:
+        raise VerificationError("ClientActor size does not extend BaseActor")
+
+    first_type_pointer = image.qword_at(UI_PLAYER_STATE_DESCRIPTOR_RVA)
+    first_type_pointer_rva = _rva_for_image_pointer(image, first_type_pointer,
+        "update_ui_player_state first component type")
+    first_type_length = image.qword_at(UI_PLAYER_STATE_DESCRIPTOR_RVA + 8)
+    if (first_type_pointer != image.qword_at(CLIENT_ACTOR_DESCRIPTOR_RVA) or
+        first_type_pointer_rva != CLIENT_ACTOR_NAME_RVA or
+        image.c_string_at(first_type_pointer_rva) != "ClientActor" or
+        first_type_length != len("ClientActor")):
+        raise VerificationError("update_ui_player_state first component is not ClientActor")
+
+    callback_name_pointer = image.qword_at(UI_PLAYER_STATE_DESCRIPTOR_RVA + 0x48)
+    callback_name_rva = _rva_for_image_pointer(image, callback_name_pointer,
+        "update_ui_player_state callback name")
+    callback_name_length = image.qword_at(UI_PLAYER_STATE_DESCRIPTOR_RVA + 0x50)
+    if (callback_name_rva != UI_PLAYER_STATE_NAME_RVA or
+        image.c_string_at(callback_name_rva) != "update_ui_player_state" or
+        callback_name_length != len("update_ui_player_state")):
+        raise VerificationError("update_ui_player_state descriptor name drift")
+
+    callback_pointer = image.qword_at(UI_PLAYER_STATE_DESCRIPTOR_RVA + 0x58)
+    if callback_pointer != image.image_base + UI_PLAYER_STATE_CALLBACK_RVA:
+        raise VerificationError("update_ui_player_state callback pointer drift")
+
+    return dict(client_actor=client_actor,
+        base_actor=base_actor,
+        client_actor_inheritance=dict(parent_descriptor_rva=f"0x{BASE_ACTOR_DESCRIPTOR_RVA:x}",
+            parent_size="0xC20", client_size="0xC38", extension_size="0x18",
+            base_link_offset=f"0x{CLIENT_ACTOR_BASE_DESCRIPTOR_OFFSET:x}"),
+        generic_actor=generic_actor,
+        state_consumer=dict(descriptor_rva=f"0x{UI_PLAYER_STATE_DESCRIPTOR_RVA:x}",
+            name="update_ui_player_state", first_component="keen::ecs::ClientActor",
+            callback_rva=f"0x{UI_PLAYER_STATE_CALLBACK_RVA:x}",
+            component_row_size="0x28", state_helper_rva="0x1dfa50",
+            state_bits=(0x25, 0x21),
+            callback_behavior="loads first component from [rsp+0x28] and passes it directly to the state helper"))
+
+
 def verify_image(image):
     require_build(image, CLIENT_BUILD)
+    if image.qword_at(0x1CAD2A0+8*8) != image.image_base+0x78CD00:
+        raise VerificationError("current GameApplication reflection metadata drift")
     state_flag_enum = verify_state_flag_metadata(image)
     sites = [verify_site(image, spec) for spec in ANCHORS]
-    base = image.image_base
-    if (image.qword_at(0x1CAD2A0+8*8) != base+0x78CD00 or
-        image.qword_at(0x17BC900) != base+0x1C99E64 or
-        image.qword_at(0x17BC920) != base+0x1C9A030 or
-        image.c_string_at(0x1C99E64) != "Actor" or
-        image.c_string_at(0x1C9A030) != "keen::ecs::Actor" or
-        image.qword_at(0x17BC940)&0xFFFFFFFF != 0xE10):
-        raise VerificationError("current GameApplication/Actor reflection metadata drift")
-    return dict(status="pinned client life reader static layout matches", static_only=True,
-        build=image.manifest(), anchors=sites, local_entity=verify_client_ownership(image),
-        state_flag_enum=state_flag_enum,
+    client_actor_metadata = verify_client_actor_metadata(image)
+    return dict(status="pinned client typed ClientActor life reader static layout matches",
+        static_only=True, build=image.manifest(), anchors=sites,
+        local_entity=verify_client_ownership(image), state_flag_enum=state_flag_enum,
+        client_actor=client_actor_metadata,
         reader=dict(game_inline_rva="0x1f07cc0", client_slot="0x250", session_slot="0x52888",
             active_byte="0x20", scene_slot="0x180", world_slot="0x1c0",
             simulation_slot="0x3439c0", simulation_world_slot=8,
-            actor_type_rva="0x17bc900", component_records="0x930", component_count="0x938",
+            client_actor_type_rva="0x17bd910", component_records="0x930", component_count="0x938",
             component_stride="0x100", reflection_slot="0x28", entity_map="0xcc4360",
             authoritative_state="0xbf8", prediction_flag="0x1b1", added_state="0xbd0",
             removed_state="0xbd8", dead_bit=state_flag_enum["entries"]["Dead"]["value"],
@@ -205,6 +318,7 @@ def verify_image(image):
         runtime_installed=False, live_gameplay_verified=False,
         limitations=["Repeated copies detect observed inconsistency, not undetectable ABA.",
             "Caller binds copied local identity to current host/capability approval.",
+            "The reader selects the exact ClientActor descriptor, not generic Actor.",
             "Conservative life gate denies authoritative OR native effective Dead/Spawning."])
 
 def main():

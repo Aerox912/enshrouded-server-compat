@@ -1,0 +1,95 @@
+{
+  "task": "G-INSTALL12-ROLLBACK",
+  "base": "E:\\Worktrees\\enshrouded-server-parity-20261009",
+  "canonical_repository": "E:\\Repos\\enshrouded-server-compat",
+  "files": [
+    {
+      "file": "src\\creative_flight_call_install.hpp",
+      "sha256": "A268AAEC4A3546C8611303076203AA0CA0D19C375DA4239C84473AABB78F069D",
+      "bytes": 2153
+    },
+    {
+      "file": "src\\creative_flight_call_transaction.hpp",
+      "sha256": "0E3A802D54F9E8CD1EADF67E7B2DE68CF16678F5B9ACE1D484FC948414DC1945",
+      "bytes": 3085
+    },
+    {
+      "file": "src\\creative_flight_call_transaction.cpp",
+      "sha256": "24EB1837242872BA88B6D04C7B3A7F7E55C0D7BB31EE86C23F139EDE04365132",
+      "bytes": 35107
+    },
+    {
+      "file": "src\\creative_flight_call_proof.hpp",
+      "sha256": "C4D4BE94C78452B6C33F1C2A8E3AA2C33CA65D6D63FF6600B26728DFA90499D5",
+      "bytes": 5666
+    },
+    {
+      "file": "tests\\creative_call_installer\\build.ps1",
+      "sha256": "574C49CE7C9FDA89824F264A5D7370159905ECEE7F985E10629EB202FE1ECEEE",
+      "bytes": 2899
+    },
+    {
+      "file": "tests\\creative_call_installer\\transaction_tests.cpp",
+      "sha256": "794227C32C8A6C34A6378336F6B6C3672D8C2E83316259E6B02CA47E675B9102",
+      "bytes": 15238
+    },
+    {
+      "file": "tests\\creative_call_installer\\native_tests.cpp",
+      "sha256": "A501B218821F06BF81181309D6DBED558E83E5BA0E94DD79248068E06905C9C2",
+      "bytes": 11714
+    },
+    {
+      "file": "tests\\creative_call_installer\\native_fixture.asm",
+      "sha256": "27D1512721490C78E3FFA6EE6C7DAFB56279671FC2694042F7EC3F501363059F",
+      "bytes": 4260
+    },
+    {
+      "file": "tests\\creative_call_installer\\bridge_dll_fixture.cpp",
+      "sha256": "675C1FC9A368E419AE81C036AA4B669E7184155EBCA4B744BC76B53EB2CFE4E6",
+      "bytes": 248
+    },
+    {
+      "file": "tests\\creative_call_installer\\verify_proof_bytes.ps1",
+      "sha256": "CCDDEA9DF98FB14A1446DA4D1EF8307FCC9D8134936D729EAC5FD15A99E6A804",
+      "bytes": 2309
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "E:\\Build\\g-install12-20261009\\creative_flight_call_production.obj",
+      "sha256": "ECA2A4E7C7473560813F5DF2C13947E0103F7B5AB79FE1CE87B5E1672F98C303"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\transaction_tests.exe",
+      "sha256": "75A567A0D89C573638FCF4D26BC12CBE0DA35C3559900472B8D90BDDEAFCE094"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\native_tests.exe",
+      "sha256": "737A9C07AA3D5605E7029C4532AB7C64FA34851F63C62A0B4BF59E80213B6202"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\bridge_dll_fixture.dll",
+      "sha256": "5E2C05A329F038CD0819BF0E02A2680204FEB07C80DED9C60F8F7CC83CE0248A"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\verify49_repro_fixed.exe",
+      "sha256": "3B87E5403DDF7389F3D59822909ABEEDA71BEB1E2B309916A3C056EF24334664"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\build-and-tests.log",
+      "sha256": "AF3897D80C0DFA966338963C535534AB76C3D278F7941D68406A2BBE114A5B32"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\proof-comparison.log",
+      "sha256": "611FA629AD3CF77EB23BD7C5D1F61AE60A320023839A621A87A9CE78AE019769"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\verify49-repro-fixed.log",
+      "sha256": "2221925DDBE23B5641DBE76BE18BEC48F275D24D113A74B712AEFA624971A39D"
+    },
+    {
+      "file": "E:\\Build\\g-install12-20261009\\atomic-codegen.log",
+      "sha256": "A138DC9B5380A0B92A0439B8D97BE029CDEE71DDC329BB2A92FDF752ED9E6E37"
+    }
+  ]
+}

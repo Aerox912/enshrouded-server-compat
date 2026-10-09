@@ -29,7 +29,7 @@ status at offset `+0` and remainder at `+4` after removal. The offline verifier
 also confirms the server remover has six direct caller sites; the other four
 remain outside this exact-site policy.
 
-## Registration and unresolved firing edge
+## Registered used action and unresolved fired-wrapper attribution
 
 The used path is registered. Constructor code calls descriptor getter
 `0xA72CB0` at `0x1D6A1E`; the returned descriptor at `0x1319530` is named
@@ -40,38 +40,48 @@ body at `0x5C3E9`.
 
 The fired removal site is in helper `0x30A40`; its three direct callers are
 `0x33897`, `0x33E57`, and `0x34062`, all within PDATA range
-`0x33289..0x34258`. This proves the exact helper and owner source, but the
-pinned image does not establish a registration edge from that enclosing
-wrapper to a registered player/action system. The separately registered
-`server_player_ranged_weapon` callback is `0xA8880`; a static edge from it to
-`0x33289` or `0x30A40` is not proven. Keep fired-consumable activation and
-capability reporting unavailable until that enclosing callback relationship
-is established.
+`0x33289..0x34258`. The pinned image does not establish a named registration
+edge from that enclosing wrapper to a registered player/action system. The
+separately registered `server_player_ranged_weapon` callback is `0xA8880`; a
+static edge from it to `0x33289` or `0x30A40` is not proven. COST10's bounded
+authorization uses the verified `0x30A40` helper scope plus the exact
+`0x30CE9` removal return PC, native owner forwarding, current full identity,
+actor liveness, and repeated lease checks. It does not claim a named enclosing
+registration, and the diagnostic keeps `callback_registration_proven=false`.
 
-The minimum remaining diagnostic is read-only observation at the fired remover
-site: record the actual caller return PC, the current query context's world and
-`0x5D5130` owner, the remover's `R8D` owner, and the enclosing registered
-callback entry active on that native stack. Then bind that owner through the
-existing authenticated full-Identity/liveness path and current effects lease.
+The read-only fired probe records the actual caller return PC, query context
+world and `0x5D5130` owner, remover `R8D` owner, and any enclosing frame in the
+known function range. A named registered callback cannot be established by the
+pinned image; that remains a reporting limitation rather than an authorization
+input.
 
-## Hook-free adapter seam
+## Runtime adapter and default-off shared hook owner
 
-`src/native_consumable_cost.hpp/.cpp` supplies `ActionScope` and
-`invoke_native_removal`. The host must scope the exact native action wrapper,
-provide the current query-world/owner reader, resolve that compact owner via
-`authenticated_owner`, check actor liveness, and supply a nonrecursive snapshot
-of the current owner-bound `free_consumables` lease. The policy requires the
-actual native return PC and matching action kind, checks that native query owner
-equals the remover's `R8D`, then repeats query, identity, liveness, and lease
-checks before allowing the skip.
+`src/native_consumable_cost.hpp/.cpp` supplies the authorization policy.
+`src/native_consumable_diagnostic.cpp` owns one hook set for used action
+`0x5C3A0`, fired helper `0x30A40`, and remover `0x163E70`;
+`src/native_consumable_runtime_adapter.hpp` contains the action/removal wrapper
+called by the detours and the adapter tests. `prepare_free_consumables_hooks`
+prepares all three sites, while `enable_free_consumables` activates the full
+set only after all trampolines are valid. The optional read-only probe shares
+this hook owner and cannot run alongside free-consumables mode. Both modes
+default off. The effects callback and backing state must remain valid for the
+process lifetime after preparation because retained detours can outlive a
+failed removal or disable.
 
-Only the two native result fields proven by the caller are set to zero. An
-allowed call skips the removal function and returns its result pointer; a
-denied or unrelated call invokes the original with all six ABI arguments
-unchanged. This leaves native item eligibility, action outputs, transaction
-commit/rollback, and all nonlisted removal callers under native control.
-`ActionKind::fired` is a candidate seam only; it is not ready for hook
-integration before the registration edge above is closed.
+At runtime the adapter reads query world and owner through the pinned helper,
+resolves the compact owner through `authenticated_owner`, checks actor
+liveness, and supplies a nonrecursive snapshot of the current owner-bound
+`free_consumables` lease. Policy requires the exact native return PC and
+matching action kind, checks query owner against remover `R8D`, then repeats
+query, identity, liveness, and lease checks before permitting the skip.
+
+Only the two native result fields proven by the caller are set to zero, after
+the result span is checked writable and the write is guarded. An allowed call
+skips removal and returns its result pointer. Denied, missing-query, mismatch,
+unknown, inactive, or unwritable cases call the original once with all six ABI
+arguments unchanged. Native item eligibility, action outputs, transaction
+commit/rollback, and the other four removal callers remain native-controlled.
 
 ## Verification
 
@@ -89,3 +99,11 @@ changes during authorization, query cursor changes, nested scopes, exact native
 argument forwarding, and result-field preservation. These are static and
 portable policy tests. No server process, hook, empty-inventory use, ordinary
 player payment, failure rollback, or gameplay scenario was exercised.
+
+COST10's adapter stub tests use the same inline wrappers called by the detours.
+They cover used/fired scopes, nested removal, exact six-argument forwarding,
+owner/query/return-site denial, missing lease, activation loss, result-write
+rejection, and inactive/diagnostic pass-through. The runtime object and tests
+compile locally; no hook was prepared or enabled and no gameplay parity is
+claimed. Empty-inventory arrow/consumable use, ordinary-player costs, and
+forced-failure rollback remain gameplay acceptance items outside this package.

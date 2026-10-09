@@ -1,0 +1,128 @@
+{
+  "task": "G-INTEGRATE13-PREP",
+  "source": [
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_install.hpp",
+      "sha256": "3A7059A6A308F8D1B6CF9C78F36B3EF9F41DC6B8A99C56A8CACFBA7B0FDD287E"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_transaction.hpp",
+      "sha256": "0E3A802D54F9E8CD1EADF67E7B2DE68CF16678F5B9ACE1D484FC948414DC1945"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_transaction.cpp",
+      "sha256": "DFD4470D60DBCD934CB2EF7366FAAE78158047B800B87A4200300B5127B48DB6"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_proof.hpp",
+      "sha256": "C4D4BE94C78452B6C33F1C2A8E3AA2C33CA65D6D63FF6600B26728DFA90499D5"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_service.hpp",
+      "sha256": "A7126BD8FD6D6587EF76D4745A2B5887199EFA2AAF78D5A6B04AC12FBB0F932F"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_call_service.cpp",
+      "sha256": "713CCAC4C16135B4DDFAE7DAEEA6347C54DFBD0595E54B9E7663FD3E163E487A"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\src\\creative_flight_g_integration.hpp",
+      "sha256": "C47D3D7AE8F9BB0E394C3C767B4FB5D80DCCBC7B3F416C295B7B162DDE698E5F"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\build.ps1",
+      "sha256": "D3C4BF6EA5A9993475D84FC5A4CF678C98B6F79269D33AA16D75E82E80C03409"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\transaction_tests.cpp",
+      "sha256": "794227C32C8A6C34A6378336F6B6C3672D8C2E83316259E6B02CA47E675B9102"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\native_tests.cpp",
+      "sha256": "9C55BE124779F2A85476F4640C4AF07306BE82DBE49E25FA0C272EB1BB1F6DD0"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\native_fixture.asm",
+      "sha256": "27D1512721490C78E3FFA6EE6C7DAFB56279671FC2694042F7EC3F501363059F"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\bridge_dll_fixture.cpp",
+      "sha256": "675C1FC9A368E419AE81C036AA4B669E7184155EBCA4B744BC76B53EB2CFE4E6"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\verify_proof_bytes.ps1",
+      "sha256": "CCDDEA9DF98FB14A1446DA4D1EF8307FCC9D8134936D729EAC5FD15A99E6A804"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\integration_tests.cpp",
+      "sha256": "DB12831A027D669AF51FBE3CFD57643BC9F0BCA684AC16E5D14D57F5747CE4E3"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\tests\\creative_call_installer\\production_service_tests.cpp",
+      "sha256": "C118518DC72F8B13503012B314CE172C4C1B2D002C6AA76B276E1AEF9082D142"
+    },
+    {
+      "path": "E:\\Worktrees\\enshrouded-creative-parity-20261009\\include\\creative\\native_client_g_integration.h",
+      "sha256": "1DB1591341F7D513BB36D5AF3DFFCBDC35996A24E1182F6D31412C32DB010CB1"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\creative_flight_call_production.obj",
+      "sha256": "D35705BABF6C193D434F73A351AB15488693BBAC9727A9804653C90D3071E552"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\creative_flight_call_service_production.obj",
+      "sha256": "8CA0BA4C7CE7808B580F1BC5FC145B8C3914DDE030A382C3D0483B73DE73171B"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\creative_flight_call_transaction.obj",
+      "sha256": "2D5CE00E12FDE6DEA76AEBA2081C721DC6BCB6BF63649579612F5E46711E7B28"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\production_service_tests.exe",
+      "sha256": "D8813D25C9420E2B484ED6AE8CC9EEF68EA46BB9AF74BFAC50203F2908EA07CE"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\integration_tests.exe",
+      "sha256": "71A4E6C757ADAA154F995DC88321C54EAA6779CCF570A67BC47FDB27277CBFDE"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\transaction_tests.exe",
+      "sha256": "CF96CAE294AA1F1165E4D13C6EE94DDD35C9127D0184763B123B03F22E63C78C"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\native_tests.exe",
+      "sha256": "F5CDA70006E2B3D3C788C82D756F9B8DBF9A02C29944C674B4E88A1687E9796F"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\bridge_dll_fixture.dll",
+      "sha256": "090CA112518908FDA6C3562CCF4ABE4BFC1B08C1C4E31EC45AFF1F2ED44E5D01"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\build-and-tests.log",
+      "sha256": "376A98966E6B408293FDD4DA2944DED2EB96977B086D1C7B8B4E77649F65BF01"
+    },
+    {
+      "path": "E:\\Build\\g-integrate13-20261009\\proof-comparison.log",
+      "sha256": "611FA629AD3CF77EB23BD7C5D1F61AE60A320023839A621A87A9CE78AE019769"
+    }
+  ],
+  "report": {
+    "path": "E:\\Worktrees\\enshrouded-server-parity-20261009\\research\\creative-flight-g-integration-G-INTEGRATE13-20261009.md",
+    "sha256": "D5AF81E0EBD5711A9CC3864AAB144654FE4E72F32EA634A1D91ED6DD5CD9C46C"
+  },
+  "verification": {
+    "integration_checks": 45,
+    "transaction_checks": 1277,
+    "native_checks": 4171,
+    "proof_rows_server": 35,
+    "proof_rows_client": 23,
+    "host_build": 26300,
+    "nt_bytes": 1693288,
+    "nt_process_records": 971,
+    "nt_fixture_threads": 6,
+    "independent_stable_scans": 3,
+    "game_process_mutation": false
+  }
+}

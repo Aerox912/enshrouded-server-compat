@@ -139,6 +139,25 @@ struct NativeFixture {
 
 int main() {
     unsigned checks = 0;
+    constexpr auto building_bit = static_cast<std::uint16_t>(Effect::free_building);
+    constexpr auto crafting_bit = static_cast<std::uint16_t>(Effect::free_crafting);
+    constexpr auto consumables_bit = static_cast<std::uint16_t>(Effect::free_consumables);
+    check(backend_ready_effects_mask(false, false, false) == 0,
+        "no active native cost backend advertises no effects", checks);
+    check(backend_ready_effects_mask(true, false, false) == building_bit &&
+        backend_ready_effects_mask(false, true, false) == crafting_bit &&
+        backend_ready_effects_mask(false, false, true) == consumables_bit,
+        "each native cost backend independently advertises only its effect", checks);
+    check(backend_ready_effects_mask(true, true, false) == (building_bit | crafting_bit) &&
+        backend_ready_effects_mask(true, false, true) == (building_bit | consumables_bit) &&
+        backend_ready_effects_mask(false, true, true) == (crafting_bit | consumables_bit) &&
+        backend_ready_effects_mask(true, true, true) == valid_effect_mask,
+        "partial and complete native cost readiness compose without cross-enabling effects", checks);
+    check(lease_effects_for_backends(valid_effect_mask, building_bit | consumables_bit) ==
+        (building_bit | consumables_bit) &&
+        lease_effects_for_backends(valid_effect_mask, 0) == 0 &&
+        lease_effects_for_backends(valid_effect_mask, building_bit | 0x8000) == building_bit,
+        "effect leases are intersected with ready backends and unknown bits are excluded", checks);
     Fixture f;
     auto services = f.services();
     CraftingEventEvidence event{f.identity.world, 0xabc, 0xdef,

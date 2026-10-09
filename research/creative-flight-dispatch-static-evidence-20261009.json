@@ -1,0 +1,585 @@
+{
+  "server": {
+    "image": {
+      "path": "E:\\Scratch\\enshrouded-flight-creative-20261008\\enshrouded_server.exe",
+      "sha256": "001C1B40ED091D8C1AEE583ADDE3800D7C858AE2C7F4DFF54FCA2938B2BE1637",
+      "timestamp": "0x69fdecc9",
+      "image_base": "0x140000000",
+      "image_size": "0x1da7000"
+    },
+    "site": "0x187595",
+    "displaced": "488b45380fb6483d",
+    "native_rsp_mod16": 0,
+    "native_rbp_minus_rsp": 256,
+    "row_from_rbp": -96,
+    "second_from_rbp": 440,
+    "parent_unwind": {
+      "prolog": 18,
+      "flags": 0,
+      "frame_register": 0,
+      "frame_offset": 0,
+      "ops": [
+        {
+          "offset": 18,
+          "op": 1,
+          "info": 0,
+          "size": 664
+        },
+        {
+          "offset": 3,
+          "op": 0,
+          "info": 6
+        },
+        {
+          "offset": 2,
+          "op": 0,
+          "info": 5
+        }
+      ],
+      "chain": null
+    },
+    "dispatch_unwind": {
+      "prolog": 191,
+      "flags": 4,
+      "frame_register": 0,
+      "frame_offset": 0,
+      "ops": [
+        {
+          "offset": 191,
+          "op": 8,
+          "info": 9,
+          "save": 576
+        },
+        {
+          "offset": 182,
+          "op": 8,
+          "info": 8,
+          "save": 592
+        },
+        {
+          "offset": 173,
+          "op": 8,
+          "info": 6,
+          "save": 624
+        },
+        {
+          "offset": 165,
+          "op": 4,
+          "info": 7,
+          "save": 656
+        },
+        {
+          "offset": 157,
+          "op": 4,
+          "info": 3,
+          "save": 688
+        },
+        {
+          "offset": 140,
+          "op": 8,
+          "info": 15,
+          "save": 480
+        },
+        {
+          "offset": 122,
+          "op": 8,
+          "info": 14,
+          "save": 496
+        },
+        {
+          "offset": 104,
+          "op": 8,
+          "info": 13,
+          "save": 512
+        },
+        {
+          "offset": 86,
+          "op": 8,
+          "info": 12,
+          "save": 528
+        },
+        {
+          "offset": 68,
+          "op": 8,
+          "info": 11,
+          "save": 544
+        },
+        {
+          "offset": 50,
+          "op": 8,
+          "info": 10,
+          "save": 560
+        },
+        {
+          "offset": 38,
+          "op": 8,
+          "info": 7,
+          "save": 608
+        },
+        {
+          "offset": 23,
+          "op": 4,
+          "info": 15,
+          "save": 640
+        },
+        {
+          "offset": 8,
+          "op": 4,
+          "info": 14,
+          "save": 648
+        }
+      ],
+      "chain": [
+        1601824,
+        1601911,
+        20681372
+      ]
+    },
+    "targets": [
+      "0x1875af",
+      "0x1875c1",
+      "0x1875d3",
+      "0x187619",
+      "0x1875e5",
+      "0x187619",
+      "0x187619",
+      "0x187619",
+      "0x187619",
+      "0x1875f7",
+      "0x187609"
+    ],
+    "call_edges": [
+      {
+        "state": 0,
+        "case": "0x1875af",
+        "mover": "0x180f60"
+      },
+      {
+        "state": 1,
+        "case": "0x1875c1",
+        "mover": "0x1801a0"
+      },
+      {
+        "state": 2,
+        "case": "0x1875d3",
+        "mover": "0x17e720"
+      },
+      {
+        "state": 4,
+        "case": "0x1875e5",
+        "mover": "0x17f5a0"
+      },
+      {
+        "state": 9,
+        "case": "0x1875f7",
+        "mover": "0x180820"
+      },
+      {
+        "state": 10,
+        "case": "0x187609",
+        "mover": "0x17e480"
+      }
+    ],
+    "original_states_checked": 256,
+    "adapter_anchors": {
+      "world_registry_address": {
+        "rva": "0x59a3f2",
+        "bytes": "498D9628090000"
+      },
+      "world_execution_registry": {
+        "rva": "0x59a496",
+        "bytes": "4989961842CC00"
+      },
+      "query_row_context": {
+        "rva": "0x5dc8dc",
+        "bytes": "48891F"
+      },
+      "mover_query_begin_row": {
+        "rva": "0x18714b",
+        "bytes": "41B838010000488D55A0488BCEE893564500"
+      },
+      "mover_query_step_row": {
+        "rva": "0x18715d",
+        "bytes": "41B838010000488D55A0488BCEE8F1074500"
+      },
+      "query_original_time": {
+        "rva": "0x5d98b0",
+        "bytes": "488B01488B4858488BC248890AC3"
+      },
+      "gravity_query_begin": {
+        "rva": "0x7e7e9",
+        "bytes": "41B830000000488D542430488BD9E8F4DF5500"
+      },
+      "gravity_query_step": {
+        "rva": "0x7e7fc",
+        "bytes": "41B830000000488D542430488BCBE851915500"
+      },
+      "gravity_private_active_gate": {
+        "rva": "0x7e850",
+        "bytes": "488B442440807810000F84FC000000"
+      },
+      "gravity_actor_row": {
+        "rva": "0x7e85f",
+        "bytes": "488B4C243833D2E875B9FAFF"
+      },
+      "actor_prediction_state": {
+        "rva": "0x2a1ee",
+        "bytes": "41F680B101000001498B80F80B00007414498B88D80B0000490B80D00B000048F7D14823C1"
+      },
+      "gravity_size": {
+        "descriptor": "0x11a0370",
+        "size": 20
+      }
+    }
+  },
+  "client": {
+    "image": {
+      "path": "D:\\Games\\SteamLibrary\\steamapps\\common\\Enshrouded\\enshrouded.exe",
+      "sha256": "AF2F5A1227911D8AA06B3908D6BD0211838211CAE14EA91099CB57D0DF990781",
+      "timestamp": "0x6a4236c8",
+      "image_base": "0x140000000",
+      "image_size": "0x2da7000"
+    },
+    "site": "0x3a60a5",
+    "displaced": "488b45380fb6483d",
+    "native_rsp_mod16": 0,
+    "native_rbp_minus_rsp": 256,
+    "row_from_rbp": -96,
+    "second_from_rbp": 440,
+    "parent_unwind": {
+      "prolog": 18,
+      "flags": 0,
+      "frame_register": 0,
+      "frame_offset": 0,
+      "ops": [
+        {
+          "offset": 18,
+          "op": 1,
+          "info": 0,
+          "size": 664
+        },
+        {
+          "offset": 3,
+          "op": 0,
+          "info": 6
+        },
+        {
+          "offset": 2,
+          "op": 0,
+          "info": 5
+        }
+      ],
+      "chain": null
+    },
+    "dispatch_unwind": {
+      "prolog": 191,
+      "flags": 4,
+      "frame_register": 0,
+      "frame_offset": 0,
+      "ops": [
+        {
+          "offset": 191,
+          "op": 8,
+          "info": 9,
+          "save": 576
+        },
+        {
+          "offset": 182,
+          "op": 8,
+          "info": 8,
+          "save": 592
+        },
+        {
+          "offset": 173,
+          "op": 8,
+          "info": 6,
+          "save": 624
+        },
+        {
+          "offset": 165,
+          "op": 4,
+          "info": 7,
+          "save": 656
+        },
+        {
+          "offset": 157,
+          "op": 4,
+          "info": 3,
+          "save": 688
+        },
+        {
+          "offset": 140,
+          "op": 8,
+          "info": 15,
+          "save": 480
+        },
+        {
+          "offset": 122,
+          "op": 8,
+          "info": 14,
+          "save": 496
+        },
+        {
+          "offset": 104,
+          "op": 8,
+          "info": 13,
+          "save": 512
+        },
+        {
+          "offset": 86,
+          "op": 8,
+          "info": 12,
+          "save": 528
+        },
+        {
+          "offset": 68,
+          "op": 8,
+          "info": 11,
+          "save": 544
+        },
+        {
+          "offset": 50,
+          "op": 8,
+          "info": 10,
+          "save": 560
+        },
+        {
+          "offset": 38,
+          "op": 8,
+          "info": 7,
+          "save": 608
+        },
+        {
+          "offset": 23,
+          "op": 4,
+          "info": 15,
+          "save": 640
+        },
+        {
+          "offset": 8,
+          "op": 4,
+          "info": 14,
+          "save": 648
+        }
+      ],
+      "chain": [
+        3824688,
+        3824775,
+        31293212
+      ]
+    },
+    "targets": [
+      "0x3a60bf",
+      "0x3a60d1",
+      "0x3a60e3",
+      "0x3a6129",
+      "0x3a60f5",
+      "0x3a6129",
+      "0x3a6129",
+      "0x3a6129",
+      "0x3a6129",
+      "0x3a6107",
+      "0x3a6119"
+    ],
+    "call_edges": [
+      {
+        "state": 0,
+        "case": "0x3a60bf",
+        "mover": "0x39fc70"
+      },
+      {
+        "state": 1,
+        "case": "0x3a60d1",
+        "mover": "0x39eeb0"
+      },
+      {
+        "state": 2,
+        "case": "0x3a60e3",
+        "mover": "0x39d430"
+      },
+      {
+        "state": 4,
+        "case": "0x3a60f5",
+        "mover": "0x39e2b0"
+      },
+      {
+        "state": 9,
+        "case": "0x3a6107",
+        "mover": "0x39f530"
+      },
+      {
+        "state": 10,
+        "case": "0x3a6119",
+        "mover": "0x39d190"
+      }
+    ],
+    "original_states_checked": 256
+  },
+  "assembled_bridge": {
+    "image": {
+      "path": "E:\\Build\\enshrouded-gflight-server-runtime-test-20261009\\binary\\Release\\creative_flight_dispatch_bridge_tests.exe",
+      "sha256": "2817F341A44CA61E2D7E41595AADC713DC08A3209AAD2E2A26BAD9E56D4B4903",
+      "timestamp": "0x6ac8e900",
+      "image_base": "0x140000000",
+      "image_size": "0xa000"
+    },
+    "function": [
+      "0x26c0",
+      "0x2895"
+    ],
+    "unwind": {
+      "prolog": 141,
+      "flags": 0,
+      "frame_register": 5,
+      "frame_offset": 0,
+      "ops": [
+        {
+          "offset": 141,
+          "op": 3,
+          "info": 5
+        },
+        {
+          "offset": 138,
+          "op": 8,
+          "info": 15,
+          "save": 400
+        },
+        {
+          "offset": 129,
+          "op": 8,
+          "info": 14,
+          "save": 384
+        },
+        {
+          "offset": 120,
+          "op": 8,
+          "info": 13,
+          "save": 368
+        },
+        {
+          "offset": 111,
+          "op": 8,
+          "info": 12,
+          "save": 352
+        },
+        {
+          "offset": 102,
+          "op": 8,
+          "info": 11,
+          "save": 336
+        },
+        {
+          "offset": 93,
+          "op": 8,
+          "info": 10,
+          "save": 320
+        },
+        {
+          "offset": 84,
+          "op": 8,
+          "info": 9,
+          "save": 304
+        },
+        {
+          "offset": 75,
+          "op": 8,
+          "info": 8,
+          "save": 288
+        },
+        {
+          "offset": 66,
+          "op": 8,
+          "info": 7,
+          "save": 272
+        },
+        {
+          "offset": 58,
+          "op": 8,
+          "info": 6,
+          "save": 256
+        },
+        {
+          "offset": 50,
+          "op": 4,
+          "info": 15,
+          "save": 136
+        },
+        {
+          "offset": 42,
+          "op": 4,
+          "info": 14,
+          "save": 128
+        },
+        {
+          "offset": 34,
+          "op": 4,
+          "info": 13,
+          "save": 120
+        },
+        {
+          "offset": 29,
+          "op": 4,
+          "info": 12,
+          "save": 112
+        },
+        {
+          "offset": 24,
+          "op": 4,
+          "info": 7,
+          "save": 72
+        },
+        {
+          "offset": 19,
+          "op": 4,
+          "info": 6,
+          "save": 64
+        },
+        {
+          "offset": 14,
+          "op": 4,
+          "info": 3,
+          "save": 56
+        },
+        {
+          "offset": 9,
+          "op": 1,
+          "info": 0,
+          "size": 424
+        },
+        {
+          "offset": 2,
+          "op": 2,
+          "info": 0,
+          "size": 8
+        },
+        {
+          "offset": 1,
+          "op": 0,
+          "info": 5
+        }
+      ],
+      "chain": null
+    },
+    "stack_bytes_to_real_return_pc": "0x1b8",
+    "body_sha256": "EDA1EC3E574C2EBF3A7FF6890B45C316604E146CE4FA89C14CB2A029BC3A54D1"
+  },
+  "package_freeze": {
+    "task_id": "G-DISPATCH7",
+    "root": "E:\\Worktrees\\enshrouded-server-parity-20261009",
+    "files_sha256": {
+      "src/creative_flight_server_runtime.cpp": "EF86B95BA181783A7CCD393D2AC1A5BE716E63BE764F917CF019681BB2FEE681",
+      "src/creative_flight_server_runtime.hpp": "D603B0B332A19A2EE0BE16331DB75531F2108B8A0A904A967FAEEA88768A492F",
+      "src/creative_flight_dispatch_bridge.hpp": "CE9B97D0D4624D40AD6D18387CBAC5B8AF9D4ECF439387DD5D453F4C13073721",
+      "src/creative_flight_dispatch_bridge.asm": "A6D429CD193667A9E719E2AB0C8A7974B98FDA70F6D7B92650FCEC16A80050DD",
+      "tests/creative_flight_server_runtime_tests.cpp": "CE22A58F9EB0141B5325B58664F4D1AF929EB6957FB1FB085D632063AB8A6BA4",
+      "tests/creative_flight_dispatch_bridge_tests.cpp": "013E55453977ED878F892F326E31D1527FBA0F114AD4C627AC57BC4A904BCFE7",
+      "tests/creative_flight_dispatch_fixture.asm": "55200F120FD7BF0048DADD6EABD8BA31103DE7815DC76B31DFD78878396F29FE",
+      "tools/test_creative_flight_server_runtime.py": "D7857C5ED2096C2BB88D284392AB704F480B4744004E4BDBCA0BCAD596635CD9",
+      "tools/verify_creative_flight_dispatch.py": "5F18226263868619B9BE7768E73E832E588DD334F928A7D081F0A3CF1C004A68",
+      "tests/test_creative_flight_dispatch.py": "1BF1F12AB5763B6B05077D5800E98DEBAA72FB6E15F4DB1B50B4177152BA4EF4",
+      "research/creative-flight-server-runtime-abi-20261009.md": "4F8EE343512774BAE538E27214E7902CD4F2B43B650455C8A21E1D4F32BE324F",
+      "research/creative-flight-server-runtime-dispatch-correction-20261009.md": "F3215B3B0FCCD01BC593B294ABD8B1DC05E51CA1EB81A35E8A2BF16E29A13AC9"
+    },
+    "evidence_self_hash": "Recorded externally after JSON serialization; excluded to avoid self-reference."
+  }
+}
