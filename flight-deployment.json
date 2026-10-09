@@ -5,10 +5,10 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "Requested Creative parity remains incomplete. Protocol v2 and menu settings compile, but true G flight, verified Journey knowledge coverage, actual gear upgrades, drag/delete, free actions, live forges and time control still require native integration and gameplay acceptance.",
+    "Full Creative parity is incomplete. The paired local Release checkpoint passes all 26 CTest targets; G flight, actual gear upgrades, accepted drag/delete, persistent HUD, remaining free actions and time control still need native integration and gameplay acceptance.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Manager commit 92b63991dda788fc19e004cce4270ebecbaac9a1 passed both cloud edition jobs in run 37917954833; publication was skipped. Independent verification accepted all 113 Admin and 109 Regular embedded files. Gameplay and final feature acceptance remain open.",
+    "Manager 074f8582d3fb3cbb3510266f9a8ba1b149902d26 passed both cloud edition jobs in run 37924463567, with publication skipped. It still consumes RC5 inputs without the shared Gem Forge payload. A complete new artifact, gameplay acceptance and final review remain open.",
     "Wine 11's disposable baseline connected to Steam and answered in-container A2S. The two old local test servers are stopped with verified snapshots, recovering RAM from 3.1 to 10.6 GB. No matching current gameplay endpoint is installed; bone pickup and actual Wine multiplayer acceptance remain unverified.",
     "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
   ],
@@ -86,12 +86,24 @@
   "local_crafting_test": {
     "human_approved": true,
     "scope": "Wire and enable crafting hooks in isolated local test server",
-    "integration": "Paired ALL_BUILD and 13/13 CTests passed; independent integrated server lease review passed. Client masked flag restoration passed review; fresh client actor/liveness gate and matching integration remain pending",
+    "integration": "CHECKPOINT-BUILD8 paired Release build and all 26 CTests passed. Independent VERIFY30 accepted integrated client provider, 39 life and 104 state checks. Matching selected-mod data passed independent VERIFY29; local installation and gameplay remain pending.",
     "gameplay_verified": false,
     "hosted_deployed": false,
     "memory_blocker_resolved": true,
     "old_local_servers_stopped": true,
     "shutdown_evidence": "E:\\Build\\enshrouded-native-cloud-rc5-20261009\\windows-endpoint\\close-old-servers-20261009T1115Z\\stop-report.json",
     "shutdown_evidence_sha256": "41f1fd9e324097e41f0d8b9de8427f93c3fae54170850cf6f0e672449586ffb9"
+  },
+  "local_protocol2_checkpoint": {
+    "release_ready": false,
+    "manifest": "E:\\Build\\enshrouded-checkpoint-cmake7-20261009\\paired-local-release-manifest.txt",
+    "ctests_passed": 26,
+    "client_sha256": "1fbd1d5b3a0970c0ec01ece43b4ad6abc5fc099ba409d56eb8d9e5725261f890",
+    "server_sha256": "5a1aacd9dccee4a65ce2798dedc19b301abb751f0396b17baf2dca2b425c6079",
+    "data_manifest": "E:\\Scratch\\enshrouded-forge-composition-FORGEDATA5-20261009T122756Z\\evidence\\selected-mod-composition-manifest.json",
+    "data_manifest_sha256": "c4fab671aacb4c3f0ee3931aecfc5823eedeb384b0eaa02eea4ac2b9f44a7b14",
+    "data_verified": true,
+    "installed": false,
+    "gameplay_verified": false
   }
 }

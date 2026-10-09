@@ -1,5 +1,30 @@
 # Native release review, 9 October 2026
 
+## Current checkpoint
+
+CHECKPOINT-BUILD8 builds the paired protocol-v2 Release sources and passes all
+26 registered CTest targets. CLIENT-LIFE4 separately passes 39 life-binding and
+104 client state/configuration checks; independent provider review also passed.
+The client life reader and its Dead/Spawning enum values are independently
+verified against the pinned client executable. Journey's bounded reader and
+unknown-level repair, inventory dispatch repair and the native-time policy
+repair have passed their focused checks and are included in the full checkpoint.
+
+VERIFY29 independently accepted the matching selected-mod data: baseline mod
+files preserved, intended AutoLoot bone repair present, Workshop 20x retained,
+and exactly three Gem Forge files added per profile. Client and server runs
+apply six additional patches and pass all six offline forge proofs. The manifest
+is E:\Scratch\enshrouded-forge-composition-FORGEDATA5-20261009T122756Z\evidence\selected-mod-composition-manifest.json,
+SHA-256 c4fab671aacb4c3f0ee3931aecfc5823eedeb384b0eaa02eea4ac2b9f44a7b14.
+
+No checkpoint installation or gameplay acceptance is claimed. G flight, gear
+upgrades, accepted drag/drop, persistent Flight HUD, remaining cost hooks and
+native time control still need completion and live evidence. Manager 074f858
+passed both cloud builds in run 37924463567 with publication skipped, but still
+contains RC5 inputs without the forge module. Package readiness remains false.
+The sections below preserve prior review and candidate evidence; this current
+checkpoint supersedes their pending-source-review status where stated above.
+
 The requested GPT-6 Pro review ran through ChatGPT Surface Control in the
 Enshrouded project. Its initial recommendation was HOLD. The reviewed package
 was Creative fd926de with server source 6f789d3. The package remains unready.
