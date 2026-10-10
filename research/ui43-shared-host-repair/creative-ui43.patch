@@ -1,0 +1,237 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a023800..9011fed 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+ add_library(creative_core STATIC src/core.cpp src/protocol.cpp src/session.cpp src/inventory_transaction.cpp src/inventory_snapshot.cpp src/catalogue.cpp src/native_journey.cpp)
+ target_include_directories(creative_core PUBLIC include)
++set(NATIVE_UI_HOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../enshrouded-mod-patches/native" CACHE PATH "Shared native UI host headers")
++target_include_directories(creative_core PUBLIC "${NATIVE_UI_HOST_ROOT}")
+ add_executable(creative_tests tests/core_tests.cpp)
+ target_link_libraries(creative_tests PRIVATE creative_core)
+ if(MSVC)
+
+diff --git a/include/creative/native_menu.h b/include/creative/native_menu.h
+index 81e5e55..93b8e4d 100644
+--- a/include/creative/native_menu.h
++++ b/include/creative/native_menu.h
+@@ -192,7 +192,8 @@ public:
+     // Enables a read-only native target-hit probe. It remains off by default;
+     // the probe never calls acceptDrop and never queues inventory actions.
+     void observe_drop_targets(bool enabled);
+-    bool visible() const;
++    bool visible() const;
++    bool blocks_gameplay_input() const;
+     std::uint64_t captured_inputs() const;
+     void update(bool approved,const std::wstring& status);
+     void update(const NativeMenuSnapshot&,const std::wstring& status);
+
+diff --git a/src/native_client.cpp b/src/native_client.cpp
+index 962df3b..6d414c8 100644
+--- a/src/native_client.cpp
++++ b/src/native_client.cpp
+@@ -784,13 +784,14 @@ class CreativeMod final:public Mod {
+         const auto foreground=GetForegroundWindow();DWORD process=0;GetWindowThreadProcessId(foreground,&process);
+         const bool focused=process==GetCurrentProcessId();
+         const bool keybind_capture=menu.keybind_capture_active();
+-        if(menu_edge.sample(menu_key.load(),focused && !keybind_capture)){if(menu_ready){if(menu.visible())menu.hide();else menu.show(foreground);}else log("Native menu unavailable; flight controls remain active");}
++        const bool modal=menu.blocks_gameplay_input();
++        if(menu_edge.sample(menu_key.load(),focused && (!modal || menu.visible()))){if(menu_ready){if(menu.visible())menu.hide();else menu.show(foreground);}else log("Native menu unavailable; flight controls remain active");}
+         lease=observe_lease(now);
+         // The shared glide hook belongs to Always Flying. Never route Creative's
+         // G binding here: Creative free flight needs its own movement adapter.
+         if(glider_key.load()!=menu_key.load() && glider_key.load()!=flight_key.load()
+-            && glider_edge.sample(glider_key.load(),focused && !menu.visible() && !keybind_capture))glider.toggle(lease.approved);
+-        if(flight_edge.sample(flight_key.load(),focused && !menu.visible() && !keybind_capture)) {
++            && glider_edge.sample(glider_key.load(),focused && !modal && !menu.visible() && !keybind_capture))glider.toggle(lease.approved);
++        if(flight_edge.sample(flight_key.load(),focused && !modal && !menu.visible() && !keybind_capture)) {
+             const auto queued=creative_flight.toggle(lease,client.action_pending() || actions.pending());
+             if(queued.request) {
+                 const auto error=actions.stage(*queued.request,false,lease);
+
+diff --git a/src/native_menu.cpp b/src/native_menu.cpp
+index 1a8c5be..b2e5604 100644
+--- a/src/native_menu.cpp
++++ b/src/native_menu.cpp
+@@ -9,7 +9,7 @@
+ #include "creative/controller_capture.h"
+ #include <Xinput.h>
+ #pragma comment(lib,"xinput9_1_0.lib")
+-#include <MinHook.h>
++#include <ui-host/client.h>
+ #include <algorithm>
+ #include <array>
+ #include <atomic>
+@@ -28,25 +28,23 @@
+ namespace creative {
+ namespace {
+ std::uintptr_t image=0;
+-using Hud=void (*)();
+-Hud original_hud=nullptr,original_playground=nullptr;
++const native_ui_host::Api* ui_host=nullptr;
++native_ui_host::Owner ui_owner{};
+ std::mutex guard;
+ std::atomic<bool> capture_open{false};
+ std::atomic<std::uint64_t> capture_calls{0};
+ std::mutex capture_guard;
+ std::array<ControllerCapture,XUSER_MAX_COUNT> capture_devices;
+-using GamepadPoll=bool (*)(void*,XINPUT_STATE*,bool);
+-GamepadPoll original_gamepad=nullptr;
+-bool gamepad_poll(void* device,XINPUT_STATE* output,bool connected_only){
+-    const bool connected=original_gamepad(device,output,connected_only);
+-    // The pinned native function indexes XInput users at device+0x10 and writes
+-    // the standard 16-byte XINPUT_STATE to its second argument.
++void gamepad_filter(void*,bool active,void* device,void* raw_output,bool connected){
++    auto* output=static_cast<XINPUT_STATE*>(raw_output);
++    if(!device || !output)return;
++    // The shared host invokes this after the pinned native poll and preserves
++    // UI43's per-device release latch while only the modal owner captures.
+     DWORD index=0;std::memcpy(&index,static_cast<const char*>(device)+0x10,sizeof(index));
+-    if(index<XUSER_MAX_COUNT && output){
++    if(index<XUSER_MAX_COUNT){
+         std::lock_guard lock(capture_guard);
+-        if(capture_devices[index].filter(capture_open.load(std::memory_order_acquire),connected,*output))capture_calls.fetch_add(1,std::memory_order_relaxed);
++        if(capture_devices[index].filter(active && capture_open.load(std::memory_order_acquire),connected,*output))capture_calls.fetch_add(1,std::memory_order_relaxed);
+     }
+-    return connected;
+ }
+ struct State {
+     bool enabled=false,open=false,searching=false,drop_observation_enabled=false;
+@@ -1365,15 +1363,18 @@ void render(){
+     } // Close child panels and the root scope before ending the window.
+     fn<void (*)(void*)>(0x946680)(window.data());
+ }
+-void playground(){std::lock_guard lock(guard);if(state.enabled && state.open)render();else original_playground();}
+-void hud(){
++void host_render(void*){std::lock_guard lock(guard);if(state.enabled && state.open && ui_host && ui_host->owns(ui_owner))render();}
++void host_frame(void*){
+     {
+-        std::lock_guard lock(guard);state.labels[++state.label_frame%3].clear();const auto mode=mode_state();std::uint8_t current=0;
++        std::lock_guard lock(guard);
++        if(!state.enabled)return;
++        state.labels[++state.label_frame%3].clear();const auto mode=mode_state();std::uint8_t current=0;
+         const bool valid=mode && read(mode+0x34e8,&current,1) && current!=0 && current!=0x2c;
+         auto close_menu=[&]{
+             state.open=false;state.searching=false;state.keyboard=false;state.pad.reset();
+             state.drop_observation_enabled=false;state.customization_open=false;
+             state.customization_focus=0;reset_keybind_capture();state.pending_keybind_change.reset();
++            if(ui_host && ui_owner)ui_host->release(ui_owner);
+         };
+         if(state.open && (!valid || mode!=state.mode_owner || current!=0x2e))close_menu();
+         DWORD process=0;GetWindowThreadProcessId(GetForegroundWindow(),&process);const bool focused=process==GetCurrentProcessId();
+@@ -1402,7 +1403,7 @@ void hud(){
+         if(state.keybind_release_latch && !capture_key_down)state.keybind_release_latch=false;
+         if(state.toggle && valid){
+             if(state.open){fn<void (*)(void*,std::uint8_t)>(0xfb7ad0)(reinterpret_cast<void*>(mode),state.previous_mode);close_menu();}
+-            else if(state.toggle>0 && state.enabled && current==1){
++            else if(state.toggle>0 && state.enabled && current==1 && ui_host && ui_host->claim(ui_owner)){
+                 reset_keybind_capture();state.pending_keybind_change.reset();state.previous_mode=current;state.mode_owner=mode;state.open=true;
+                 state.zone=State::Zone::Items;state.keyboard=false;state.pad.reset();state.settings_page=0;
+                 state.customization_open=false;state.customization_focus=0;
+@@ -1412,7 +1413,7 @@ void hud(){
+         state.toggle=0;
+         capture_open.store(state.open,std::memory_order_release);
+     }
+-    original_hud();
++
+ }
+ }
+ bool NativeMenu::load(const std::filesystem::path&){return !catalogue().empty();}
+@@ -1422,18 +1423,22 @@ bool NativeMenu::initialize(){
+     std::lock_guard installation_lock(installation_guard);
+     const auto current_image=reinterpret_cast<std::uintptr_t>(GetModuleHandleW(nullptr));
+     if(installed_image==current_image){std::lock_guard lock(guard);state.enabled=true;filter();return true;}
+-    image=reinterpret_cast<std::uintptr_t>(GetModuleHandleW(nullptr));
+-    struct Site{std::uintptr_t rva;std::array<unsigned char,16> bytes;void* hook;void** original;};
+-    const Site sites[]{
+-        {0xb25f50,{0x40,0x55,0x41,0x55,0x48,0x8d,0xac,0x24,0xa8,0xed,0xff,0xff,0xb8,0x58,0x13,0},reinterpret_cast<void*>(hud),reinterpret_cast<void**>(&original_hud)},
+-        {0xa971f0,{0x48,0x89,0x5c,0x24,0x18,0x55,0x48,0x8d,0x6c,0x24,0xa9,0x48,0x81,0xec,0xc0,0},reinterpret_cast<void*>(playground),reinterpret_cast<void**>(&original_playground)},
+-        {0xdb5b50,{0x40,0x53,0x48,0x83,0xec,0x50,0x48,0x8b,0x41,0x18,0x48,0x8b,0xd9,0x48,0x85,0xc0},reinterpret_cast<void*>(gamepad_poll),reinterpret_cast<void**>(&original_gamepad)}
+-    };
+-    for(const auto& s:sites)if(std::memcmp(reinterpret_cast<void*>(image+s.rva),s.bytes.data(),s.bytes.size()))return false;
+-    std::size_t created=0;
+-    for(const auto& s:sites){if(MH_CreateHook(reinterpret_cast<void*>(image+s.rva),s.hook,s.original)!=MH_OK){for(std::size_t i=0;i<created;++i)MH_RemoveHook(reinterpret_cast<void*>(image+sites[i].rva));return false;}++created;}
+-    for(const auto& s:sites)if(MH_EnableHook(reinterpret_cast<void*>(image+s.rva))!=MH_OK){for(const auto& r:sites)MH_DisableHook(reinterpret_cast<void*>(image+r.rva));return false;}
+-    std::lock_guard lock(guard);installed_image=image;state.enabled=true;filter();return true;
++    image=current_image;
++    ui_host=native_ui_host::connect();
++    if(!ui_host)return false;
++    native_ui_host::Client client;
++    client.context=&state;
++    client.surface=native_ui_host::Surface::playground;
++    client.frame=host_frame;
++    client.render=host_render;
++    client.gamepad=gamepad_filter;
++    ui_owner=ui_host->register_client(&client);
++    if(!ui_owner)return false;
++    std::lock_guard lock(guard);
++    installed_image=image;
++    state.enabled=true;
++    filter();
++    return true;
+ }
+ bool NativeMenu::show(HWND,bool){std::lock_guard lock(guard);state.toggle=1;return state.enabled;}
+ void NativeMenu::hide(){
+@@ -1451,6 +1456,7 @@ void NativeMenu::release(){
+     reset_keybind_capture();state.pending_keybind_change.reset();
+ }
+ bool NativeMenu::visible()const{std::lock_guard lock(guard);return state.open;}
++bool NativeMenu::blocks_gameplay_input()const{std::lock_guard lock(guard);return ui_host && ui_host->modal_active();}
+ void NativeMenu::update(bool approved,const std::wstring& text){
+     NativeMenuSnapshot snapshot;snapshot.approved=approved;snapshot.fresh=approved;
+     update(snapshot,text);
+
+diff --git a/tools/verify_native_ui_sites.py b/tools/verify_native_ui_sites.py
+index 3707720..6f0d69a 100644
+--- a/tools/verify_native_ui_sites.py
++++ b/tools/verify_native_ui_sites.py
+@@ -1,14 +1,33 @@
+-"""Verify the exact native UI hook signatures against the pinned local executable."""
+-import argparse,hashlib,json,re
+-from pathlib import Path
+-import pefile
+-p=argparse.ArgumentParser();p.add_argument('game');p.add_argument('source');a=p.parse_args()
+-raw=Path(a.game).read_bytes();digest=hashlib.sha256(raw).hexdigest()
+-if digest!='af2f5a1227911d8aa06b3908d6bd0211838211cae14ea91099cb57d0df990781':raise SystemExit('Unsupported client executable')
+-pe=pefile.PE(data=raw);image=pe.get_memory_mapped_image();sites=[]
+-for rva,values in re.findall(r'\{(0x[0-9a-f]+),\{((?:0x[0-9a-f]+|0)(?:,(?:0x[0-9a-f]+|0))*)\},reinterpret_cast<void\*>',Path(a.source).read_text()):
+- expected=bytes(int(x,0) for x in values.split(','));offset=int(rva,16);actual=image[offset:offset+len(expected)]
+- if len(expected)!=16 or expected!=actual:raise SystemExit(f'Hook mismatch at {rva}: expected {expected.hex()} actual {actual.hex()}')
+- sites.append({'rva':rva,'bytes':expected.hex()})
+-if {int(s['rva'],16) for s in sites}!={0xb25f50,0xa971f0,0xdb5b50} or len(sites)!=3:raise SystemExit('Expected HUD, menu and controller poll hook signatures')
+-print(json.dumps({'client_sha256':digest,'verified_sites':sites},indent=2))
++"""Verify Creative's shared UI host integration against the pinned client."""
++import argparse
++import hashlib
++import json
++import re
++from pathlib import Path
++import pefile
++
++parser = argparse.ArgumentParser(description=__doc__)
++parser.add_argument('game')
++parser.add_argument('source', type=Path, help='Creative src/native_menu.cpp')
++parser.add_argument('--host', type=Path, help='Shared ui-host/host.cpp; defaults to sibling mod-patches')
++args = parser.parse_args()
++raw = Path(args.game).read_bytes()
++digest = hashlib.sha256(raw).hexdigest()
++if digest != 'af2f5a1227911d8aa06b3908d6bd0211838211cae14ea91099cb57d0df990781':
++    raise SystemExit('Unsupported client executable')
++source = args.source.read_text()
++if 'ui_host->register_client(&client)' not in source or 'MH_CreateHook(' in source:
++    raise SystemExit('Creative must register with the shared host and own no menu detours')
++host = args.host or args.source.resolve().parents[2] / 'enshrouded-mod-patches/native/ui-host/host.cpp'
++image = pefile.PE(data=raw).get_memory_mapped_image()
++sites = []
++pattern = r'\{(0x[0-9a-f]+),\{((?:0x[0-9a-f]+|0)(?:,(?:0x[0-9a-f]+|0))*)\},reinterpret_cast<void\*>'
++for rva, values in re.findall(pattern, host.read_text()):
++    expected = bytes(int(value, 0) for value in values.split(','))
++    offset = int(rva, 16)
++    if len(expected) != 16 or expected != image[offset:offset + 16]:
++        raise SystemExit(f'Hook mismatch at {rva}')
++    sites.append({'rva': rva, 'bytes': expected.hex()})
++if {int(site['rva'], 16) for site in sites} != {0xb25f50, 0xa971f0, 0xdb5b50, 0xa7ea00} or len(sites) != 4:
++    raise SystemExit('Expected HUD, playground, controller poll and dual-inventory hook signatures')
++print(json.dumps({'client_sha256': digest, 'shared_host': str(host), 'verified_sites': sites}, indent=2))
+

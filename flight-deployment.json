@@ -39,6 +39,18 @@
   "deploy_only_when_empty": true,
   "coordination": "Active thread goal replaces the scheduled deployment check.",
   "automation_id": null,
+  "hosted_backup_cleanup": {
+    "task": "DEPLOY116-CLEANUP-CLOSE",
+    "policy": "Retain newest complete backup per server",
+    "complete": true,
+    "retained": {
+      "1650d1ae": "87bebe8f-57bf-46f1-b48b-2ea710ab6597",
+      "c70c80c3": "b4521221-4ed9-49ca-8d25-fc58f14bc929",
+      "ea6b2409": "992ee43c-266d-4c49-91ed-638ba4e1cf2f"
+    },
+    "older_backups_absent": 10,
+    "limits": "Two authorized older Soulrend rows entered deleting without a corresponding recorded click; disappearance verified, exact individual action causality uncertain. Physical reclaimed space not measured. All servers running."
+  },
   "removed_automation_id": "deploy-always-flying-when-servers-are-empty",
   "servers": [
     {
@@ -107,8 +119,16 @@
       "name": "Soulrend",
       "id": "ea6b2409",
       "applied": false,
+      "current_retained_backup": {
+        "name": "Backup at 2026-10-10 01:45:06",
+        "uuid": "992ee43c-266d-4c49-91ed-638ba4e1cf2f",
+        "complete": true,
+        "size_display": "5.96 GiB",
+        "rollout_baseline_verified": false
+      },
       "predeploy_backup": {
         "name": "ROLLOUT88-SOULREND-20261010",
+        "deleted_under_keep_latest_policy": true,
         "completed_utc": "2026-10-09T22:29:36Z",
         "size_display": "10.01 GiB",
         "state": "CREATED",
@@ -307,9 +327,9 @@
       "ea6b2409"
     ],
     "excluded": [],
-    "priority": "Update Enshrouded and fix, push and privately publish the Admin manager now; defer IKEA and Soulrend",
+    "priority": "Enshrouded deployed; publish and repair Admin 4.4.8 publicly for testing; IKEA and Soulrend deferred",
     "authorization": "Latest direct user instruction on2026-10-10 explicitly defers IKEA and Soulrend. Enshrouded empty-only rollout remains authorized.",
-    "readiness": "Enshrouded deployed by DEPLOY113 with nine installed hashes and healthy native startup verified. VERIFY117 accepted installed-hash comparison and local rollback bytes; VERIFY121 accepted the correction packet. Current shared-UI preview fails hosted approval and needs the matching client repair. IKEA and Soulrend remain deferred and unapplied. Full parity and gameplay acceptance remain open.",
+    "readiness": "Enshrouded DEPLOY113 nine installed hashes and healthy startup verified; local client protocol mismatch repaired by APP127/CLIENT123. Current hosted activation and full gameplay acceptance remain pending. IKEA and Soulrend deferred and unapplied.",
     "preparation_accepted": true,
     "operator_task": "DEPLOY113-SFTP",
     "stage_directory": "E:\\Build\\enshrouded-rollout96-three-servers-20261010",
@@ -353,5 +373,43 @@
     "broker_status": "Admin4.4.7 persists after parent exit but Needs attention remains: receipt selects Creative while recording2 unselected Flight paths and omitting5 selected Creative/forge paths. Camera controls disabled; RECEIPT109/110 read-only provenance and compatibility review pending.",
     "gameplay_verified": false,
     "local_evidence": "E:\\Build\\enshrouded-launcher-repair105-20261010\\causal-report.md"
+  },
+  "manager_receipt_repair": {
+    "version": "4.4.8",
+    "commit": "da9c1b42ab5e68e7fb01432d9e44a8ee8a27b40c",
+    "source_accepted": true,
+    "independent_checks": "11 preview and 19 app-recovery checks passed; guard runs under the shared exclusive operation lock",
+    "owner_admin_checks": 716,
+    "published": true,
+    "installed": true,
+    "status": "APP127 completed public-API repair: Installed, 173 tracked paths, Creative enabled, standalone Flight disabled, eight original backup hashes verified, no pending journal. Admin 4.4.8 visibly open. Current gameplay acceptance remains pending.",
+    "run_url": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/38016267205",
+    "release_url": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/private-preview-4.4.8-ui43-da9c1b4",
+    "admin_zip_sha256": "230c1ef4ccf34fcbde5b3ed98f368fa99e58ca89cdd7a83729dcbbde0695c7df",
+    "admin_exe_sha256": "3ee36d1408fc7b43d52fa9fb5b4c73da839f81f88a4c0e5a339bee36b712823f",
+    "repaired_receipt_sha256": "00c1f8e7d3e8d323340ce14f0e4e2c60d083097241ddd07d50813f57882a444d",
+    "public_release_url": "https://github.com/Aerox912/enshrouded-client-releases/releases/tag/admin-preview-4.4.8-ui43-da9c1b4",
+    "public_admin_feed": {
+      "version": "4.4.8",
+      "sequence": 1791600709,
+      "commit": "9511f29d03bb314786c069a067216f4ed7a97a2f",
+      "publisher_commit": "b703120ed5f09595595bfdcb4c43c813d6b7f528",
+      "run_url": "https://github.com/Aerox912/enshrouded-client-installer/actions/runs/38018482408",
+      "verified": true,
+      "verification": "Anonymous signed feed passed signatures and production UpdateProtocol channel, package, executable, game-pin and sequence checks. Exact ZIP/sidecar downloads matched. Only bundled-channels/admin.json changed; Regular and legacy feeds preserved. Friend update application not observed."
+    }
+  },
+  "matched_shared_host_client": {
+    "directory": "E:\\Build\\creative-ui43-shared-host-20261010",
+    "base_creative_commit": "8fa0ebb3b177f3182a6d78da21b265094046ffc5",
+    "paired_server_commit": "5f173c49875cc65c8d7903062dfc6ed904896758",
+    "creative_sha256": "f5729c9ce7da04ad015d3ee7a8c8a0c28337eaaeb41679d629b27ce161663493",
+    "storage_sha256": "813d47c14b6180569450012e38e677b99924a9b05d8af6ff5afb71fa60905682",
+    "host_sha256": "b6d9e4757d4305bd9aba4325ebd31c3c4e2a31ac6931999f327fe3dbd22f6b46",
+    "offline_accepted": true,
+    "verification": "VERIFY126 confirms exact five-file Creative delta against121 tracked source files, byte-identical protocol/auth/session, matching server revision, input/modal and hash pins. Config115/115 passes normal Windows; earlier sandbox failures resolved.",
+    "installed": true,
+    "gameplay_verified": false,
+    "installation_evidence": "APP127 verified all three DLL pins, six receipt-map files and three preserved originals. Preview backup d5c8f6e642f04807ba850a4fa7581266. Current user gameplay test pending."
   }
 }

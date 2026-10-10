@@ -1,0 +1,170 @@
+{
+  "task_id": "SOURCE132",
+  "bundle_kind": "source-only patch bundle",
+  "candidate_evidence": {
+    "path": "E:\\Build\\creative-ui43-shared-host-20261010\\candidate-evidence.md",
+    "bytes": 2974,
+    "sha256": "A47130993FC1317DC56E59CDDF7E765779D9AEA88AF606A2CBD3051D388D922A"
+  },
+  "carrier_repository": {
+    "path": "E:\\Repos\\enshrouded-server-compat",
+    "requested_base_commit": "5f173c49875cc65c8d7903062dfc6ed904896758",
+    "requested_base_present": true,
+    "observed_head": "972b939c30ed6f004045a1ab368e4bf302971497",
+    "observed_worktree_had_preexisting_unrelated_changes": true,
+    "changed_outside_bundle": false
+  },
+  "inputs": {
+    "creative": {
+      "source": "E:\\Worktrees\\enshrouded-creative-fullscreen-20261009",
+      "base_commit": "8fa0ebb3b177f3182a6d78da21b265094046ffc5",
+      "base_worktree_clean_at_capture": true,
+      "changed_files": [
+        {
+          "path": "CMakeLists.txt",
+          "base_sha256": "A8D4593A1B0B258DF2924E2414D032A05A37A41B4500BEE663C5C65E1BC5230C",
+          "candidate_sha256": "97B4E85ACD5C73B3E62C234D768F75C3ACF0DE0272391EEB69DABD43F764A6CF"
+        },
+        {
+          "path": "include/creative/native_menu.h",
+          "base_sha256": "CFC28836AA3A817900B4236B6F726BA3162BBB26895AEF739320DB6060908DC7",
+          "candidate_sha256": "4B261812C04894AAD5CE4CB9BE98321679C31E3516ED0EA40B6B40746FF2AACE"
+        },
+        {
+          "path": "src/native_client.cpp",
+          "base_sha256": "FC7A4F5D915CCFF6DED183E30430D65A95CFEB166F827C9E4EB9FC6F5126CEEB",
+          "candidate_sha256": "90C5B95E17FDAF3643374736911CF0B9484A4F061C68159911745A62B9CF2816"
+        },
+        {
+          "path": "src/native_menu.cpp",
+          "base_sha256": "97F4F4D01D217EEEC2ABA138445A9F5639A2F2D93B9672AA3FAA5857A1B7ED7D",
+          "candidate_sha256": "3E390889E3A471AC4FD198D307BECB83B7BA0282CFE6A9B7AEAD494E457380D9"
+        },
+        {
+          "path": "tools/verify_native_ui_sites.py",
+          "base_sha256": "20A0F5D1351B4E63944DCB89B43D4CC171B7B1F09EA813189A2FFC22D3DFF265",
+          "candidate_sha256": "908FBCD2220964DE639593020ECF66A4D30FB878A4E0D589AF887505DEE2774A"
+        }
+      ]
+    },
+    "magic_storage": {
+      "source": "E:\\Repos\\enshrouded-mod-patches\\native\\magic-storage",
+      "repository_head": "7dc8953df88e44fa6fe12a41b247e0475dad64b1",
+      "source_was_untracked_at_capture": true,
+      "base_is_hash_gated_not_commit_gated": true,
+      "changed_files": [
+        {
+          "path": "native_mod_bindings.cpp",
+          "base_sha256": "634BF2C2AF4ACA656CD4BB0B2B49FCFDD658FED196BC9BC0F2F5676BF3191BC8",
+          "candidate_sha256": "ACC91F6F7E9265DD79D8CEEE8E81E732336916C68C97192226D56BD70F9ABA5F"
+        },
+        {
+          "path": "Install-UiPreview.ps1",
+          "base_sha256": "B386627671CB4B9B04297DB6291B468073FB6DC4540F6BC7738AF13B83BCCEA2",
+          "candidate_sha256": "9108CBE132C82A82FFE40D77E2779ACF5112D882451EFAEC060B9D12A9A597B4"
+        }
+      ]
+    }
+  },
+  "patches": [
+    {
+      "path": "creative-ui43.patch",
+      "bytes": 14320,
+      "sha256": "E3BB5A6E40F5D489021C6E782606C14DE570F6CE8AC0D9B2B1CBF02538301AFE",
+      "format": "git diff; 3 context lines"
+    },
+    {
+      "path": "magic-storage-ui43.patch",
+      "bytes": 1080,
+      "sha256": "E9C9D88A5E965244CBFA2E9DF7C7E21E2DC4A8B2613D6ADE81790E56D660D088",
+      "format": "git diff; zero context; apply with --unidiff-zero"
+    }
+  ],
+  "reconstruction_validation": {
+    "method": "Apply each patch to baseline copies under the owned bundle's temporary scratch area and compare all seven resulting files to candidate source SHA-256 values.",
+    "patch_check_and_apply_passed": true,
+    "all_seven_candidate_hashes_matched": true,
+    "storage_patch_unrelated_hash_context_lines": 0
+  },
+  "secret_scan": {
+    "scope": "seven changed candidate source files and both patches",
+    "steamid_shaped_literals": 0,
+    "private_key_blocks": 0,
+    "bearer_tokens": 0,
+    "credential_assignments": 0,
+    "private_allowlist_files_copied": false
+  },
+  "existing_candidate_artifacts": {
+    "creative_dll": {
+      "path": "E:\\Build\\creative-ui43-shared-host-20261010\\build\\Release\\creative_client_dev.dll",
+      "bytes": 969216,
+      "sha256": "F5729C9CE7DA04AD015D3EE7A8C8A0C28337EAAEB41679D629B27CE161663493",
+      "copied_into_bundle": false
+    },
+    "magic_storage_dll": {
+      "path": "E:\\Build\\creative-ui43-shared-host-20261010\\storage-build\\Release\\magic_storage_ui_preview.dll",
+      "bytes": 627200,
+      "sha256": "813D47C14B6180569450012E38E677B99924A9B05D8AF6FF5AFB71FA60905682",
+      "copied_into_bundle": false
+    },
+    "staged_host_dll": {
+      "path": "E:\\Build\\creative-ui43-shared-host-20261010\\storage-build\\ui-host\\Release\\native_ui_host.dll",
+      "bytes": 237056,
+      "sha256": "B6D9E4757D4305BD9ABA4325EBD31C3C4E2A31AC6931999F327FE3DBD22F6B46",
+      "copied_into_bundle": false
+    }
+  },
+  "existing_test_evidence": {
+    "creative_ctest": {
+      "result": "15/15 passed per candidate evidence",
+      "path": "E:\\Build\\creative-ui43-shared-host-20261010\\build\\Testing\\Temporary\\LastTest.log",
+      "bytes": 50010,
+      "sha256": "CBDD5B4FAD873535264788052DC5817C7A2A10D89962D285A172427772F044E6"
+    },
+    "storage_host_ctest": {
+      "result": "7/7 passed per candidate evidence",
+      "path": "E:\\Build\\creative-ui43-shared-host-20261010\\storage-build\\Testing\\Temporary\\LastTest.log",
+      "bytes": 6538,
+      "sha256": "07CC9706526CE15A1EA558368525D003D1583423D3ED4B0BDD85B456849B611C"
+    },
+    "installer_fixtures": {
+      "result": "26 checks passed per candidate evidence",
+      "fixture_root": "E:\\Build\\creative-ui43-shared-host-20261010\\installer-fixtures\\1dbd356281da43c68c187058cb756606",
+      "evidence_source": "candidate-evidence.md"
+    }
+  },
+  "verification_gaps": [
+    "At SOURCE132 producer capture, its named PE inspection scripts could not run because pefile was unavailable. VERIFY126 later independently matched four host sites; this separate result is recorded below.",
+    "Live F6/F7 and hosted shared-host gameplay acceptance remain pending."
+  ],
+  "scope": {
+    "contains_only": [
+      "creative-ui43.patch",
+      "magic-storage-ui43.patch",
+      "README.md",
+      "manifest.json"
+    ],
+    "contains_no_binaries_assets_or_test_fixtures": true,
+    "git_stage_commit_push_performed": false
+  },
+  "subsequent_independent_results": {
+    "source_task_ids": [
+      "VERIFY126",
+      "APP127"
+    ],
+    "verifier": "VERIFY126 independently matched four host sites",
+    "install": "APP127 later installed the accepted local trio and repaired the receipt; installed pins, six receipt files, and three originals were verified",
+    "hosted_gameplay": "pending"
+  },
+  "scratch_cleanup": {
+    "removed": [
+      ".verify-apply",
+      ".verify-apply2",
+      ".verify-final"
+    ],
+    "retained_empty": [
+      ".verify-work\\creative"
+    ],
+    "reason": "Windows reported the empty leaf in use; exact process command-line query was unavailable"
+  }
+}

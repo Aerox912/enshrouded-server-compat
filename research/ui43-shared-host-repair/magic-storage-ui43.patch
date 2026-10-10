@@ -1,0 +1,20 @@
+diff --git a/native_mod_bindings.cpp b/native_mod_bindings.cpp
+index 46b296a..a02113a 100644
+--- a/native_mod_bindings.cpp
++++ b/native_mod_bindings.cpp
+@@ -48 +48 @@ const std::map<std::string,std::string> reviewed{
+-    {"creative_mode/creative_mode.dll","3c599865d0a11ab54a5de15ddb7f500817c04d1abc699ed208f50bbb082cfe1f"},
++    {"creative_mode/creative_mode.dll","f5729c9ce7da04ad015d3ee7a8c8a0c28337eaaeb41679d629b27ce161663493"},
+
+diff --git a/Install-UiPreview.ps1 b/Install-UiPreview.ps1
+index b3f10cc..c26ce09 100644
+--- a/Install-UiPreview.ps1
++++ b/Install-UiPreview.ps1
+@@ -4,3 +4,3 @@ param(
+-    [string]$GameDirectory='D:\Games\SteamLibrary\steamapps\common\Enshrouded',
+-    [string]$BuildDirectory='E:\Build\enshrouded-magic-storage-20261009',
+-    [string]$CreativeBuildDirectory='E:\Build\magic-storage-creative-ui-20261010'
++    [Parameter(Mandatory=$true)][string]$GameDirectory,
++    [string]$BuildDirectory='E:\Build\creative-ui43-shared-host-20261010\storage-build',
++    [string]$CreativeBuildDirectory='E:\Build\creative-ui43-shared-host-20261010\build'
+
