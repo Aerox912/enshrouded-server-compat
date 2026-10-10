@@ -5,13 +5,14 @@
   "sha256": null,
   "evidence": "research/native-release-review-20261009.md",
   "blockers": [
-    "UI43 source8fa0ebb passed VERIFY78 and GPT-6 Pro review; exact-head native CI37996919115 succeeded with16 verified payload hashes. Matching private manager delivery and final artifact acceptance are underway; live respawn remains unverified.",
-    "Full Creative parity remains incomplete and is follow-up scope. The user requests current matched changes deployed to all three servers before native-menu refinement; narrower release compatibility and runtime evidence still require evaluation.",
+    "UI43 source8fa0ebb passed VERIFY78 and GPT-6 Pro review; exact-head native CI37996919115 succeeded with16 verified payload hashes. Private manager4.4.7 is published; repaired Admin4.4.8 is under independent verification.",
+    "Enshrouded is deployed and running, but the user's current shared-UI preview client waits for approval and F6 is unavailable. Its source uses a55-byte protocol1 request while deployed UI43 expects80-byte protocol2 requests. A compatible shared-host client is being prepared; no gameplay success is claimed.",
+    "Full Creative parity remains incomplete and is follow-up scope. The latest user instruction defers IKEA and Soulrend deployment and prioritizes Enshrouded plus the Admin manager.",
     "Intentional same-connection F6 preference retention and actor suspension need gameplay acceptance on the final matching candidate.",
     "Partial-fit inventory rollback, mixed approved/denied clients and actual Wine multiplayer acceptance remain open.",
-    "Manager23ed410 passed exact-head cloud run37956399896 for both editions and setup checks; publish was skipped. VERIFY53 independently accepted actual cloud payload inventories and RC6 lock provenance. Full feature successor, gameplay and final review remain required before public release.",
+    "Public release remains gated on full feature and gameplay acceptance. Public manager4.4.6 and package_ready=false remain unchanged.",
     "UI41 opens and receives approval per user gameplay report. Settings alignment and Journey activation remain unaccepted. Focused endpoint omits XP Share; hosted composition, crafting, bone pickup and Wine multiplayer acceptance remain unverified.",
-    "Matching client delivery, fresh empty-server evidence, complete rollback backups and post-deployment verification remain required for each hosted server."
+    "Any later IKEA or Soulrend deployment requires renewed user scope, a matching client, fresh empty-server evidence, complete rollback backup and post-deployment verification."
   ],
   "development_artifacts": {
     "version": "0.3.0-rc.2",
@@ -43,7 +44,22 @@
     {
       "name": "Enshrouded",
       "id": "1650d1ae",
-      "applied": false,
+      "applied": true,
+      "deployment": {
+        "task": "DEPLOY113-SFTP",
+        "installed_files_verified": 9,
+        "preserved_baseline_files_reported": 76,
+        "installed_evidence": "E:\\Build\\enshrouded-deploy103-20261010\\DEPLOY113-Enshrouded\\DEPLOY113-Enshrouded-install-20261010T011156Z.json",
+        "installed_evidence_correction": "VERIFY121 accepted DEPLOY116-Enshrouded-completion-correction-20261010T0129Z.json alongside the original ledger: correct old-loader hash, four replacements, five additions and retained provenance. Prior VERIFY117 accepted nine installed hash/size entries and four local rollback copies.",
+        "startup_verified_by_operator": true,
+        "startup": "Native HostOnline, Run, Steam connected and expected hook/config initialization observed; Kinetic running",
+        "post_start_a2s_utc": "2026-10-10T01:14:01Z",
+        "post_start_players": 0,
+        "gameplay_verified": false,
+        "live_activation_result": "User reports F7 opens but waits for approval and F6 unavailable. At2026-10-10T01:29:14Z the server observed authenticated inventory ownership then rejected an authenticated message in the protocol parser. Client preview source differs from the frozen deployed wire contract; CLIENT123 owns the compatible shared-host client repair.",
+        "rollback_directory": "E:\\Build\\enshrouded-deploy103-20261010\\DEPLOY113-Enshrouded\\rollback",
+        "full_backup_reused": true
+      },
       "predeploy_backup": {
         "name": "DEPLOY103-ROLLBACK-Enshrouded-20261010",
         "captured_utc": "2026-10-09T23:48:00Z",
@@ -59,7 +75,7 @@
         "server_exe_sha256": "001c1b40ed091d8c1aee583adde3800d7c858ae2c7f4dff54fca2938b2be1637",
         "root_dbghelp_sha256": "0b69fed17198db9e1d982abdede4cd09122d9a7137f602964337bafc25af13da"
       },
-      "last_attempt": {
+      "previous_attempt": {
         "task": "DEPLOY103-THREE-SERVERS",
         "result": "Upload blocked before file selection; baseline restarted unchanged",
         "uploaded_files": 0,
@@ -284,19 +300,21 @@
   },
   "rollout_scope": {
     "targets": [
-      "1650d1ae",
+      "1650d1ae"
+    ],
+    "deferred": [
       "c70c80c3",
       "ea6b2409"
     ],
     "excluded": [],
-    "priority": "Deploy current matched build through the manager before further native-menu refinement",
-    "authorization": "Latest direct user annotation explicitly adds Soulrend again on2026-10-10; supersedes earlier two-server restriction.",
-    "readiness": "Verified private UI43 package remains accepted for the scoped rollout. DEPLOY103 uploaded nothing because the browser file chooser failed; Enshrouded was restarted unchanged and IKEA/Soulrend were untouched. User confirmed browser file-URL access was already enabled and requested SFTP. Establish read-only authenticated SFTP, trusted host key, transfer and rollback capability before another stop; fresh zero-player, backup, hash and startup gates remain.",
+    "priority": "Update Enshrouded and fix, push and privately publish the Admin manager now; defer IKEA and Soulrend",
+    "authorization": "Latest direct user instruction on2026-10-10 explicitly defers IKEA and Soulrend. Enshrouded empty-only rollout remains authorized.",
+    "readiness": "Enshrouded deployed by DEPLOY113 with nine installed hashes and healthy native startup verified. VERIFY117 accepted installed-hash comparison and local rollback bytes; VERIFY121 accepted the correction packet. Current shared-UI preview fails hosted approval and needs the matching client repair. IKEA and Soulrend remain deferred and unapplied. Full parity and gameplay acceptance remain open.",
     "preparation_accepted": true,
-    "operator_task": "DEPLOY107-SFTP",
+    "operator_task": "DEPLOY113-SFTP",
     "stage_directory": "E:\\Build\\enshrouded-rollout96-three-servers-20261010",
     "full_parity_ready": false,
-    "transfer_method": "SFTP requested by user; connection verification pending",
+    "transfer_method": "Pinned authenticated SFTP; exact-nine staging and installed readback verified. Paramiko was installed in a scoped WSL environment with explicit user authorization.",
     "previous_attempt_evidence": "E:\\Build\\enshrouded-deploy103-20261010\\deployment-ledger.json"
   },
   "ui43_repair": {
