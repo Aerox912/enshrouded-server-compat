@@ -330,9 +330,10 @@
     "release_url": "https://github.com/Aerox912/enshrouded-client-installer/releases/tag/private-preview-4.4.7-ui43-58141a4",
     "private_prerelease": true,
     "installed": true,
-    "installation_scope": "Regular4.4.7 app registration only; previous4.4.2 retained; Automatic=true restored; no game payload applied",
+    "installation_scope": "Admin4.4.7 app-only registration and running process verified; previousAdmin4.4.6 and Regular4.4.7/4.4.2 slots preserved; Automatic=true; no game payload applied",
     "broker_running": true,
-    "broker_status": "Regular4.4.7 persists after monitor/parent exit, but ReadReceipt rejects the installed Admin Creative selection. REPAIR105 is switching app-only to matching Admin4.4.7; Home gameplay unverified.",
-    "gameplay_verified": false
+    "broker_status": "Admin4.4.7 persists after parent exit but Needs attention remains: receipt selects Creative while recording2 unselected Flight paths and omitting5 selected Creative/forge paths. Camera controls disabled; RECEIPT109/110 read-only provenance and compatibility review pending.",
+    "gameplay_verified": false,
+    "local_evidence": "E:\\Build\\enshrouded-launcher-repair105-20261010\\causal-report.md"
   }
 }
