@@ -82,3 +82,5 @@ A retained F6 preference is not an execution lease. The fixed recovery budget mu
 ## Backup cleanup and interrupted delivery
 
 Use the backup capture event or reliable directory creation time for age-based cleanup; copied source files can retain older timestamps inside a fresh backup. Preserve current recovery inputs and prune only verified obsolete children in mixed backup trees. After interrupted operations, recover the release, install pointer and deletion ledger before repeating a mutation. Displayed deduplicated backup sizes do not establish physically reclaimed storage.
+
+Verify the transfer route before taking a server offline. A browser chooser timeout before selecting files means no upload occurred; restart the unchanged baseline and preserve the evidence. Browser troubleshooting guidance is a hypothesis, not an observed setting: the user confirmed file-URL access was already enabled. Their explicit SFTP request permits a supported alternate transport with the same package, occupancy, credential, host-key and rollback checks.

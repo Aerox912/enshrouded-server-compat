@@ -45,17 +45,28 @@
       "id": "1650d1ae",
       "applied": false,
       "predeploy_backup": {
-        "name": "rollout46-predeploy-2026-10-09",
-        "completed_utc": "2026-10-09T19:42:11Z",
+        "name": "DEPLOY103-ROLLBACK-Enshrouded-20261010",
+        "captured_utc": "2026-10-09T23:48:00Z",
+        "complete": true,
         "locked": true,
-        "ignored_files": 0,
-        "restore_rehearsed": false
+        "size_display": "6.26 GiB",
+        "restore_rehearsed": false,
+        "evidence": "E:\\Build\\enshrouded-deploy103-20261010\\Enshrouded.json"
       },
       "baseline_audit": {
         "evidence": "E:\\Build\\rollout55-audit-baseline-20261009\\rollout55-audit-baseline-20261009.md",
         "archive_sha256": "59b288914fb5e37a615aa5c09f38c46e186650f75eeecf4abe72fe6a904db4c1",
         "server_exe_sha256": "001c1b40ed091d8c1aee583adde3800d7c858ae2c7f4dff54fca2938b2be1637",
         "root_dbghelp_sha256": "0b69fed17198db9e1d982abdede4cd09122d9a7137f602964337bafc25af13da"
+      },
+      "last_attempt": {
+        "task": "DEPLOY103-THREE-SERVERS",
+        "result": "Upload blocked before file selection; baseline restarted unchanged",
+        "uploaded_files": 0,
+        "pre_stop_players": 0,
+        "pre_stop_utc": "2026-10-09T23:46:00.9857862Z",
+        "baseline_restart_a2s_utc": "2026-10-09T23:55:09.9581279Z",
+        "baseline_restart_players": 0
       }
     },
     {
@@ -280,11 +291,13 @@
     "excluded": [],
     "priority": "Deploy current matched build through the manager before further native-menu refinement",
     "authorization": "Latest direct user annotation explicitly adds Soulrend again on2026-10-10; supersedes earlier two-server restriction.",
-    "readiness": "All3 hosted baselines and completed backups captured; Soulrend has identical mod/resource/loader composition and different preserved server JSON. UI43 source/Pro/native artifacts, final private manager packages and three-host mapping independently accepted. Main assigned DEPLOY103 for scoped private rollout with fresh immediate pre-stop zero-player checks, backup/baseline verification, exact installed hashes and healthy startup. No server is yet recorded applied. Local Regular/Admin mismatch is being corrected separately without game-payload changes.",
+    "readiness": "Verified private UI43 package remains accepted for the scoped rollout. DEPLOY103 uploaded nothing because the browser file chooser failed; Enshrouded was restarted unchanged and IKEA/Soulrend were untouched. User confirmed browser file-URL access was already enabled and requested SFTP. Establish read-only authenticated SFTP, trusted host key, transfer and rollback capability before another stop; fresh zero-player, backup, hash and startup gates remain.",
     "preparation_accepted": true,
-    "operator_task": "DEPLOY103-THREE-SERVERS",
+    "operator_task": "DEPLOY107-SFTP",
     "stage_directory": "E:\\Build\\enshrouded-rollout96-three-servers-20261010",
-    "full_parity_ready": false
+    "full_parity_ready": false,
+    "transfer_method": "SFTP requested by user; connection verification pending",
+    "previous_attempt_evidence": "E:\\Build\\enshrouded-deploy103-20261010\\deployment-ledger.json"
   },
   "ui43_repair": {
     "creative_commit": "8fa0ebb3b177f3182a6d78da21b265094046ffc5",
