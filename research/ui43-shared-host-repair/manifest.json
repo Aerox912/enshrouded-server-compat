@@ -139,6 +139,7 @@
   ],
   "scope": {
     "contains_only": [
+      ".gitattributes",
       "creative-ui43.patch",
       "magic-storage-ui43.patch",
       "README.md",
@@ -160,11 +161,40 @@
     "removed": [
       ".verify-apply",
       ".verify-apply2",
-      ".verify-final"
+      ".verify-final",
+      ".roundtrip-source136"
     ],
     "retained_empty": [
       ".verify-work\\creative"
     ],
     "reason": "Windows reported the empty leaf in use; exact process command-line query was unavailable"
+  },
+  "patch_transport": {
+    "attributes_file": {
+      "path": ".gitattributes",
+      "bytes": 57,
+      "sha256": "91DDC8E1DC4318A2618D72CB51BEEC7769C3715A9662D30D76FCD24F52BD33A4",
+      "rules": [
+        "creative-ui43.patch -text",
+        "magic-storage-ui43.patch -text"
+      ]
+    },
+    "scratch_repository": {
+      "core_autocrlf": "true",
+      "creative": {
+        "bytes": 14320,
+        "blob_oid": "989095313fe846d6be09f89aef51381316ca343e",
+        "sha256": "E3BB5A6E40F5D489021C6E782606C14DE570F6CE8AC0D9B2B1CBF02538301AFE",
+        "index_blob_and_checkout_exact": true
+      },
+      "magic_storage": {
+        "bytes": 1080,
+        "blob_oid": "7163503079670c83cf19ca90e26c59e68d05f98e",
+        "sha256": "E9C9D88A5E965244CBFA2E9DF7C7E21E2DC4A8B2613D6ADE81790E56D660D088",
+        "index_blob_and_checkout_exact": true
+      },
+      "all_seven_source_hashes_reconstructed": true,
+      "scratch_repository_removed": true
+    }
   }
 }

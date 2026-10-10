@@ -1,6 +1,6 @@
 # UI43 shared-host repair source bundle
 
-This bundle contains the two source patches for the accepted local UI43 shared-host candidate. It contains no build products, game binaries/assets, staging fixtures, private allowlist files, or secrets. The accepted build and test evidence remains at the paths listed in `manifest.json`.
+This bundle contains the two source patches and a narrowly scoped `.gitattributes` file for the accepted local UI43 shared-host candidate. The attributes disable Git end-of-line conversion for only the two patches so their pinned raw bytes survive index/blob roundtrips. The bundle contains no build products, game binaries/assets, staging fixtures, private allowlist files, or secrets. The accepted build and test evidence remains at the paths listed in `manifest.json`.
 
 ## Inputs and application
 
@@ -18,7 +18,7 @@ git -C $MagicStorageScratch -c core.autocrlf=false -c core.whitespace=cr-at-eol 
 git -C $MagicStorageScratch -c core.autocrlf=false -c core.whitespace=cr-at-eol apply --unidiff-zero E:\Repos\enshrouded-server-compat\research\ui43-shared-host-repair\magic-storage-ui43.patch
 ```
 
-`manifest.json` records each input and accepted candidate file hash. Reconstructing the seven accepted files in isolated scratch copies matched all seven candidate hashes exactly. The same source and patch scan found no SteamID-shaped literal, private-key block, bearer token, or credential assignment.
+`manifest.json` records each input and accepted candidate file hash. A disposable repository with `core.autocrlf=true` staged both patches, checked their raw blob IDs and sizes, removed the working copies, and checked them out from the index. Both checked-out files retained their exact pinned SHA-256 values; applying those roundtripped patches to isolated baseline copies then matched all seven accepted candidate hashes. The disposable repository was removed. The same source and patch scan found no SteamID-shaped literal, private-key block, bearer token, or credential assignment.
 
 ## Existing verification and limits
 

@@ -31,7 +31,7 @@ Local cleanup removed seven old minimap snapshots and 169 old artifacts, preserv
 ## Next acceptance
 
 1. Obtain current F7 approval/F6 activation feedback on Enshrouded; inspect read-only logs if it fails.
-2. Commit isolated compatible-source handoff and final records. Update Notion/Linear with the release/install delta and close this urgent delivery handoff.
+2. Source handoff is verified: both patches survive Git index/checkout with their exact hashes and reconstruct all seven accepted files. Notion/Linear record the public release and completed local repair, with gameplay and friend update application still pending.
 3. Resume native menu/Journey work afterward; keep the other two servers deferred.
 
 Exact hashes, evidence locations and continuation ownership are in latest_session_work.md and flight-deployment.json.
