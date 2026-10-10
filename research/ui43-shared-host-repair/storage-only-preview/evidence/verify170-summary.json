@@ -1,0 +1,13 @@
+{
+  "taskId": "VERIFY170",
+  "result": "PASS",
+  "reportedBy": "parent task capsule",
+  "scope": {
+    "storageOnlyChecks": 15,
+    "supplementalGates": 4,
+    "fullPreviewChecks": 26,
+    "removeRollbackFaultCases": 4
+  },
+  "detailedVerifierArtifactIncluded": false,
+  "evidenceNote": "This concise summary transcribes the parent handoff; the APP167 producer evidence files are included separately."
+}

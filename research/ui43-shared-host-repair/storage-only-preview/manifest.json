@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "taskId": "SOURCE175",
+  "acceptedChangeTask": "APP167",
+  "purpose": "Source-only carrier for accepted APP167 Storage-only preview installer mode",
+  "sourceTarget": "research/ui43-shared-host-repair/storage-only-preview/candidate/magic-storage",
+  "sourceBasis": {
+    "kind": "bundled-candidate-fixture",
+    "patchDirection": "baseline/magic-storage to candidate/magic-storage",
+    "actualNativeModSourcePath": false,
+    "replayNote": "Patch applies only to a scratch target seeded from this package baseline; it is not a patch for the current preview-removal-retry tree."
+  },
+  "patch": {
+    "path": "APP167.patch",
+    "sha256": "8a375b56d2039334b4845cfa4b40ce894c31aaf737c60c5ecdc1077f6514d91e",
+    "size": 71643
+  },
+  "sourceInput": {
+    "bundleRoot": "E:\\Build\\enshrouded-flight-menu-20261010\\app167-source-bundle",
+    "manifestSha256": "99cad9134ddf62891aa7241c7f887ade708f76cc25e73868956eb4cc28936d7d",
+    "originalContextPatchSha256": "f2b48480b25752aa5628d2ccbbd291ae74db956e566d1c8b49b7d9b530cb9c3f"
+  },
+  "pins": {
+    "storageDll": "403d7b85ab595888da4840e3fb5f07451fb98c0bf8883864a218c01c778ffcab",
+    "storageManifest": "16c496b58f799becd074145f174451b8c2cba9e20eeb71190e48d8ce8a325f8f",
+    "creative": "befee002983183009129efb76aff80dcb017f5933ea6da6b05aaa7d652ab6250",
+    "host": "b6d9e4757d4305bd9aba4325ebd31c3c4e2a31ac6931999f327fe3dbd22f6b46"
+  },
+  "files": [
+    {
+      "path": "baseline/magic-storage/Install-UiPreview.ps1",
+      "sha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "length": 18308
+    },
+    {
+      "path": "baseline/magic-storage/installer_tests.ps1",
+      "sha256": "5ec44f66e87d757167659d5d278211d5fd0b2e396d86ecc362cd5a26535d673e",
+      "length": 8017
+    },
+    {
+      "path": "baseline/magic-storage/installer_remove_rollback_tests.ps1",
+      "sha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "length": 12722
+    },
+    {
+      "path": "candidate/magic-storage/Install-UiPreview.ps1",
+      "sha256": "26b4f0b12166da6b703dc55c95546298255837a8cea14da1fc00832a36b8baf8",
+      "length": 48021
+    },
+    {
+      "path": "candidate/magic-storage/installer_storage_only_tests.ps1",
+      "sha256": "723dc51d1c124f20bd4744500a45c8a4f22243dcb22fbdff7d2c6b4a972a27fd",
+      "length": 26030
+    },
+    {
+      "path": "candidate/magic-storage/installer_tests.ps1",
+      "sha256": "07ae9757984f46bd746071544a80dbe9f5f878abe2ae980dda1534a01e251128",
+      "length": 8810
+    },
+    {
+      "path": "candidate/magic-storage/installer_remove_rollback_tests.ps1",
+      "sha256": "a0afea6b2f1d3cd5c0c23e96bd555153126d71da7c6b85673a7eb6cd4d50a7e9",
+      "length": 12607
+    }
+  ],
+  "evidence": [
+    {
+      "path": "evidence/app167-source-manifest.json",
+      "sha256": "99cad9134ddf62891aa7241c7f887ade708f76cc25e73868956eb4cc28936d7d",
+      "length": 2444
+    },
+    {
+      "path": "evidence/storage-only-tests.json",
+      "sha256": "b6405d1186f33282f9efe6edc83376d9f107b2b5ac8e261396bd258a96bc8644",
+      "length": 1994
+    },
+    {
+      "path": "evidence/full-preview-installer-tests.json",
+      "sha256": "52494843f40a4f8db606ba43d42a74a4623e8e1f6faa4b2655c88202aa820c5c",
+      "length": 441
+    },
+    {
+      "path": "evidence/full-preview-remove-rollback-tests.json",
+      "sha256": "6779804536022b1be8c7a6e1e2dee079c018f1367f8066f0fbd9ab68d071cb80",
+      "length": 1021
+    },
+    {
+      "path": "evidence/verify170-summary.json",
+      "sha256": "cc6d8ec0d04d8457ef0ea64ae40e875a080fe032158605e258facf08e2084925",
+      "length": 416
+    },
+    {
+      "path": "evidence/source175-patch-roundtrip.json",
+      "sha256": "4705249e000b0541f1fe0ee9c94aa02d60f076dd4f594c4e5fa81b30993d36c1",
+      "length": 1556
+    },
+    {
+      "path": "evidence/source175-git-checkout.json",
+      "sha256": "3a534efd39a1c585b8b2bd59418756e73dfdb4656f4ad40309747733f103cbc2",
+      "length": 520
+    }
+  ],
+  "verification": {
+    "producer": {
+      "taskId": "APP167",
+      "storageOnlyChecks": "15/15",
+      "fullPreviewChecks": 26,
+      "removeRollbackFaultCases": 4
+    },
+    "independent": {
+      "taskId": "VERIFY170",
+      "result": "PASS",
+      "scope": "15 Storage-only checks, 4 supplemental gates, 26 full-preview checks, 4 rollback cases",
+      "artifact": "evidence/verify170-summary.json",
+      "detail": "Summary transcribed from parent handoff; detailed independent verifier artifact was not supplied."
+    },
+    "source175": {
+      "patchApplyCheck": "PASS",
+      "candidatePatchRoundtrip": "PASS",
+      "candidateFilesExact": "4/4",
+      "autocrlf": true,
+      "gitCheckout": "PASS",
+      "pinnedFilesExact": 18,
+      "gitAttributesPolicyFileNormalized": true,
+      "metadataFilesHashed": 2
+    }
+  },
+  "gitAttributes": "-text rules cover source scripts, patch, evidence, manifest, provenance, and README",
+  "bounds": {
+    "liveInstallPerformed": false,
+    "gameOrManagerStateModified": false,
+    "carrierStaged": false,
+    "carrierCommitted": false
+  },
+  "packageMetadata": [
+    {
+      "path": "README.md",
+      "sha256": "567793cb32c254d21d0eff340d120702887dae0e94695319b3b7454f607cde07",
+      "length": 2747
+    },
+    {
+      "path": "provenance.json",
+      "sha256": "c0c9082e5cb7ad0cd1adf0894c1a82620aa06223f023179eb55b24f0567c1d21",
+      "length": 680
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "taskId": "APP167",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "attach-manager-owned-pair",
+      "outcome": "passed"
+    },
+    {
+      "name": "remove-preserves-manager-and-unrelated-config",
+      "outcome": "passed"
+    },
+    {
+      "name": "attach-first-move-failure-retryable",
+      "outcome": "passed"
+    },
+    {
+      "name": "attach-config-failure-rollback",
+      "outcome": "passed"
+    },
+    {
+      "name": "remove-first-move-failure-retryable",
+      "outcome": "passed"
+    },
+    {
+      "name": "remove-config-failure-retryable",
+      "outcome": "passed"
+    },
+    {
+      "name": "missing-manager-receipt-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "wrong-manager-owned-hash-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "wrong-current-pair-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "wrong-storage-hash-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "wrong-storage-manifest-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "unreceipted-storage-conflict-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "existing-storage-setting-fails-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "unknown-mode-wrong-pin-and-missing-preview-receipt-fail-closed",
+      "outcome": "passed"
+    },
+    {
+      "name": "changed-owned-config-fails-closed",
+      "outcome": "passed"
+    }
+  ],
+  "inputs": {
+    "storageSha256": "403d7b85ab595888da4840e3fb5f07451fb98c0bf8883864a218c01c778ffcab",
+    "creativeSha256": "befee002983183009129efb76aff80dcb017f5933ea6da6b05aaa7d652ab6250",
+    "hostSha256": "b6d9e4757d4305bd9aba4325ebd31c3c4e2a31ac6931999f327fe3dbd22f6b46",
+    "testFixture": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-source\\magic-storage\\test-runs\\20261010T053418874Z-e24ec84709b241d698e62724d349c6c9\\game-fixture"
+  }
+}

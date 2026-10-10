@@ -1,0 +1,15 @@
+{
+  "taskId": "SOURCE175",
+  "check": "git checkout byte preservation",
+  "result": "PASS",
+  "coreAutocrlf": true,
+  "pinnedFilesCompared": 18,
+  "allPinnedFilesExact": true,
+  "attributes": {
+    "patch": "text unset",
+    "sourceScripts": "text unset",
+    "evidenceJson": "text unset"
+  },
+  "exception": "The .gitattributes policy file itself was CRLF-normalized by Git autocrlf; its rules remained active. It is not included as a raw-byte-pinned source artifact.",
+  "carrierGitState": "unchanged"
+}

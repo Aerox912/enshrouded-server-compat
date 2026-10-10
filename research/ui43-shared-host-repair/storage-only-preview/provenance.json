@@ -1,0 +1,12 @@
+{
+  "taskId": "SOURCE175",
+  "acceptedInputTask": "APP167",
+  "acceptedInputRoot": "E:\\Build\\enshrouded-flight-menu-20261010\\app167-source-bundle",
+  "acceptedInputManifestSha256": "99cad9134ddf62891aa7241c7f887ade708f76cc25e73868956eb4cc28936d7d",
+  "originalAcceptedPatchSha256": "f2b48480b25752aa5628d2ccbbd291ae74db956e566d1c8b49b7d9b530cb9c3f",
+  "packagePurpose": "Source-only carrier for APP167 Storage-only preview installer mode",
+  "sourceBasis": "Bundled baseline-to-candidate fixture; not an actual native mod source tree or a live install path.",
+  "liveInstallPerformed": false,
+  "gameOrManagerStateModified": false,
+  "gitDeliveryPerformed": false
+}

@@ -1,0 +1,60 @@
+{
+  "taskId": "APP167",
+  "purpose": "Storage-only attach/remove mode for verified manager-owned Creative/host pair",
+  "sourceTarget": "research/ui43-shared-host-repair/preview-removal-retry/candidate/magic-storage",
+  "liveInstallPerformed": false,
+  "gameOrManagerStateModified": false,
+  "files": [
+    {
+      "path": "Install-UiPreview.ps1",
+      "baselineSha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "candidateSha256": "26b4f0b12166da6b703dc55c95546298255837a8cea14da1fc00832a36b8baf8",
+      "baselinePresent": true
+    },
+    {
+      "path": "installer_storage_only_tests.ps1",
+      "baselineSha256": null,
+      "candidateSha256": "723dc51d1c124f20bd4744500a45c8a4f22243dcb22fbdff7d2c6b4a972a27fd",
+      "baselinePresent": false
+    },
+    {
+      "path": "installer_tests.ps1",
+      "baselineSha256": "5ec44f66e87d757167659d5d278211d5fd0b2e396d86ecc362cd5a26535d673e",
+      "candidateSha256": "07ae9757984f46bd746071544a80dbe9f5f878abe2ae980dda1534a01e251128",
+      "baselinePresent": true
+    },
+    {
+      "path": "installer_remove_rollback_tests.ps1",
+      "baselineSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "candidateSha256": "a0afea6b2f1d3cd5c0c23e96bd555153126d71da7c6b85673a7eb6cd4d50a7e9",
+      "baselinePresent": true
+    }
+  ],
+  "pins": {
+    "storageDll": "403d7b85ab595888da4840e3fb5f07451fb98c0bf8883864a218c01c778ffcab",
+    "storageManifest": "16c496b58f799becd074145f174451b8c2cba9e20eeb71190e48d8ce8a325f8f",
+    "creative": "befee002983183009129efb76aff80dcb017f5933ea6da6b05aaa7d652ab6250",
+    "host": "b6d9e4757d4305bd9aba4325ebd31c3c4e2a31ac6931999f327fe3dbd22f6b46"
+  },
+  "validation": [
+    {
+      "name": "storage-only installer tests",
+      "result": "15/15 passed",
+      "evidence": "evidence/storage-only-tests.json"
+    },
+    {
+      "name": "full-preview installer tests",
+      "result": "26 checks passed",
+      "fixture": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-source\\magic-storage\\full-preview-fixtures\\8b16a5419d704981887129dba259824b"
+    },
+    {
+      "name": "full-preview removal rollback tests",
+      "result": "4 fault-injection cases passed",
+      "evidence": "evidence/full-preview-remove-rollback-tests.json"
+    },
+    {
+      "name": "PowerShell syntax",
+      "result": "4/4 scripts parsed cleanly"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "taskId": "SOURCE175",
+  "check": "candidate-basis patch apply",
+  "result": "PASS",
+  "autocrlfConfig": true,
+  "targetPath": "research/ui43-shared-host-repair/storage-only-preview/candidate/magic-storage",
+  "applyCheck": "PASS",
+  "candidateHashChecks": [
+    {
+      "path": "candidate/magic-storage/Install-UiPreview.ps1",
+      "expectedSha256": "26b4f0b12166da6b703dc55c95546298255837a8cea14da1fc00832a36b8baf8",
+      "actualSha256": "26b4f0b12166da6b703dc55c95546298255837a8cea14da1fc00832a36b8baf8",
+      "match": true
+    },
+    {
+      "path": "candidate/magic-storage/installer_storage_only_tests.ps1",
+      "expectedSha256": "723dc51d1c124f20bd4744500a45c8a4f22243dcb22fbdff7d2c6b4a972a27fd",
+      "actualSha256": "723dc51d1c124f20bd4744500a45c8a4f22243dcb22fbdff7d2c6b4a972a27fd",
+      "match": true
+    },
+    {
+      "path": "candidate/magic-storage/installer_tests.ps1",
+      "expectedSha256": "07ae9757984f46bd746071544a80dbe9f5f878abe2ae980dda1534a01e251128",
+      "actualSha256": "07ae9757984f46bd746071544a80dbe9f5f878abe2ae980dda1534a01e251128",
+      "match": true
+    },
+    {
+      "path": "candidate/magic-storage/installer_remove_rollback_tests.ps1",
+      "expectedSha256": "a0afea6b2f1d3cd5c0c23e96bd555153126d71da7c6b85673a7eb6cd4d50a7e9",
+      "actualSha256": "a0afea6b2f1d3cd5c0c23e96bd555153126d71da7c6b85673a7eb6cd4d50a7e9",
+      "match": true
+    }
+  ],
+  "note": "Applied in an isolated scratch repository seeded from the bundled baseline; no carrier index was changed."
+}

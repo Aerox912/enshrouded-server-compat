@@ -1,0 +1,7 @@
+/APP167.patch -text
+/README.md -text
+/manifest.json -text
+/provenance.json -text
+/baseline/magic-storage/*.ps1 -text
+/candidate/magic-storage/*.ps1 -text
+/evidence/*.json -text

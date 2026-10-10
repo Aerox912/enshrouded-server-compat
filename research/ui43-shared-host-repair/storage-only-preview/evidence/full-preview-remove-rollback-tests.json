@@ -1,0 +1,35 @@
+{
+  "taskId": "INSTALL157",
+  "result": "PASS",
+  "fixture": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-source\\magic-storage\\full-preview-fixtures\\rollback-source-9ba9841d8e9b44fdb2ce696c362c6951",
+  "runRoot": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-source\\magic-storage\\full-preview-remove-runs\\20261010T053437339Z-f8c6976b265a469f82d172a4ffa6c7ac",
+  "cases": [
+    {
+      "name": "first-move",
+      "injectedCall": 1,
+      "rollbackExactTree": true,
+      "successfulRetry": true
+    },
+    {
+      "name": "mid-transaction",
+      "injectedCall": 4,
+      "rollbackExactTree": true,
+      "successfulRetry": true
+    },
+    {
+      "name": "config-replace",
+      "mechanism": "deny FILE_SHARE_DELETE",
+      "rollbackExactTree": true,
+      "successfulRetry": true
+    },
+    {
+      "name": "rollback-failure",
+      "injectedCalls": [
+        4,
+        5
+      ],
+      "bothErrorsReported": true,
+      "recoveryDataRetained": true
+    }
+  ]
+}

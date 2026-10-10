@@ -11,4 +11,4 @@ Patch paths are relative to the native source root. Check/apply from that direct
 
 The adjacent .gitattributes uses exact -text rules for byte-hashed source, patch, evidence, and provenance files so autocrlf=true cannot rewrite their stored bytes. Scratch verification applies the same patch with autocrlf=true and an output .gitattributes that marks the two output PowerShell paths -text.
 
-Run the focused test from this directory with the supplied fixture path and an isolated output directory. Independent VERIFY155 reacceptance remains pending. No live game install/removal is part of this bundle.
+Run the focused test from this directory with the supplied fixture path and an isolated output directory. Independent VERIFY155 reacceptance passed. No live game install/removal is part of this bundle.

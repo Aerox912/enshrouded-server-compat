@@ -1,0 +1,10 @@
+{
+  "taskId": "APP167",
+  "suite": "installer_tests.ps1",
+  "result": "PASS",
+  "checks": 26,
+  "fixture": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-source\\magic-storage\\full-preview-fixtures\\8b16a5419d704981887129dba259824b",
+  "installerBuild": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-build",
+  "creativeBuild": "E:\\Build\\enshrouded-flight-menu-20261010\\package-build",
+  "liveGameTouched": false
+}
