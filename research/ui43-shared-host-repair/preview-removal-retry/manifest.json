@@ -1,0 +1,73 @@
+{
+  "taskId": "SOURCE164",
+  "sourceTask": "INSTALL157",
+  "files": [
+    {
+      "path": "baseline/magic-storage/Install-UiPreview.ps1",
+      "sha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+      "change": "accepted baseline"
+    },
+    {
+      "path": "candidate/magic-storage/Install-UiPreview.ps1",
+      "sha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "change": "rollback repair"
+    },
+    {
+      "path": "candidate/magic-storage/installer_remove_rollback_tests.ps1",
+      "sha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "change": "focused fixture tests"
+    },
+    {
+      "path": "INSTALL157-remove-rollback.patch",
+      "sha256": "ef4eaf6e5549fc704766b5f110f6a368ba02b46ffc2dcd6c8d02ac575dadb1fb",
+      "change": "unified source patch"
+    },
+    {
+      "path": "evidence/install157-focused-test-results.json",
+      "sha256": "43bf35f2f4f9599a6839cf3622a54983ebb82cfdbf5f14910bb28fd87cb8d947",
+      "change": "test result summary"
+    },
+    {
+      "path": "provenance/INSTALL157-manifest.json",
+      "sha256": "930a9aa9d215f2e75edc9b615ff7e930b76dfc380a6ecdecef9ac6eed159377e",
+      "change": "original source evidence"
+    },
+    {
+      "path": "provenance.json",
+      "sha256": "41e1f9129832780b523fc1ba720f9f17bc0f43ca08104aaf0d92c7020953db65",
+      "change": "carrier provenance"
+    },
+    {
+      "path": "evidence/patch-roundtrip-results.json",
+      "sha256": "632d425198eafd0e1183d20ea8d11f38d93ff0f5c87640363ac174655be24c76",
+      "change": "core.autocrlf=true scratch patch roundtrip evidence"
+    }
+  ],
+  "attributes": {
+    "path": ".gitattributes",
+    "sha256": "b9f7b146dabc4bbc41ce888fe0f76291790794eda37af2f2975dee7b7b38e3f9",
+    "policy": "Exact-path -text entries preserve byte-pinned artifacts under core.autocrlf=true."
+  },
+  "test": {
+    "result": "PASS",
+    "cases": 4,
+    "script": "candidate/magic-storage/installer_remove_rollback_tests.ps1",
+    "evidence": "evidence/install157-focused-test-results.json"
+  },
+  "patchRoundtrip": {
+    "result": "PASS",
+    "gitCoreAutocrlf": "true",
+    "baselineSha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+    "patchSha256": "ef4eaf6e5549fc704766b5f110f6a368ba02b46ffc2dcd6c8d02ac575dadb1fb",
+    "reconstructedInstallerSha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+    "reconstructedTestsSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+    "evidence": "evidence/patch-roundtrip-results.json",
+    "note": "Both outputs matched candidate hashes; scratch subtree removed."
+  },
+  "boundaries": [
+    "No staging or commit.",
+    "No canonical source, game, manager, or live receipt changes.",
+    "No full post-delta source tree hash claim.",
+    "Independent VERIFY155 reacceptance pending."
+  ]
+}

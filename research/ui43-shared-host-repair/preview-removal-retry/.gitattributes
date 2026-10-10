@@ -1,0 +1,9 @@
+/baseline/magic-storage/Install-UiPreview.ps1 -text
+/candidate/magic-storage/Install-UiPreview.ps1 -text
+/candidate/magic-storage/installer_remove_rollback_tests.ps1 -text
+/INSTALL157-remove-rollback.patch -text
+/evidence/install157-focused-test-results.json -text
+/provenance/INSTALL157-manifest.json -text
+/provenance.json -text
+/manifest.json -text
+/evidence/patch-roundtrip-results.json -text

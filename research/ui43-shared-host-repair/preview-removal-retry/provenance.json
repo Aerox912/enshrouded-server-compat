@@ -1,0 +1,27 @@
+{
+  "carrierTask": "SOURCE164",
+  "sourceTask": "INSTALL157",
+  "acceptedBaseline": {
+    "path": "E:\\Build\\creative-ui43-shared-host-20261010\\native\\magic-storage\\Install-UiPreview.ps1",
+    "sha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4"
+  },
+  "sourceBundle": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-source-patch",
+  "sourceBundleManifestSha256": "930a9aa9d215f2e75edc9b615ff7e930b76dfc380a6ecdecef9ac6eed159377e",
+  "copiedInstall157Manifest": {
+    "path": "provenance/INSTALL157-manifest.json",
+    "sha256": "930a9aa9d215f2e75edc9b615ff7e930b76dfc380a6ecdecef9ac6eed159377e"
+  },
+  "copiedTestResult": {
+    "path": "evidence/install157-focused-test-results.json",
+    "sha256": "43bf35f2f4f9599a6839cf3622a54983ebb82cfdbf5f14910bb28fd87cb8d947"
+  },
+  "priorInventoryNote": "BUILD151 120-file source inventory predates INSTALL157; this bundle makes no post-delta full-tree hash claim.",
+  "excluded": [
+    "raw build logs",
+    "game binaries",
+    "manager payloads",
+    "secrets",
+    "live receipts"
+  ],
+  "verificationBoundary": "INSTALL157 fixture self-check passed; independent VERIFY155 reacceptance remains pending."
+}

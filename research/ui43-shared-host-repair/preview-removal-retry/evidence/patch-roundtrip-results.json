@@ -1,0 +1,41 @@
+{
+  "taskId": "SOURCE164",
+  "result": "PASS",
+  "gitSettings": {
+    "coreAutocrlf": "true"
+  },
+  "command": [
+    "git apply --directory=<carrier>/_roundtrip-source164 --check <INSTALL157-remove-rollback.patch>",
+    "git apply --directory=<carrier>/_roundtrip-source164 <INSTALL157-remove-rollback.patch>"
+  ],
+  "scratchRelativePath": "_roundtrip-source164 (removed after verification)",
+  "baseline": {
+    "sha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+    "reconstructedSha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+    "path": "baseline/magic-storage/Install-UiPreview.ps1"
+  },
+  "patch": {
+    "path": "INSTALL157-remove-rollback.patch",
+    "sha256": "ef4eaf6e5549fc704766b5f110f6a368ba02b46ffc2dcd6c8d02ac575dadb1fb"
+  },
+  "outputs": [
+    {
+      "expectedSha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "actualSha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "match": true,
+      "path": "magic-storage/Install-UiPreview.ps1"
+    },
+    {
+      "expectedSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "actualSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "match": true,
+      "path": "magic-storage/installer_remove_rollback_tests.ps1"
+    }
+  ],
+  "outputAttributes": [
+    "/magic-storage/Install-UiPreview.ps1 -text",
+    "/magic-storage/installer_remove_rollback_tests.ps1 -text"
+  ],
+  "checkAttrResult": "text: unset for both reconstructed outputs",
+  "scope": "Patch-byte roundtrip only; no build, gameplay test, live install, or full-tree hash claim."
+}

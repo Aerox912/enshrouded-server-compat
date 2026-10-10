@@ -1,0 +1,35 @@
+{
+  "taskId": "INSTALL157",
+  "result": "PASS",
+  "fixture": "E:\\Build\\enshrouded-flight-menu-20261010\\verify155-remove-failure-fixture",
+  "runRoot": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-test-runs\\20261010T045603621Z-f537201474fd489abc8d9196962033ca",
+  "cases": [
+    {
+      "name": "first-move",
+      "injectedCall": 1,
+      "rollbackExactTree": true,
+      "successfulRetry": true
+    },
+    {
+      "name": "mid-transaction",
+      "injectedCall": 4,
+      "rollbackExactTree": true,
+      "successfulRetry": true
+    },
+    {
+      "name": "config-replace",
+      "mechanism": "deny FILE_SHARE_DELETE",
+      "rollbackExactTree": true,
+      "successfulRetry": true
+    },
+    {
+      "name": "rollback-failure",
+      "injectedCalls": [
+        4,
+        5
+      ],
+      "bothErrorsReported": true,
+      "recoveryDataRetained": true
+    }
+  ]
+}

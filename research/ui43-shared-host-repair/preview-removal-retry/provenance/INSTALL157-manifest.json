@@ -1,0 +1,84 @@
+{
+  "taskId": "INSTALL157",
+  "purpose": "Source-only repair of Remove rollback for the isolated preview installer.",
+  "baseline": {
+    "acceptedSourcePath": "E:\\Build\\creative-ui43-shared-host-20261010\\native\\magic-storage\\Install-UiPreview.ps1",
+    "bundledBaselinePath": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-source-patch\\baseline\\magic-storage\\Install-UiPreview.ps1",
+    "sha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+    "bytes": 15048,
+    "acceptedSourcePathSha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+    "matchesAcceptedSource": true
+  },
+  "priorStorageInventory": {
+    "path": "E:\\Build\\enshrouded-flight-menu-20261010\\storage-source-hash-manifest.final.json",
+    "sha256": "4b505e245241830cd86c8af7e52085c3b3bb1386f678385b5edd041f2857c8fe",
+    "fileCount": 120,
+    "note": "BUILD151 source inventory predates this installer-only delta; it is provenance, not a full-tree validation claim for the post-INSTALL157 source copy."
+  },
+  "changes": [
+    {
+      "path": "magic-storage/Install-UiPreview.ps1",
+      "change": "modified",
+      "baselineSha256": "9108cbe132c82a82ffe40d77e2779acf5112d882451efaec060b9d12a9a597b4",
+      "candidateSha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "bytes": 18308
+    },
+    {
+      "path": "magic-storage/installer_remove_rollback_tests.ps1",
+      "change": "added",
+      "candidateSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "bytes": 12722
+    }
+  ],
+  "patch": {
+    "path": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-source-patch\\INSTALL157-remove-rollback.patch",
+    "sha256": "ef4eaf6e5549fc704766b5f110f6a368ba02b46ffc2dcd6c8d02ac575dadb1fb",
+    "bytes": 18249,
+    "applyFrom": "native/",
+    "exactApplyCommand": "git -c core.autocrlf=false apply --check <patch>; git -c core.autocrlf=false apply <patch>",
+    "note": "autocrlf=true also applies but converts both files to CRLF, so resulting byte hashes differ."
+  },
+  "validation": {
+    "powershellVersion": "7.6.5",
+    "parser": "PASS for installer and test script; PASS for reconstructed installer",
+    "focusedTest": {
+      "result": "PASS",
+      "testPath": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-source-patch\\candidate\\magic-storage\\installer_remove_rollback_tests.ps1",
+      "testSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "fixturePath": "E:\\Build\\enshrouded-flight-menu-20261010\\verify155-remove-failure-fixture",
+      "fixtureMutation": "None; each test case used a clone and removed only the clone empty marker.",
+      "resultPath": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-source-patch\\evidence\\install157-focused-test-results.json",
+      "resultSha256": "43bf35f2f4f9599a6839cf3622a54983ebb82cfdbf5f14910bb28fd87cb8d947",
+      "cases": [
+        "first Move-Item failure: exact cloned tree/config restored; retry succeeded",
+        "mid-transaction failure after preview/original moves: exact cloned tree/config restored; retry succeeded",
+        "config Replace failure under a deny-delete file handle: exact tree/config restored; retry succeeded",
+        "rollback Move-Item failure: initiating and rollback failures both reported; recovery data retained"
+      ]
+    },
+    "patchRoundtrip": {
+      "result": "PASS",
+      "scratchPath": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-patch-check-final-54a96f8c75974f4daa1a3ae1d37f7223",
+      "autocrlf": "false",
+      "installerSha256": "7e1e4ddf4c7c2f79456248e06bc69a3fbc5ed38b047c846f5aae2c0949b70afb",
+      "testSha256": "5587c61fb7167c13df0c17dd27857f1a8e17cca27d2ab85468527358eac2762a",
+      "exactCandidateHashesMatched": true
+    },
+    "autocrlfTrueObservation": {
+      "scratchPath": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-patch-check-crlf-87894264afb34048a39e4be685faef6c",
+      "installerSha256": "19d309c58bedf3ae129f5dc96033b7c45062742a4480c94d163b37e5116bce92",
+      "testSha256": "b766a963677c3603379d487644212600913803616c26c4958fb0692c60878406",
+      "result": "Text applied; CRLF byte hashes differ from LF candidate."
+    }
+  },
+  "nonActions": [
+    "No live Install/Remove invocation and no live game, manager, config, receipt, or DLL write.",
+    "The test harness changed paths only in disposable receipt clones; the supplied fixture remained read-only.",
+    "No canonical source, Git index/refs, or DLL build changes."
+  ],
+  "operationalGate": "Per current parent instruction, do not install the preview yet. RELEASE158 owns the manager payload; the live order is remove the current verified preview, apply public 4.4.9 manager payload, then install the matching new preview after verification and the parent exact transaction package.",
+  "readme": {
+    "path": "E:\\Build\\enshrouded-flight-menu-20261010\\install157-source-patch\\README.md",
+    "sha256": "b1b458dc6316d9dc4dd37feee9cae0a3e85dbb349d03d44b1af8d8e4c948e9ee"
+  }
+}
