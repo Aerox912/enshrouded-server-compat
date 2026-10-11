@@ -12,6 +12,7 @@ struct Toggle {
     }
 };
 Host current_host();
+Host current_connection(); // Retired only by peer removal/reset/replacement.
 bool allowed_host(std::uint64_t steam);
 std::uint64_t random_number();
 bool prepare();

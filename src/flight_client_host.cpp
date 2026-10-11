@@ -49,6 +49,9 @@ bool send_hook(void* context,std::uint16_t handle,const void* data,std::uint32_t
 }
 std::uintptr_t remove_hook(void* context,std::uint16_t handle){forget(context,handle);return original_remove(context,handle);}
 std::uintptr_t reset_hook(void* context){forget(context);return original_reset(context);}
+Host current_connection() {
+    std::lock_guard lock(host_guard);return host;
+}
 Host current_host() {
     std::lock_guard lock(host_guard);
     const auto now=GetTickCount64();

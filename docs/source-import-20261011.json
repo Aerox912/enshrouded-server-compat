@@ -1,0 +1,444 @@
+{
+  "schema": 1,
+  "source": {
+    "source": "native-input-continuation-20261011",
+    "source_manifest": "7d2fec35a46dc4712c4d963a4479209fc74783628f01541ea72b5c95ff397671",
+    "dependency_manifest": "ef86298da4a3472a024d696a19f396a40a916c010d8b3e74b7fe0935211fb466",
+    "runtime_connection_source": "Aerox912/enshrouded-magic-storage@7b5382e88a092527b706d1d16570ace92a057bc1",
+    "live_changes": false
+  },
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "6cd3519da23a487e31068afee5ef326f0f0fb919bef4e5061179df8d3f0d8b94"
+    },
+    {
+      "path": "native_time/include/callback_writer.hpp",
+      "sha256": "f368a555cfa1e659a3e90ed807d2acd0ff23f22ab1fccf2f05f3cfde30b85689"
+    },
+    {
+      "path": "native_time/include/read_only_observer.hpp",
+      "sha256": "748bcc27cb15eb765b8eb615d9486896b478f19412055fa00083d88a9692f98e"
+    },
+    {
+      "path": "native_time/include/read_only_server_observer.hpp",
+      "sha256": "bb0c5b2e7e19e0d8cc32daad72122ba3d53bdec3c3177f3b0dd960e5f59168d6"
+    },
+    {
+      "path": "native_time/include/time_control.hpp",
+      "sha256": "5d37cc023203d497feca58985a567a6d3dd1e8234b862ea127afb94240a9494a"
+    },
+    {
+      "path": "native_time/research/read-only-observer-time5-20261009.md",
+      "sha256": "2ef5f036b4258bd27635f3575b1ce883e14f629be6683572bd038dba69aaaf1e"
+    },
+    {
+      "path": "native_time/research/time-control-abi-20261009.md",
+      "sha256": "e32d389b69f6fc9e876e0bc505ff59cf3da70d5bc98f1568cb956a706b1f7624"
+    },
+    {
+      "path": "native_time/src/callback_writer.cpp",
+      "sha256": "8bdfcb78db0f22a962f2ecba9b053a41b07be22deec3f8ec4d61f39f15fe21f4"
+    },
+    {
+      "path": "native_time/src/read_only_observer.cpp",
+      "sha256": "6afc29447828d01309bc73f304b6103b482c3426ba751947218624c98e6eac9f"
+    },
+    {
+      "path": "native_time/src/read_only_server_observer.cpp",
+      "sha256": "c3dfc058f329180297bd739e16fafb0b14080e2ecdfda245a394d963158e8b47"
+    },
+    {
+      "path": "native_time/src/time_control.cpp",
+      "sha256": "253ee686ba569643282c442e57e4a4f28342345af766ab59e6de8d79c1eaea44"
+    },
+    {
+      "path": "native_time/tests/callback_writer_tests.cpp",
+      "sha256": "2b8874fecf3170cc8767c3f510e0c620ca27ac8ae369097e4ea9ddebb4dcb953"
+    },
+    {
+      "path": "native_time/tests/read_only_observer_tests.cpp",
+      "sha256": "910bb6fc6710d0f93d243d79245bab326afcbd2a1a90c80fc2f0feab51f47644"
+    },
+    {
+      "path": "native_time/tests/read_only_server_observer_tests.cpp",
+      "sha256": "cd33371b15180c4c623661f7b420f9d60905b7343323d3fe3a9897c069ec71fb"
+    },
+    {
+      "path": "native_time/tests/time_control_tests.cpp",
+      "sha256": "dd29a62ea4d04922c1b0575617fd8ab027ee06bd79b7ab98240be08d4db8dd0d"
+    },
+    {
+      "path": "native_time/tools/verify_time_probe.py",
+      "sha256": "bc50bf1e5bed9a813f7aad765d6d94b4a5532daf0482c392b1b7189dce376634"
+    },
+    {
+      "path": "src/adapter.cpp",
+      "sha256": "dc37a89667d3a18f00bf55f79d4ee754b9e2ae84f880c15714cf220143d32e68"
+    },
+    {
+      "path": "src/adapter.hpp",
+      "sha256": "01ff56e4e32014f88826fc3ef02ebd31788f84932ef2120294e84e8c8ca0c54f"
+    },
+    {
+      "path": "src/callback_gate.hpp",
+      "sha256": "a8fa77f69d02e78447d3c0aa11a5168f5224c7c8ce60136398b914023b6112cc"
+    },
+    {
+      "path": "src/creative_client_life.hpp",
+      "sha256": "796b989cae6b30eef98b0fd8363d6f11245aec3a2a5b21d67786387d5cfdbff7"
+    },
+    {
+      "path": "src/creative_flight_local.hpp",
+      "sha256": "a0cff8910489f1989edaf6750d85dfb31c3feb60284d3732c7d9a3c7caf15d5a"
+    },
+    {
+      "path": "src/creative_flight_movement.hpp",
+      "sha256": "f173314a9ea2f8c8ff00666bd861af5f37da3e04febfea344b8ccc3c920914ae"
+    },
+    {
+      "path": "src/creative_flight_native_movement.hpp",
+      "sha256": "86ad64a67ac9601853e847737be6a411e97fbba65df508e8b264731229f29b0c"
+    },
+    {
+      "path": "src/creative_flight_probe.hpp",
+      "sha256": "895fa76b0eeb016e23e9bc87d2e7b4bb6bb70d42533217878a0d433c61119aa4"
+    },
+    {
+      "path": "src/dbghelp.def",
+      "sha256": "94b109aa74d6dfe1a9e4da5f956db59a4de0e42a2e139bf4a97ec703bd5a69b6"
+    },
+    {
+      "path": "src/extras.cpp",
+      "sha256": "74d49d4d91fb0ee448c33232ea14f142a8f5ba353564559d3f17789a572570d0"
+    },
+    {
+      "path": "src/flight_client.cpp",
+      "sha256": "9c146411b3d59eda0e120898f2190a135912532b2b68617de6de4c9e869708b1"
+    },
+    {
+      "path": "src/flight_client_host.cpp",
+      "sha256": "c622fcdf7d6e1ee7399660afa1608b0f06d585bfdddf82d15a10725b749911af"
+    },
+    {
+      "path": "src/flight_client_host.hpp",
+      "sha256": "e2c1a3f7c065f2fe0f69f0b5141778aa7fd7143d38aa8f5cbb88c9615dda32dc"
+    },
+    {
+      "path": "src/flight_hook.cpp",
+      "sha256": "a5bbc41eb91eafb5276703500857279b9468ea08e23b474b38e2c28a8a2c85db"
+    },
+    {
+      "path": "src/flight_hook.hpp",
+      "sha256": "c718e8b693160e53637b8e4dadb37be83e9120737d660012649069d8659efe4b"
+    },
+    {
+      "path": "src/flight_identity.cpp",
+      "sha256": "e54bd3cdc5f1b36a60ccc1658aa3adfd2752d37416a38da5d45922a0950c1154"
+    },
+    {
+      "path": "src/flight_identity.hpp",
+      "sha256": "f58b94dcd5bc8191f27a04e504540310a0e3c51fab2882b1eda3b382c3875fa0"
+    },
+    {
+      "path": "src/flight_native.cpp",
+      "sha256": "14e1679eb96ba8e60b0ec0469da02febfb8255c74638c7d2cef8b61fcc6c17ad"
+    },
+    {
+      "path": "src/flight_native.hpp",
+      "sha256": "0e2142217df2c9039569188ad5b1765f75a3a26019bebe49c983daf89631b408"
+    },
+    {
+      "path": "src/flight_pitch.asm",
+      "sha256": "ed70c0376d82cfb4d327334c7e0f05e76190eee319fe878b07d30db9517035b2"
+    },
+    {
+      "path": "src/flight_server_dev.def",
+      "sha256": "11036c4ec786045ff090500f5fdbd5cf21c6569320dcd1a3067caab2e7301787"
+    },
+    {
+      "path": "src/flight_session.cpp",
+      "sha256": "e45df8b4baec19e3aee1448d01289e42638b495a8863ff48d38bdc7afc2c4fe6"
+    },
+    {
+      "path": "src/flight_session.hpp",
+      "sha256": "4df2908742d8b193f5b9e99be6447c8bda69e59c618e6687d52fa5c1d6fac954"
+    },
+    {
+      "path": "src/flight_transport.hpp",
+      "sha256": "28aa194aa66e9f528a53678368a92397f37cc051a01f2ff9c258a2f169ddd490"
+    },
+    {
+      "path": "src/flight_worker.hpp",
+      "sha256": "063cfa287229e22cfa4aac8e3bceb28e451a416aa63c5e048d904264d84a4f5f"
+    },
+    {
+      "path": "src/native_building_cost.cpp",
+      "sha256": "d9b5f3648f22991dd8594c8ba5cfac630a30dc87c63bd3cb0c9c2c4afc20d0d2"
+    },
+    {
+      "path": "src/native_building_cost.hpp",
+      "sha256": "18ca4ed0d2b64435ea20b2ec86b959fc8f5c9d498783ac64cc2df70c131f5d58"
+    },
+    {
+      "path": "src/native_building_cost_runtime.cpp",
+      "sha256": "b80ff2a297a25cc1860239faf5896d3adb83b845d7674fa543f2a5453bfe3cf9"
+    },
+    {
+      "path": "src/native_building_cost_runtime.hpp",
+      "sha256": "7ead4b4f06447354566b1680e4ea9fccc641325590f7c30eb65fbfaa9a6fc8ad"
+    },
+    {
+      "path": "src/native_consumable_cost.cpp",
+      "sha256": "cfc98fa7d21b50651215b209c391a578ae0801ac1eb0421fa216cd1e2717fe57"
+    },
+    {
+      "path": "src/native_consumable_cost.hpp",
+      "sha256": "fd7064e17f7b16bc9c170a045403e3420d870e04ae5a538fc3723fe3437c4a42"
+    },
+    {
+      "path": "src/native_cost_hook_lifecycle.hpp",
+      "sha256": "1bbc7fec14e984e597bf029c4bd059eba23337a2004db321671ffda5176ef4be"
+    },
+    {
+      "path": "src/native_effects.cpp",
+      "sha256": "c605c60730d8e255ff4c368ef5ef772e70a58b94f110cf3c816da42b94c63664"
+    },
+    {
+      "path": "src/native_effects.hpp",
+      "sha256": "f131773bdd216aa7b2a28808a79716c47d5c7ef4ed35edb4cb179f58acd4004d"
+    },
+    {
+      "path": "src/native_effects_runtime.cpp",
+      "sha256": "16fe55d028178f538893f068ce5b20959fa3e9e1c3b75dbbea2f2b224da4c360"
+    },
+    {
+      "path": "src/native_effects_runtime.hpp",
+      "sha256": "1eda0b62eae025308818c5a3670d3d62e2967ce23ad8b6d6c082ef7b313a0737"
+    },
+    {
+      "path": "src/no_cost.cpp",
+      "sha256": "ed406282df725a212953ba007cf1b8173ec2c8705ce308d54d32e0997c9e236c"
+    },
+    {
+      "path": "src/no_cost.hpp",
+      "sha256": "bafa075a6297389a9786b1dfd8251f2ec499a201b3a743229b89105d0eb2d6ff"
+    },
+    {
+      "path": "src/pickup_delay.asm",
+      "sha256": "295b7e829c073dae2913cda9ca4a07687ce0ba082146a9ac4c30b71ad6a9ed35"
+    },
+    {
+      "path": "src/proxy.cpp",
+      "sha256": "244953fc46928cf09044b1ca9eb3a39afbb936cf0c6749d2735824ec8f7a62d1"
+    },
+    {
+      "path": "src/vein_radius.cpp",
+      "sha256": "fc2e1d0686123f89a0b5c075badfe41a831f214a82e1426b5f48f393e5ab370b"
+    },
+    {
+      "path": "src/vein_radius.hpp",
+      "sha256": "f48beb1bd78eed09f98ee830d795ad267e08e00c6abd815e17326fe374bd45e9"
+    },
+    {
+      "path": "tests/adapter_tests.cpp",
+      "sha256": "9a6ca976a23e2499abcb797ac3e26315432365377c8e1090c628c838fe801ba5"
+    },
+    {
+      "path": "tests/callback_gate_tests.cpp",
+      "sha256": "8a643c48897a597ab3dcadee94676ac959a3f6af403d549e4ee2b5e978ba7ea9"
+    },
+    {
+      "path": "tests/cloud_checks.cpp",
+      "sha256": "1274904bfddae6497a403a9898650c44a88e2779dda35e77a9bc98f544fa8cf9"
+    },
+    {
+      "path": "tests/creative_client_life_tests.cpp",
+      "sha256": "0dccb94e3ee76f488dc103ac830142722792bcadf86cb6e39188e917e3730086"
+    },
+    {
+      "path": "tests/creative_flight_local_tests.cpp",
+      "sha256": "cf4161f58ede2e7bcbf5b66eba87fe0481ae6e97b13e523366398401b7a293b5"
+    },
+    {
+      "path": "tests/creative_flight_movement_tests.cpp",
+      "sha256": "119d7a6d25c6f3fb9218d16cf26480f44cd3c7a7ea52e3fb0912b5d76a8c6d0f"
+    },
+    {
+      "path": "tests/creative_flight_native_movement_tests.cpp",
+      "sha256": "898c9fba545b7d622d691f2d9627c904857477cf8dca2a0ea627fc8d7555db10"
+    },
+    {
+      "path": "tests/creative_flight_probe_tests.cpp",
+      "sha256": "ab5028e82ff8669c0194ae9ec0d4fa25bf39eb6a6643cc2404f20c104ad105a6"
+    },
+    {
+      "path": "tests/extras_probe.asm",
+      "sha256": "580b508236f8148d01ad5270323bfb7aaad457de3ceb328303e25bf0bed50b93"
+    },
+    {
+      "path": "tests/extras_tests.cpp",
+      "sha256": "cda3a65d82214682f0690237e190568486caf4c3a7544e8e247da3084fe6aaa8"
+    },
+    {
+      "path": "tests/flight_identity_tests.cpp",
+      "sha256": "df5e44b56a25f50ed21235b1a3056101b212e65e8aa54e9659d71fc288ac36a0"
+    },
+    {
+      "path": "tests/flight_probe.asm",
+      "sha256": "b496d8748dbe86338cf6e9f31724930d53af67a5e9e522e864b37d47d3c75700"
+    },
+    {
+      "path": "tests/flight_session_tests.cpp",
+      "sha256": "93bd6448959884200af41334ee541cbcdb292335714b3d2ef506ffb5d62172e0"
+    },
+    {
+      "path": "tests/flight_tests.cpp",
+      "sha256": "c9957cc21ffc66f0885d8388fc501e9b51373a76183f817625ca8a6a857052be"
+    },
+    {
+      "path": "tests/flight_worker_tests.cpp",
+      "sha256": "c116a2ab0dcde5600f11abd83a67a8054a7f8c206b13c7b08fb9324e4f235eb3"
+    },
+    {
+      "path": "tests/native_building_cost_tests.cpp",
+      "sha256": "a804d5b5f21dcf64a063057fb1d1ba38cd2ef0e8c95b39f5515650088aede184"
+    },
+    {
+      "path": "tests/native_consumable_cost_tests.cpp",
+      "sha256": "603e44423b0adcabf140dec5a22a951caae89d6c984db3419fd097ac8f063a97"
+    },
+    {
+      "path": "tests/native_cost_hook_lifecycle_tests.cpp",
+      "sha256": "ef6fdcb7637782684ab8f21319a5db409f7d7901e5e345612fedaf6b35ceaa48"
+    },
+    {
+      "path": "tests/native_cost_tests.cpp",
+      "sha256": "3b0ff37969cbd79f53b8cbf48d0d1c1bd536654f4172cdc67a8e70da799225d2"
+    },
+    {
+      "path": "tests/Test-GemForgePackaging.ps1",
+      "sha256": "19dd8c9903162f3b93f4147449e003113cec1f302035e0dc905db44b3f840618"
+    },
+    {
+      "path": "tests/Test-ServerVerification.ps1",
+      "sha256": "ba2645bbae5167b4cb1f874c289d0b77cf5e340296a184109f2f6c1c056990fd"
+    },
+    {
+      "path": "tests/test_creative_client_life.py",
+      "sha256": "ad4803ae16876db4b93aa031bc20ed90cbb755ac3c746e56e824f5124ed86417"
+    },
+    {
+      "path": "tests/test_creative_flight_offsets.py",
+      "sha256": "611624beecbbe00a845eb34273b3f45f85be92094de3f0e6bc33c14abbd95574"
+    },
+    {
+      "path": "tests/test_release_prep.py",
+      "sha256": "d19d28e28dea2fe93325a6f785c71f13fa16a81fe07eb20af4a363c92ee1284a"
+    },
+    {
+      "path": "tests/wine/Containerfile",
+      "sha256": "c960f060bdad1edeb775687aedac60744ffe9b00263fd637808a5fa5b5b63ace"
+    },
+    {
+      "path": "tests/wine/run-tests.sh",
+      "sha256": "721fc614622b7f5464210d5fca664e315674ed18ff38342605ddefebcc026c66"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/.editorconfig",
+      "sha256": "b4f2bf03993483823327466bec0b90563ce9baaced65423ab17439761d081c5a"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/.github/workflows/msbuild.yml",
+      "sha256": "b06d397cb587565a7bc2755d84703d758e14d2dc2ada8cc0dbb6e9dfd42c3339"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/.gitignore",
+      "sha256": "8f44d8438c40829db695de58b984dac1c080c8b96e5ca40754ec0f39f952bfac"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/AUTHORS.txt",
+      "sha256": "264e92bdf94bf3af4606e05ea725c761c4b362577a5423cf88241eb9c771e5d3"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/cmake/minhook-config.cmake.in",
+      "sha256": "621a3c479adfa3ec78639b1ffb4e3ef6b72055dfb292615dc50f835c48c74956"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/CMakeLists.txt",
+      "sha256": "238f85ef7d9bc907f763370d8307ebe4d8463da9232decb88c113a2974f7717f"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/dll_resources/MinHook.def",
+      "sha256": "c27f9be30a81ddd55f6ecfa7ae3f6b7f7e2ef761e305a7b7217a09bfd10cd82e"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/dll_resources/MinHook.rc",
+      "sha256": "7bf72847f2c3559d9f4dd45ece24454e9352295d3f5be457bac364cbf1bd7012"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/include/MinHook.h",
+      "sha256": "c3608e584bd9659aebdbb4c8c82585605989193623f240552d35c43311b3d31a"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/LICENSE.txt",
+      "sha256": "4f21f857550d7be854da6ea5f2da4e6775ca4e3fbb535e4f3d961c47d0bf3335"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/README.md",
+      "sha256": "7eb454bd671e16c850a19a8f7b808a4bb99e4c7bf7cd47a356d2a7a51e3028e3"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/buffer.c",
+      "sha256": "69045b390e0f18cf149ea0451ae750f389654eb8d2ed7f2f89c7ff04b7909519"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/buffer.h",
+      "sha256": "175ec5496c020509cf4c7670322b51b5bcd5b63a345bfefc4a19b43675857fa7"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/hde32.c",
+      "sha256": "2d4d7dd73d609028822aaf71ac05112b83fe6cc2ae2d6d71fa051b3fc6acfc43"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/hde32.h",
+      "sha256": "754579fbcec5f64fa229646ceecb241c0b7f31c8a0bb12370e604c316c569315"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/hde64.c",
+      "sha256": "06b588a5140e15f0a55e13ddadc7e3a4648f3223cefab2d5285b796a422bb9f5"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/hde64.h",
+      "sha256": "fd5b39e2865e12b9525ebda8fd9e9658b341ead5932d1bcb412a189f81ca42ca"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/pstdint.h",
+      "sha256": "975488009779ea99c7e04b83a160397d5cd7195cb5bf6ad79180805f756c7d00"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/table32.h",
+      "sha256": "e56f8641bd9133c1b99a1e6555b19eebe7ed663e5ea8de4edbe74ba461161ab4"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hde/table64.h",
+      "sha256": "0b6c69ad498e67907e0c574ab06123aee4ec30c99fa181099ea929a8d820bfc1"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/hook.c",
+      "sha256": "4005d39875ca4b8a957aabba73bd053cba77e50a8b383d48e0cb44c13f26669b"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/trampoline.c",
+      "sha256": "824ed887ec9da606960962af8973205d1f97cd03241e75517eba485280fb6377"
+    },
+    {
+      "path": "vendor/minhook-1.3.4/src/trampoline.h",
+      "sha256": "23681f7768d5dbd23ea14b45ba64e488a337501f23122253c532b05dbed4b85f"
+    },
+    {
+      "path": "version.txt",
+      "sha256": "19bd24b7bb1947301e2c83ce0e1429cfbc6763573bf16dc95cdd6fd6a98b2d1c"
+    }
+  ]
+}
