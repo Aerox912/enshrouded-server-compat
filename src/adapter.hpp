@@ -5,7 +5,7 @@
 namespace xhl {
 using Logger = void (*)(const char*);
 inline constexpr char server_hash[] = "001c1b40ed091d8c1aee583adde3800d7c858ae2c7f4dff54fca2938b2be1637";
-inline constexpr char plugin_hash[] = "6d31c439fda536aad2078683a244e2d05f685e5e3fba2d5467950fff613f5bcc";
+inline constexpr char radius_plugin_hash[] = "4921a0009dbb1f9fcca79be355a4e3fb70481be4b811b1f1eba1c4bcbab936f7";
 inline constexpr char xp_hash[] = "1971830b0457ca97d3dbcdb8f681c45fbebcf23813d77a58add793249490e84c";
 std::wstring module_path(HMODULE module);
 bool verify_file(const std::wstring& path, const char* expected);

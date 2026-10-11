@@ -1,4 +1,5 @@
 #include "adapter.hpp"
+#include "vein_radius.hpp"
 #include <MinHook.h>
 #include <bcrypt.h>
 #include <array>
@@ -104,8 +105,8 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
             return false;
         }
     }
-    if (!verify_file(plugin_path, plugin_hash)) {
-        log("NOT APPLIED: original XHL-Vein-Mining v1.0.33 DLL is missing or changed.");
+    if (!verify_file(plugin_path,radius_plugin_hash)) {
+        log("NOT APPLIED: paired radius-enabled XHL-Vein-Mining DLL is missing or changed.");
         return false;
     }
     HMODULE plugin = LoadLibraryExW(plugin_path.c_str(), nullptr, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
@@ -146,6 +147,10 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
         for (const auto& h : hooks) MH_RemoveHook(base + h.game_rva);
         log("NOT APPLIED: could not pin native plugin lifetime."); return false;
     }
+    if (!vein_radius::prepare(plugin)) {
+        for (const auto& h:hooks) MH_RemoveHook(base+h.game_rva);
+        log("NOT APPLIED: could not prepare the bounded radius extension.");return false;
+    }
     // MinHook suspends other threads and relocates instruction pointers while
     // applying the batch. All original-call pointers are ready before enabling.
     if (MH_ApplyQueued() != MH_OK) {
@@ -155,7 +160,8 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
         return false;
     }
     log("HOOKS INSTALLED: 5 server gameplay/input hooks; client graphics and keyboard disabled.");
-    log("Clients require XHL-Vein-Mining v1.0.33. Multiplayer mining and payout still require gameplay verification.");
+    log("RADIUS READY: per-player 1x/2x/3x requests, 1000ms expiry, bounded 64-cubed regions.");
+    log("Clients require the matching radius extension. Multiplayer mining and payout still require gameplay verification.");
     return true;
 }
 }

@@ -15,7 +15,7 @@ int main() {
   { std::ofstream output(input,std::ios::binary); output<<"abc"; }
   check(xhl::verify_file(input.wstring(),"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"),"verified SHA-256 file accepted");
   check(!xhl::verify_file(input.wstring(),xhl::server_hash),"wrong server content refused");
-  check(!xhl::verify_file((root/L"missing").wstring(),xhl::plugin_hash),"missing dependency refused");
+  check(!xhl::verify_file((root/L"missing").wstring(),xhl::radius_plugin_hash),"missing dependency refused");
   check(!xhl::validate_server(GetModuleHandleW(nullptr)),"unrelated executable rejected without hooks");
   check(!xhl::start(GetModuleHandleW(nullptr),input.wstring(),logger),"adapter fails closed on unsupported executable");
   check(logged,"compatibility rejection logged");
