@@ -1,5 +1,6 @@
 #include "adapter.hpp"
 #include "vein_radius.hpp"
+#include "server_lifecycle.hpp"
 #include <MinHook.h>
 #include <bcrypt.h>
 #include <array>
@@ -128,6 +129,19 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
     if (MH_Initialize() != MH_OK) { log("NOT APPLIED: hook engine initialization failed."); return false; }
     size_t prepared = 0;
     bool queued = true;
+    std::array<void*,std::size(hooks)> previous_owner{},previous_call{};
+    for(size_t i=0;i<std::size(hooks);++i) {
+        previous_owner[i]=*reinterpret_cast<void**>(p+hooks[i].owner_slot);
+        previous_call[i]=*reinterpret_cast<void**>(p+hooks[i].call_slot);
+    }
+    const auto abort_preparation=[&] {
+        // Restore publication before freeing any never-activated trampoline.
+        for(size_t i=0;i<prepared;++i) {
+            *reinterpret_cast<void**>(p+hooks[i].owner_slot)=previous_owner[i];
+            *reinterpret_cast<void**>(p+hooks[i].call_slot)=previous_call[i];
+        }
+        for(size_t i=0;i<prepared;++i) MH_RemoveHook(base+hooks[i].game_rva);
+    };
     for (const auto& h : hooks) {
         void* trampoline = nullptr;
         if (MH_CreateHook(base + h.game_rva, p + h.callback_rva, &trampoline) != MH_OK) break;
@@ -137,30 +151,41 @@ bool start(HMODULE game, const std::wstring& plugin_path, Logger logger) {
         if (MH_QueueEnableHook(base + h.game_rva) != MH_OK) { queued = false; break; }
     }
     if (!queued || prepared != std::size(hooks)) {
-        for (size_t i = 0; i < prepared; ++i) MH_RemoveHook(base + hooks[i].game_rva);
+        abort_preparation();
         log("NOT APPLIED: could not prepare all five server hooks.");
         return false;
     }
     HMODULE pinned;
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_PIN | GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
                            reinterpret_cast<LPCWSTR>(plugin), &pinned)) {
-        for (const auto& h : hooks) MH_RemoveHook(base + h.game_rva);
+        abort_preparation();
         log("NOT APPLIED: could not pin native plugin lifetime."); return false;
     }
     if (!vein_radius::prepare(plugin)) {
-        for (const auto& h:hooks) MH_RemoveHook(base+h.game_rva);
+        abort_preparation();
         log("NOT APPLIED: could not prepare the bounded radius extension.");return false;
+    }
+    if (!lifecycle::prepare(game)) {
+        vein_radius::cancel();
+        abort_preparation();
+        log("NOT APPLIED: could not prepare connection lifecycle hooks.");return false;
     }
     // MinHook suspends other threads and relocates instruction pointers while
     // applying the batch. All original-call pointers are ready before enabling.
     if (MH_ApplyQueued() != MH_OK) {
         // Keep trampolines allocated even on failure: a callback may be in flight.
-        MH_DisableHook(MH_ALL_HOOKS);
+        for (const auto& h:hooks) {
+            MH_QueueDisableHook(base+h.game_rva);
+            MH_DisableHook(base+h.game_rva);
+        }
+        vein_radius::cancel();
+        lifecycle::cancel();
         log("NOT APPLIED: hook activation failed; attempted to disable the batch.");
         return false;
     }
     log("HOOKS INSTALLED: 5 server gameplay/input hooks; client graphics and keyboard disabled.");
     log("RADIUS READY: per-player 1x/2x/3x requests, 1000ms expiry, bounded 64-cubed regions.");
+    log("RADIUS LIFECYCLE READY: player removal and world teardown retire request history; same-session replay remains rejected.");
     log("Clients require the matching radius extension. Multiplayer mining and payout still require gameplay verification.");
     return true;
 }

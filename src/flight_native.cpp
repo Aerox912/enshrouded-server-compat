@@ -2,6 +2,7 @@
 #include "flight_hook.hpp"
 #include "flight_identity.hpp"
 #include "flight_transport.hpp"
+#include "server_lifecycle.hpp"
 #include <MinHook.h>
 #include <bcrypt.h>
 #include <atomic>
@@ -31,8 +32,8 @@ std::atomic<bool> running{false};
 using One = std::uintptr_t (*)(void*);
 using Two = std::uintptr_t (*)(void*,void*);
 using Remove = std::uintptr_t (*)(void*,std::uint16_t);
-Two original_event, original_player_reset;
-One original_receive, original_peer_reset, original_teardown;
+Two original_event;
+One original_receive, original_peer_reset;
 Remove original_remove;
 using ActorSystem = void (*)(void*);
 ActorSystem original_actor;
@@ -99,17 +100,15 @@ std::uintptr_t reset_hook(void* context) {
     {std::lock_guard lock(guard);proofs.clear_backend(backend);sessions.clear_backend(backend);}
     return original_peer_reset(context);
 }
-std::uintptr_t player_reset_hook(void* state,void* player) {
+void player_removed(void* state,void* player) {
     // 0x68a7e0 destroys the connection's Player record on removal/handle
     // replacement, not the actor's normal Dead/Spawning transition.
     const auto world=field<std::uintptr_t>(reinterpret_cast<std::uintptr_t>(state),0x1b0);
     const auto handle=field<std::uint32_t>(reinterpret_cast<std::uintptr_t>(player),0);
     {std::lock_guard lock(guard);if(handle)sessions.remove_owner(world,(handle&63)+1);}
-    return original_player_reset(state,player);
 }
-std::uintptr_t teardown_hook(void* state) {
+void world_removed(void*) {
     {std::lock_guard lock(guard);sessions.clear();}
-    return original_teardown(state);
 }
 void actor_hook(void* context) {
     if(running.load(std::memory_order_acquire)) {
@@ -289,11 +288,11 @@ bool start_runtime(HMODULE game,const std::wstring& directory,Logger log,Extensi
         {0x8f7a60,{0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x74,0x24,0x18,0x66,0x89,0x54,0x24,0x10,0x57},reinterpret_cast<void*>(remove_hook),reinterpret_cast<void**>(&original_remove)},
         {0x8f7800,{0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x6c,0x24,0x10,0x48,0x89,0x74,0x24,0x18,0x57},reinterpret_cast<void*>(reset_hook),reinterpret_cast<void**>(&original_peer_reset)},
         {0x69e570,{0x48,0x89,0x5c,0x24,0x20,0x55,0x56,0x57,0x41,0x54,0x41,0x55,0x41,0x56,0x41,0x57},reinterpret_cast<void*>(receive_hook),reinterpret_cast<void**>(&original_receive)},
-        {0x68a7e0,{0x48,0x89,0x74,0x24,0x20,0x57,0x48,0x81,0xec,0x90,0,0,0,0x0f,0xb6,0x82},reinterpret_cast<void*>(player_reset_hook),reinterpret_cast<void**>(&original_player_reset)},
-        {0x68a430,{0x48,0x89,0x5c,0x24,0x10,0x48,0x89,0x6c,0x24,0x18,0x48,0x89,0x74,0x24,0x20,0x57},reinterpret_cast<void*>(teardown_hook),reinterpret_cast<void**>(&original_teardown)}
     };
     for(const auto& s:sites)if(std::memcmp(reinterpret_cast<void*>(image+s.rva),s.bytes.data(),s.bytes.size()))return false;
     const auto status=MH_Initialize();if(status!=MH_OK && status!=MH_ERROR_ALREADY_INITIALIZED)return false;
+    if(!lifecycle::prepare(game))return false;
+    lifecycle::observe(player_removed,world_removed);
     std::size_t prepared=0;
     for(const auto& s:sites) {
         if(MH_CreateHook(reinterpret_cast<void*>(image+s.rva),s.detour,s.original)!=MH_OK) {
