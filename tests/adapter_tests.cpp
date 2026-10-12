@@ -9,11 +9,36 @@
 #include <vector>
 #include <cmath>
 #include <limits>
+#include <semaphore>
+// Compile the real lifecycle translation unit here so only the original native
+// game bodies can be replaced with inert stubs. The installed detours, request
+// cache and native dispatch remain production code. Its archive object is unused.
+#include "../src/server_lifecycle.cpp"
+// Inject one activation failure after enabling the real MinHook prefix. All
+// normal runs use the real apply function; only the failure return is synthetic.
+namespace { MH_STATUS WINAPI apply_fixture(); }
+#define MH_ApplyQueued apply_fixture
+#include "../src/adapter.cpp"
+#undef MH_ApplyQueued
 
 namespace {
 unsigned checks = 0;
 unsigned char* plugin;
 std::atomic<DWORD> tick = 10000;
+thread_local bool pause_clock=false;
+std::binary_semaphore clock_entered{0},clock_resume{0};
+bool fail_apply=false;
+unsigned char* fixture_game=nullptr;
+MH_STATUS WINAPI apply_fixture() {
+    if(!fail_apply)return MH_ApplyQueued();
+    const auto loaded=static_cast<unsigned char*>(static_cast<void*>(GetModuleHandleW(L"XHL-Vein-Mining.dll")));
+    if(!loaded)return MH_ERROR_NOT_CREATED;
+    for(DWORD rva:{0x1c0be0u,0x87dae0u,0x1d38a0u,0x1d2310u,0x145510u,0x68a7e0u})
+        if(MH_EnableHook(fixture_game+rva)!=MH_OK)return MH_ERROR_NOT_CREATED;
+    for(DWORD rva:{0x25b0u,0x3300u,0x4bd0u,0x1d10u})
+        if(MH_EnableHook(loaded+rva)!=MH_OK)return MH_ERROR_NOT_CREATED;
+    return MH_ERROR_MEMORY_PROTECT; // World hook is still disabled and queued.
+}
 thread_local int observed_activation = -1;
 thread_local unsigned observed_radius = 0;
 thread_local unsigned unpack_calls = 0;
@@ -26,13 +51,21 @@ Chain chain;
 bool exercise_chain=false;
 float observed_metres=0;
 bool sphere_ok=false;
+unsigned player_removals=0, world_removals=0, player_observations=0, world_observations=0;
+std::uintptr_t removed_stub(void*,void*) { ++player_removals; return 431; }
+std::uintptr_t teardown_stub(void*) { ++world_removals; return 432; }
+void observe_player(void*,void*) { ++player_observations; }
+void observe_world(void*) { ++world_observations; }
 void check(bool value, const char* name) {
     if (!value) { std::printf("FAIL: %s\n", name); std::exit(1); }
     ++checks;
     std::printf("PASS: %s\n", name);
 }
 void logger(const char* message) { std::printf("native: %s\n", message); }
-DWORD WINAPI clock_stub() { return tick.load(); }
+DWORD WINAPI clock_stub() {
+    if(pause_clock){clock_entered.release();clock_resume.acquire();}
+    return tick.load();
+}
 int unpack_stub(void*, void*) { ++unpack_calls; return 732; }
 DWORD* activation() { return reinterpret_cast<DWORD* (*)(void*)>(plugin + 0x17880)(plugin + 0x37020); }
 int terraform_stub(void*, void*, void*) {
@@ -101,14 +134,18 @@ struct World {
     }
     int mine() { observed_activation = -1; return terraform(nullptr, &entity_pointer, reflection.data()); }
 };
-void reset_cache() { std::memset(plugin + 0x49100, 0, 64 * 16); }
+void reset_cache() {
+    std::memset(plugin + 0x49100, 0, 64 * 16);
+    vein_radius::retire_world();
+}
 }
 
 int wmain(int argc, wchar_t** argv) {
-    if (argc < 3) { std::puts("usage: adapter_tests server.exe original-plugin.dll [reject-header|reject-hook|reject-plugin]"); return 2; }
+    if (argc < 3) { std::puts("usage: adapter_tests server.exe original-plugin.dll [reject-header|reject-hook|reject-plugin|reject-lifecycle]"); return 2; }
     HMODULE game = LoadLibraryExW(argv[1], nullptr, DONT_RESOLVE_DLL_REFERENCES);
     check(game != nullptr, "map dedicated server executable without running it");
     auto base = reinterpret_cast<unsigned char*>(game);
+    fixture_game=base;
     if (argc == 4) {
         const std::wstring mode = argv[3];
         if (mode == L"reject-header") {
@@ -119,15 +156,37 @@ int wmain(int argc, wchar_t** argv) {
         } else if (mode == L"reject-hook") {
             BYTE changed = 0xcc;
             protected_write(base + 0x1d2310, &changed, 1);
+        } else if (mode == L"reject-lifecycle") {
+            BYTE changed=0xcc;
+            protected_write(base+0x68a430,&changed,1);
+        } else if(mode==L"reject-apply") {
+            fail_apply=true;
         }
         const std::wstring path = mode == L"reject-plugin" ? std::wstring(argv[2]) + L".missing" : argv[2];
         check(!xhl::start(game, path, logger), "incompatible input rejected before activating hooks");
         check(base[0x1c0be0] == 0x48 && base[0x145510] == 0x4c, "other server entry points remain unchanged after rejection");
+        if(mode==L"reject-lifecycle" || mode==L"reject-apply") {
+            check(MH_ApplyQueued()==MH_OK,"simulate a later component applying the shared hook queue");
+            check(base[0x1c0be0]==0x48 && base[0x145510]==0x4c,"failed Vein activation stays absent after later apply");
+            const auto rejected=static_cast<unsigned char*>(static_cast<void*>(GetModuleHandleW(argv[2])));
+            check(rejected && rejected[0x25b0]==0x55 && rejected[0x3300]==0x55 && rejected[0x4bd0]==0x55 && rejected[0x1d10]==0x45,
+                "radius hooks are cancelled when lifecycle preparation fails");
+            if(mode==L"reject-lifecycle") {
+                check(get<void*>(rejected,0x49588)==nullptr && get<void*>(rejected,0x495a8)==nullptr,
+                    "pre-activation abort clears dependent trampoline publication before freeing it");
+            } else {
+                check(base[0x68a7e0]==0x48 && base[0x68a430]==0x48,
+                    "partial activation cancels both lifecycle hooks before a later shared apply");
+                check(!xhl::lifecycle::prepare(game),"next shared owner cannot reuse a failed lifecycle installation");
+            }
+        }
         std::printf("%u checks passed\n", checks);
         return 0;
     }
     check(xhl::start(game, argv[2], logger), "initialize adapter against verified server image");
     check(!xhl::start(game, argv[2], logger), "duplicate initialization rejected");
+    check(base[0x68a7e0] == 0xe9 && base[0x68a430] == 0xe9,
+        "Vein installs player-removal and world-teardown lifecycle hooks");
     plugin = reinterpret_cast<unsigned char*>(GetModuleHandleW(L"XHL-Vein-Mining.dll"));
     check(plugin != nullptr, "original DLL loaded");
     check(get<DWORD>(plugin, 0x37040) == 34, "original config parser loaded all 34 configured material IDs");
@@ -168,6 +227,7 @@ int wmain(int argc, wchar_t** argv) {
     check(observed_activation == 1, "correct full sender ID still matches");
     reset_cache();
     for (DWORD invalid : {0x00000001u, 0xa6000000u, 0xa4000001u, 0xa5000001u}) {
+        reset_cache();
         Packet packet(0x12340002, invalid);
         packet.send();
         alice.mine();
@@ -225,6 +285,7 @@ int wmain(int argc, wchar_t** argv) {
         check(observed_activation == 0 && observed_radius == 1, "extended request consumed once");
     }
     for (DWORD invalid : {0xa6c00001u,0xa6000000u,0xa6400000u,0xa7000001u}) {
+        reset_cache();
         Packet packet(0x12340002,invalid);packet.send();alice.mine();
         check(packet.stripped() && observed_activation == 0, "invalid radius/version/nonce strips without activation");
     }
@@ -251,6 +312,63 @@ int wmain(int argc, wchar_t** argv) {
             "real pinned chain callback uses 5/10/15m for broad phase and exact spherical material filter");
     }
     exercise_chain=false;
+    // Simulate the real connection-removal callback through the patched native
+    // entry, including playerId reuse by a newly started client (sequence 1).
+    xhl::lifecycle::original_player_reset=removed_stub;
+    xhl::lifecycle::original_teardown=teardown_stub;
+    xhl::lifecycle::observe(observe_player,observe_world);
+    check(xhl::lifecycle::prepare(game),"combined runtime reuses the lifecycle hooks without double-hooking");
+    const auto remove_player=reinterpret_cast<std::uintptr_t(*)(void*,void*)>(base+0x68a7e0);
+    const auto remove_world=reinterpret_cast<std::uintptr_t(*)(void*)>(base+0x68a430);
+    World restarted(1), unaffected(2);
+    Packet(1,0xa6800064).send();restarted.mine();
+    check(observed_activation==1,"previous client establishes a high request sequence");
+    Packet(1,0xa6400065).send();Packet(2,0xa6800064).send();
+    DWORD removed_handle=64; // generation 1, slot 0 -> reflected playerId 1
+    check(remove_player(nullptr,&removed_handle)==431,"player-removal detour forwards original callback result");
+    restarted.mine();check(observed_activation==0,"disconnected player's pending request cannot reach a replacement player");
+    unaffected.mine();check(observed_activation==1 && observed_radius==3,"disconnect preserves another player's pending radius request");
+    Packet(1,0xa6400001).send();restarted.mine();
+    check(observed_activation==1 && observed_radius==2,"restarted client immediately mines after playerId reuse with sequence one");
+    Packet(1,0xa6800001).send();restarted.mine();
+    check(observed_activation==0,"same-session replay stays rejected after reconnect and radius change");
+    Packet(1,0xa6000002).send();tick+=1001;restarted.mine();
+    Packet(1,0xa6800002).send();restarted.mine();
+    check(observed_activation==0,"idle expiry cannot retire replay protection");
+    for(DWORD lifetime=2;lifetime<=101;++lifetime) {
+        Packet(1,0xa6000064).send();restarted.mine();
+        removed_handle=lifetime<<6;remove_player(nullptr,&removed_handle);
+        Packet(1,0xa6800001).send();restarted.mine();
+        check(observed_activation==1 && observed_radius==3,"repeated client restarts never require counter catch-up");
+    }
+    Packet(1,0xa6800002).send();Packet(2,0xa6400065).send();
+    check(remove_world(nullptr)==432,"world-teardown detour forwards original callback result");
+    restarted.mine();check(observed_activation==0,"world teardown discards pending activation");
+    Packet(1,0xa6000001).send();restarted.mine();check(observed_activation==1,"new world accepts fresh first-player sequence");
+    Packet(2,0xa6400001).send();unaffected.mine();check(observed_activation==1 && observed_radius==2,"new world accepts other players' reset sequences");
+    check(player_removals==101 && player_observations==101 && world_removals==1 && world_observations==1,
+        "shared lifecycle observers and native originals each run exactly once");
+    for(bool whole_world:{false,true}) {
+        reset_cache();Packet(1,0xa6800064).send();
+        std::thread stale_receive([]{pause_clock=true;Packet(1,0xa6800065).send();});
+        clock_entered.acquire();
+        if(whole_world)remove_world(nullptr);else remove_player(nullptr,&removed_handle);
+        Packet(1,0xa6400001).send();
+        clock_resume.release();stale_receive.join();
+        restarted.mine();check(observed_activation==1 && observed_radius==2,
+            "real retirement detour rejects old receive without replacing fresh connection request");
+        reset_cache();Packet(1,0xa6800064).send();
+        std::atomic<int> stale_activation=-1;
+        std::thread stale_mining([&]{pause_clock=true;World old(1);old.mine();stale_activation=observed_activation;});
+        clock_entered.acquire();
+        if(whole_world)remove_world(nullptr);else remove_player(nullptr,&removed_handle);
+        Packet(1,0xa6400001).send();
+        clock_resume.release();stale_mining.join();
+        check(stale_activation==0,"old terraform callback cannot take replacement connection activation");
+        restarted.mine();check(observed_activation==1 && observed_radius==2,
+            "replacement connection retains its request after old terraform resumes");
+    }
+    xhl::lifecycle::observe(nullptr,nullptr);
     terraform(nullptr, nullptr, nullptr);
     check(observed_activation == 0, "unreadable entity context forwards ordinary mining safely");
     reset_cache();

@@ -12,6 +12,7 @@ namespace vein_radius {
 namespace {
 unsigned char* plugin = nullptr;
 RadiusProvider local_radius = nullptr;
+void* previous_stock_chain = nullptr;
 thread_local unsigned multiplier = 1;
 thread_local bool chaining = false;
 using Chain = std::uintptr_t (*)(void*, void*, unsigned);
@@ -31,6 +32,14 @@ struct Request {
     bool pending=false;
 };
 std::array<Request,64> requests{};
+// Capture at callback entry, before decoding or clock lookup. Retirement
+// advances this sequence, so an already-entered callback cannot refill a
+// retired connection's cache after it resumes.
+std::atomic<std::uint64_t> retirement_sequence{0};
+std::array<std::uint64_t,64> player_retired_at{};
+std::array<unsigned,64> player_removing{};
+std::uint64_t world_retired_at=0;
+unsigned world_removing=0;
 SRWLOCK request_lock = SRWLOCK_INIT;
 struct Lock {
     Lock() { AcquireSRWLockExclusive(&request_lock); }
@@ -93,8 +102,11 @@ DWORD sender(void* entity_argument, void* reflection) {
     DWORD value=0;
     return read(components+member,value) && valid_sender(value) ? value : 0;
 }
-void accept(DWORD owner,DWORD nonce,unsigned radius,DWORD tick) {
+void accept(DWORD owner,DWORD nonce,unsigned radius,DWORD tick,std::uint64_t entered) {
     Lock guard;
+    if (world_removing || entered<world_retired_at) return;
+    if (owner>=1 && owner<=player_retired_at.size() &&
+        (player_removing[owner-1] || entered<player_retired_at[owner-1])) return;
     Request* target=nullptr;
     Request* oldest=&requests[0];
     for (auto& request:requests) {
@@ -109,12 +121,16 @@ void accept(DWORD owner,DWORD nonce,unsigned radius,DWORD tick) {
     const DWORD distance=(nonce-previous)&nonce_mask;
     // Compare decoded serials, not radius bits. Retain the last serial after
     // consumption/expiry so delayed or altered duplicates cannot become fresh.
-    // The paired radius protocol keeps its sequence while this sender is cached.
+    // Authoritative connection removal retires this history before playerId
+    // reuse. Idle expiry alone must never make an old request fresh again.
     if (previous && (!distance || distance>(nonce_mask>>1))) return;
     previous=nonce;target->received=tick;target->radius=radius;target->pending=true;
 }
-unsigned consume(DWORD owner,DWORD tick) {
+unsigned consume(DWORD owner,DWORD tick,std::uint64_t entered=retirement_sequence.load(std::memory_order_acquire)) {
     Lock guard;
+    if (world_removing || entered<world_retired_at) return 0;
+    if (owner>=1 && owner<=player_retired_at.size() &&
+        (player_removing[owner-1] || entered<player_retired_at[owner-1])) return 0;
     for (auto& request:requests) if (request.sender==owner && request.pending) {
         request.pending=false;
         return DWORD(tick-request.received)<1000 ? request.radius : 0;
@@ -122,6 +138,7 @@ unsigned consume(DWORD owner,DWORD tick) {
     return 0;
 }
 int receive(void* context,void* message) {
+    const auto entered=retirement_sequence.load(std::memory_order_acquire);
     if (message && load<BYTE>(message,0x378) && load<DWORD>(message,0x37c)==magic) {
         const DWORD encoded=load<DWORD>(message,0x380);
         const DWORD tag=encoded & 0xff000000;
@@ -130,7 +147,7 @@ int receive(void* context,void* message) {
         DWORD owner=0;
         const auto address=reinterpret_cast<std::uintptr_t>(message);
         if (tag==extended && nonce && radius<=3 && address>=16 &&
-            read(address-16,owner) && valid_sender(owner)) accept(owner,nonce,radius,now());
+            read(address-16,owner) && valid_sender(owner)) accept(owner,nonce,radius,now(),entered);
         // Every XHLC namespace value is stripped, including future/invalid tags.
         store<BYTE>(message,0x378,0);
         store<std::uint64_t>(message,0x37c,0);
@@ -139,8 +156,9 @@ int receive(void* context,void* message) {
     return unpack?unpack(context,message):0;
 }
 int terraform(void* context,void* entity,void* reflection) {
+    const auto entered=retirement_sequence.load(std::memory_order_acquire);
     const DWORD owner=sender(entity,reflection);
-    const unsigned selected=owner?consume(owner,now()):0;
+    const unsigned selected=owner?consume(owner,now(),entered):0;
     RadiusScope radius(selected?selected:1);
     ActivationScope active(activation(),selected?1:0);
     const auto original=load<Terraform>(plugin,0x49528);
@@ -188,6 +206,25 @@ int contains(float x,float y,float z,const float* center) {
 
 unsigned current_multiplier() { return multiplier; }
 
+void retire_player(DWORD owner,bool beginning) {
+    Lock guard;
+    const auto sequence=retirement_sequence.fetch_add(1,std::memory_order_acq_rel)+1;
+    if (owner>=1 && owner<=player_retired_at.size()) {
+        player_retired_at[owner-1]=sequence;
+        if (beginning) ++player_removing[owner-1];
+        else if (player_removing[owner-1]) --player_removing[owner-1];
+    }
+    for (auto& request : requests) if (request.sender == owner) request = {};
+}
+
+void retire_world(bool beginning) {
+    Lock guard;
+    world_retired_at=retirement_sequence.fetch_add(1,std::memory_order_acq_rel)+1;
+    if (beginning) ++world_removing;
+    else if (world_removing) --world_removing;
+    requests = {};
+}
+
 bool prepare(HMODULE module,RadiusProvider provider) {
     if (plugin || !module) return false;
     auto p=reinterpret_cast<unsigned char*>(module);
@@ -216,7 +253,18 @@ bool prepare(HMODULE module,RadiusProvider provider) {
     }
     plugin=p;local_radius=provider;
     // Writable pointer slot populated by the verified original initializer.
-    InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(p+0x495a8),reinterpret_cast<void*>(stock_chain));
+    previous_stock_chain=InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(p+0x495a8),reinterpret_cast<void*>(stock_chain));
     return true;
+}
+
+void cancel() {
+    if (!plugin) return;
+    constexpr size_t sites[]={0x25b0,0x3300,0x4bd0,0x1d10,0x36c0};
+    const size_t count=local_radius?std::size(sites):std::size(sites)-1;
+    for (size_t i=0;i<count;++i) {
+        MH_QueueDisableHook(plugin+sites[i]);
+        MH_DisableHook(plugin+sites[i]);
+    }
+    InterlockedExchangePointer(reinterpret_cast<PVOID volatile*>(plugin+0x495a8),previous_stock_chain);
 }
 }
